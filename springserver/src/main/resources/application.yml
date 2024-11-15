@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: springserver
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ppiyongpiyong-database.c3aggsqkoyer.ap-northeast-2.rds.amazonaws.com:3306/mysql
+    username: PPiyongpiyong
+    password: Tkfkdgo2001!
+  jpa:
+
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+aws-property:
+  s3-bucket-name: ppiyongpiyong-bucket
+  access-key: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  aws-region: ap-northeast-2
