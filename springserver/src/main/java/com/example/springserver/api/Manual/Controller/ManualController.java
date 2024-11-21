@@ -1,7 +1,7 @@
 package com.example.springserver.api.Manual.Controller;
 
-import com.example.springserver.api.Manual.Domain.Manual;
-import com.example.springserver.api.Manual.Dto.ManualRespond.ManualRespondDto;
+import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Service.ManualService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +24,9 @@ public class ManualController {
         return manualService.getManualByEmergencyName(emergencyName);
     }
 
+    @GetMapping("/getCategory")
+    public List<ManualCategoryRespondDto> searchCategory(@RequestParam String category) {
+        return manualService.getManualByCategory(category);
 
     @GetMapping("/autocomplete")
     public ResponseEntity<List<String>> autocomplete(@RequestParam String keyword) {
