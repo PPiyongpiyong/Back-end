@@ -1,4 +1,4 @@
-package com.example.springserver.api.Manual.Dto.ManualRespond;
+package com.example.springserver.api.Manual.Dto.Manual.ManualRequest;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ManualRespondDto {
+public class ManualRequestDto {
     private String emergencyName;
-    private String emergencyResponseSummary;
 }

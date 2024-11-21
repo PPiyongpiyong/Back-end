@@ -1,4 +1,4 @@
-package com.example.springserver.api.Manual.Dto.ManualRequest;
+package com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRequest;
 
 
 import lombok.AllArgsConstructor;
@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ManualRequestDto {
+public class ManualCategoryRequestDto {
     private String emergencyName;
+    private String manualSummary;
+    private String category;
+    // 생성자
+
 }
