@@ -2,8 +2,8 @@ package com.example.springserver.api.Manual.Mapper;
 
 
 import com.example.springserver.api.Manual.Domain.Manual;
-import com.example.springserver.api.Manual.Dto.ManualRequest.ManualRequestDto;
-import com.example.springserver.api.Manual.Dto.ManualRespond.ManualRespondDto;
+import com.example.springserver.api.Manual.Dto.Manual.ManualRequest.ManualRequestDto;
+import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
 
 public class ManualMapper {
 
