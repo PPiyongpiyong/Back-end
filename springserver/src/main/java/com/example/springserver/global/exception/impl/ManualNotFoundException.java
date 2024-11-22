@@ -1,4 +1,4 @@
-package com.example.springserver.api.Manual.exception;
+package com.example.springserver.global.exception.impl;
 
 public class ManualNotFoundException extends RuntimeException {
     public ManualNotFoundException(String message) {
