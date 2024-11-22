@@ -4,25 +4,18 @@ import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespon
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
-import com.example.springserver.api.Manual.exception.ManualNotFoundException;
+import com.example.springserver.global.exception.impl.ManualNotFoundException;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.Trie;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
