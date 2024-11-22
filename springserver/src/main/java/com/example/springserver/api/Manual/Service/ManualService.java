@@ -56,10 +56,11 @@ public class ManualService {
                             manual.getCategory(), // category
                             manual.getEmergencyName(),
                             manual.getManualSummary() // manualSummaries
-                              // emergencyName
+                            // emergencyName
                     );
                 })
                 .collect(Collectors.toList());
+    }
 
     // Trie에 키워드 저장 메서드
     public void addAutocompleteKeyword(String keyword) {
