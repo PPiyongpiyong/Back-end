@@ -36,6 +36,29 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+	// Spring Web 의존성 (RestTemplate 포함)
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// JSON 처리 라이브러리 (org.json)
+	implementation 'org.json:json:20210307'
+
+	// Spring Boot Starter Web (Spring MVC)
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Thymeleaf 템플릿 엔진 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Spring Boot Starter Data JPA (optional, DB 연동이 필요하면 추가)
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+
+	// 이거 존나 중요함(버전 스프링부트랑 맞춰야 해서 2023.0.3)
+	implementation platform('org.springframework.cloud:spring-cloud-dependencies:2023.0.3')
+
+	//클라우드!!!!!
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
 
 tasks.named('test') {
