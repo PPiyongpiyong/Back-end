@@ -27,6 +27,7 @@ public class ManualController {
     @GetMapping("/getCategory")
     public List<ManualCategoryRespondDto> searchCategory(@RequestParam String category) {
         return manualService.getManualByCategory(category);
+    }
 
     @GetMapping("/autocomplete")
     public ResponseEntity<List<String>> autocomplete(@RequestParam String keyword) {
