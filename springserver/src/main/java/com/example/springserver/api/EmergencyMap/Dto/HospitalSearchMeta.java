@@ -5,13 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class HospitalSearchMeta {
-    private Integer totalCount;
     private Integer pageableCount;
     private Boolean isEnd;
 
-    public HospitalSearchMeta(Boolean isEnd, Integer totalCount, Integer pageableCount) {
+    public HospitalSearchMeta(Boolean isEnd, Integer pageableCount) {
         this.isEnd = isEnd;
-        this.totalCount = totalCount;
         this.pageableCount = pageableCount;
     }
 }

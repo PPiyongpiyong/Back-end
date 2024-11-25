@@ -16,13 +16,13 @@ public class HospitalSearchResponse {
         this.hospitals = hospitals;
     }
 
-    public static HospitalSearchResponse of(KakaoCategorySearchResponse kakaoCategorySearchResponse, Integer page, Integer size) {
+    public static HospitalSearchResponse of(KakaoCategorySearchResponse kakaoCategorySearchResponse) {
 
         List<HospitalInfo> hospitalInfos = kakaoCategorySearchResponse.getDocuments().stream()
                 .map(HospitalInfo::of)
                 .toList();
 
-        HospitalSearchMeta searchMeta = new HospitalSearchMeta(kakaoCategorySearchResponse.getMeta().getIsEnd(), kakaoCategorySearchResponse.getMeta().getTotalCount(), kakaoCategorySearchResponse.getMeta().getPageableCount());
+        HospitalSearchMeta searchMeta = new HospitalSearchMeta(kakaoCategorySearchResponse.getMeta().getIsEnd(), kakaoCategorySearchResponse.getMeta().getPageableCount());
 
         return new HospitalSearchResponse(
                 searchMeta,

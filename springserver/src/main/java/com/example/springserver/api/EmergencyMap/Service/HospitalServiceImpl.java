@@ -22,31 +22,22 @@ public class HospitalServiceImpl implements HospitalService {
 
 
     @Override
-    public HospitalSearchResponse searchHospitals(HospitalSearchRequest hospitalSearchRequest) {
+    public HospitalSearchResponse searchHospitals(Integer page, Integer size, String x, String y) {
 
-        if (hospitalSearchRequest.getPage() == null || hospitalSearchRequest.getPage() < 0) {
-            hospitalSearchRequest.initPage();
-        }
-
-        if (hospitalSearchRequest.getSize() == null || hospitalSearchRequest.getSize() < 0) {
-            hospitalSearchRequest.initSize();
-        }
-
-        if(hospitalSearchRequest.getSize() > 15 && hospitalSearchRequest.getPage() > 45) {
-            hospitalSearchRequest.initPage();
-            hospitalSearchRequest.initSize();
+        if (size <= 0 || size > 15) {
+            throw new IllegalArgumentException("size는 1~15 사이의 값이어야 합니다.");
         }
 
         KakaoCategorySearchResponse categorySearchResponse = kakaoHospitalApiClient.searchHospitals(
                 CategoryGroupCode.HP8.name(),
-                hospitalSearchRequest.getX(),
-                hospitalSearchRequest.getY(),
+                x,
+                y,
                 radius,
-                hospitalSearchRequest.getPage(),
-                hospitalSearchRequest.getSize(),
+                page,
+                size,
                 distance
         );
 
-        return HospitalSearchResponse.of(categorySearchResponse, hospitalSearchRequest.getPage(), hospitalSearchRequest.getSize());
+        return HospitalSearchResponse.of(categorySearchResponse);
     }
 }
