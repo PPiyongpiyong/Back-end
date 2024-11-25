@@ -17,8 +17,6 @@ public interface ManualRepository extends JpaRepository<Manual, Long> {
     Optional<Manual> findByEmergencyName(String emergencyName);
 
 
-
-
     @Query("SELECT m.emergencyName FROM Manual m")
     List<String> findAllEmergencyNames();
 
