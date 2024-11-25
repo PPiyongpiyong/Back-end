@@ -2,13 +2,17 @@ package com.example.springserver.api.Manual.Service;
 import com.example.springserver.api.Manual.Domain.Manual;
 import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRequest.ManualDetailRequestDto;
+import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
+import com.example.springserver.global.exception.impl.DetailNotFoundException;
 import com.example.springserver.global.exception.impl.ManualNotFoundException;
 
 import lombok.AllArgsConstructor;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -17,15 +21,13 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.Trie;
 
-
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ManualService {
 
     
     private final ManualCategoryRepository manualCategoryRepository;
-
-
     private final Trie trie;
     private final ManualRepository manualRepository;
 
@@ -79,4 +81,17 @@ public class ManualService {
         this.trie.remove(keyword);
 
     }
+
+    //세부 매뉴얼 조회
+    public ManualDetailRespondDto getManualDetail(String emergencyName) {
+
+        Manual manual = manualRepository.findByEmergencyName(emergencyName)
+                .orElseThrow(() -> new DetailNotFoundException("세부 매뉴얼을 찾을 수 없습니다."));
+
+        return new ManualDetailRespondDto(manual.getEmergencyName(), manual.getManualDetail());
+    }
+
+
 }
+
+
