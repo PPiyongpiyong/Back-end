@@ -4,9 +4,8 @@ import com.example.springserver.api.security.auth.TokenProvider;
 import com.example.springserver.api.security.domain.MemberEntity;
 import com.example.springserver.api.security.dto.*;
 import com.example.springserver.api.security.repository.MemberRepository;
-import com.example.springserver.global.exception.impl.AlreadyExistUserException;
-import com.example.springserver.global.exception.impl.PasswordUnmatchedException;
-import com.example.springserver.global.exception.impl.UserNotFoundException;
+import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class MemberService {
 
         // 이미 존재하는 유저인지를 확인
         if (memberRepository.existsById(requestDto.id())) {
-            throw new AlreadyExistUserException();
+            throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
         // 입력한 내용들에 대하여 입력
@@ -43,9 +42,9 @@ public class MemberService {
 
     // 회원 정보를 추가하기
     @Transactional
-    public MemberResponseDto addMemberInfo(String token, MemberRequestDto requestDto) throws RuntimeException {
+    public MemberResponseDto addMemberInfo(String token, MemberRequestDto requestDto) throws CustomException {
         String memberId = tokenProvider.getMemberIdFromToken(token);
-        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new UserNotFoundException());
+        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         MemberEntity savedMember = memberRepository.save(MemberEntity.builder()
                 .phoneNumber(requestDto.phoneNumber())
@@ -59,22 +58,23 @@ public class MemberService {
     }
 
     // 나의 정보 조회하기
-    public MemberResponseDto getMyInfo(String authToken) throws RuntimeException {
+    public MemberResponseDto getMyInfo(String authToken) throws CustomException {
         String memberId = tokenProvider.getMemberIdFromToken(authToken);
-        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new UserNotFoundException());
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
         return MemberMapper.toDto(member);
     }
 
     // 로그인 후 토큰 발급
-    public TokenDto GeneralLogin(LoginRequestDto requestDto) throws RuntimeException {
+    public TokenDto GeneralLogin(LoginRequestDto requestDto) throws CustomException {
 
         // 1. 사용자 존재 여부 확인
         MemberEntity member = memberRepository.findById(requestDto.getId())
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_ALREADY_EXISTS));
 
         // 2. 비밀번호 검증
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) {
-            throw new PasswordUnmatchedException();
+            throw new CustomException(ErrorCode.UNMATCHED_PASSWORD);
         }
         // 로그인 성공
         // 3. 토큰 발급

@@ -1,6 +1,6 @@
 package com.example.springserver.global.exception;
 
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,20 +9,30 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.View;
 
 import java.nio.file.AccessDeniedException;
-import java.rmi.AccessException;
 
 @Slf4j
 @ControllerAdvice
 public class CustomerExceptionHandler {
 
-    @ExceptionHandler(AbstractException.class)
-    protected ResponseEntity<ErrorResponse> handleCustomException(AbstractException e) {
+    private final View error;
+
+    public CustomerExceptionHandler(View error) {
+        this.error = error;
+    }
+
+    @ExceptionHandler(CustomException.class)
+    protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e, HttpServletRequest request) {
+
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("Request URI : [{}] {}", request.getMethod() ,request.getRequestURI());
+        log.error("Error message : {}", errorCode.getDescription());
+
         ErrorResponse errorResponse = ErrorResponse.builder()
-                                        .code(e.getStatusCode())
+                                        .status(e.getStatus())
                                         .message(e.getMessage())
                                         .build();
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.resolve(e.getStatusCode()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.resolve(errorCode.getStatus()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
@@ -30,7 +40,7 @@ public class CustomerExceptionHandler {
         log.error("Access denied", e);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                                                .code(HttpStatus.FORBIDDEN.value())
+                                                .status(HttpStatus.FORBIDDEN.value())
                                                 .message(e.getMessage())
                                                 .build();
 

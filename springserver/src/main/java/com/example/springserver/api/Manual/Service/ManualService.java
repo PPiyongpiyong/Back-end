@@ -6,9 +6,8 @@ import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRequest.
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
-import com.example.springserver.global.exception.impl.DetailNotFoundException;
-import com.example.springserver.global.exception.impl.ManualNotFoundException;
-
+import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 
 
@@ -35,7 +34,7 @@ public class ManualService {
 
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
-                .orElseThrow(() -> new ManualNotFoundException("매뉴얼을 찾을 수 없습니다: " + emergencyName));
+                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
         return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary());
     }
 
@@ -86,7 +85,7 @@ public class ManualService {
     public ManualDetailRespondDto getManualDetail(String emergencyName) {
 
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
-                .orElseThrow(() -> new DetailNotFoundException("세부 매뉴얼을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
         return new ManualDetailRespondDto(manual.getEmergencyName(), manual.getManualDetail());
     }
