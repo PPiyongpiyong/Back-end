@@ -2,8 +2,8 @@ package com.example.springserver.api.security.auth;
 
 import com.example.springserver.api.security.domain.MemberEntity;
 import com.example.springserver.api.security.domain.constants.JwtValidationType;
-import com.example.springserver.global.exception.AbstractException;
-import com.example.springserver.global.exception.impl.UnvalidTokenException;
+import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -75,7 +75,7 @@ public class TokenProvider {
     }
 
     // 발급받은 Token으로부터 member의 아이디를 얻기
-    public String getMemberIdFromToken(String token) throws AbstractException {
+    public String getMemberIdFromToken(String token) throws CustomException {
 
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -86,7 +86,7 @@ public class TokenProvider {
         String memberId = claims.getSubject();
 
         if(!StringUtils.hasText(memberId)) {
-            throw new UnvalidTokenException();
+            throw new CustomException(ErrorCode.UNVAILD_TOKEN);
         }
         return memberId;
     }

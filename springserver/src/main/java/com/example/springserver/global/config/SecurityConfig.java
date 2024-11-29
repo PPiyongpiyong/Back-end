@@ -2,17 +2,16 @@ package com.example.springserver.global.config;
 
 import com.example.springserver.api.security.auth.JwtAuthenticationFilter;
 import com.example.springserver.api.security.auth.TokenProvider;
+import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.global.exception.CustomerAccessDeniedHandler;
 import com.example.springserver.global.exception.CustomerExceptionHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -47,8 +46,11 @@ public class SecurityConfig {
         //setTokenRefreshFilter(httpSecurity);
         setPermissions(httpSecurity);
 
-        return httpSecurity.exceptionHandling(
-                eh -> eh.accessDeniedHandler((AccessDeniedHandler) new CustomerExceptionHandler())).build();
+        // AccessDeniedHandler 설정
+        httpSecurity.exceptionHandling()
+                .accessDeniedHandler(new CustomerAccessDeniedHandler());
+
+        return httpSecurity.build();
     }
 
     // JwtAuthenticationFilter 추가(API 접근 인증 설정)
