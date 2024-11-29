@@ -19,6 +19,17 @@ spring:
     compatibility-verifier:
       enabled: false  # 이 부분을 추가하여 호환성 검사를 비활성화
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jwt:
+    secret: cHBpeW9ucHBpeW9uZw== # base64로 ppiyongppiyong 인코딩한 값
+    access:
+      expiration: 2592000000 # 60L * 60L * 24L * 30000
+    refresh:
+      expiration: 2592000000
+
 aws-property:
   s3-bucket-name: ppiyongpiyong-bucket
   access-key: ${AWS_ACCESS_KEY_ID}
@@ -36,6 +47,4 @@ logging:
         web:
           client:
             RestTemplate: DEBUG
-
-
 

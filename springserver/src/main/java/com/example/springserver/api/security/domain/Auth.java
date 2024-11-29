@@ -1,10 +1,7 @@
-package com.example.springserver.global.auth;
+package com.example.springserver.api.security.domain;
 
-import com.example.springserver.api.MyPage.Domain.MemberEntity;
 import lombok.Data;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class Auth {
@@ -23,7 +20,7 @@ public class Auth {
 
         public MemberEntity toEntity() {
             return MemberEntity.builder()
-                    .userId(this.userId)
+                    .id(this.userId)
                     .password(this.password)
                     .build();
         }
