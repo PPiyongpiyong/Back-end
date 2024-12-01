@@ -1,18 +1,28 @@
 package com.example.springserver.api.security.controller;
 
+import com.example.springserver.api.security.auth.TokenProvider;
 import com.example.springserver.api.security.dto.LoginRequestDto;
 import com.example.springserver.api.security.dto.MemberRequestDto;
+import com.example.springserver.api.security.dto.RefreshRequestDto;
 import com.example.springserver.api.security.dto.TokenDto;
 import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.api.security.service.MemberService;
+import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+import static com.example.springserver.api.security.domain.constants.JwtValidationType.VALID_JWT;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
+    private final TokenProvider tokenProvider;
     MemberService memberService;
     MemberRepository memberRepository;
 
@@ -32,6 +42,18 @@ public class MemberController {
             @RequestBody LoginRequestDto requestDto
             ) {
         return ResponseEntity.ok(memberService.GeneralLogin(requestDto));
+    }
+
+    // Access Token을 재발급받기
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(
+            @RequestBody RefreshRequestDto request
+            ) {
+
+        return ResponseEntity.ok(Map.of(
+                "accessTooken",
+                memberService.regenerateAccessToken(request)));
+
     }
 
     // 회원 정보 수정하기

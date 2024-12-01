@@ -1,19 +1,23 @@
 package com.example.springserver.api.security.auth;
 
+import com.example.springserver.api.security.domain.MemberEntity;
+import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.api.security.service.MemberService;
+import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.global.exception.ErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 import static com.example.springserver.api.security.domain.constants.JwtValidationType.VALID_JWT;
@@ -21,8 +25,10 @@ import static com.example.springserver.api.security.domain.constants.JwtValidati
 // JWT 인증을 검증하기 위한 클래스
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
     @Override
@@ -41,7 +47,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String memberId = tokenProvider.getMemberIdFromToken(token); // 유효한 jwt에 대하여 id 가져오기
 
                 // ID를 통하여 인증 생성
-                MemberAuthentication authentication = MemberAuthentication.createMemberAuthentication(memberId);
+                MemberEntity member = memberRepository.findById(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+
+                MemberAuthentication authentication = MemberAuthentication.createMemberAuthentication(member);
 
                 // 받은 요청을 기반으로 인증에 대한 detail 입력하기(UserDetails)
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -50,7 +59,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Unauthorized: Invalid token");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Invalid token\", \"message\": \"" + e.getMessage() + "\"}");
+
             return; // 필터 체인을 중단
         }
         filterChain.doFilter(request, response);
@@ -59,8 +70,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 요청(Request)에서 JWT 토큰 추출
     // Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MjM5MDIyfQ.S...
     private String getJwtFromRequest(HttpServletRequest request) {
+
         // 헤더에서 Authorization 정보를 가져오기
         String bearerToken = request.getHeader("Authorization");
+
+        // bearer 형식의 Authorization이 아닌 경우에 대한 체크
+        if (!StringUtils.hasText(bearerToken)) {
+            log.warn("Authorization header is missing or empty");
+            return null;
+        }
+        if (!bearerToken.startsWith("Bearer ")) {
+            log.warn("Authorization header format is invalid");
+            return null;
+        }
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7); // Bearer  이후만 반환하게 substr

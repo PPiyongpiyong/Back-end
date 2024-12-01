@@ -2,15 +2,20 @@ package com.example.springserver.api.security.auth;
 
 import com.example.springserver.api.security.domain.MemberEntity;
 import com.example.springserver.api.security.domain.constants.JwtValidationType;
+import com.example.springserver.api.security.domain.constants.Role;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +26,7 @@ import javax.crypto.SecretKey;
 public class TokenProvider {
 
     private final ObjectMapper objectMapper; // java 객체의 다양 변환 가능
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String KEY_ROLES = "roles";
 
@@ -47,11 +53,17 @@ public class TokenProvider {
             Date now = new Date();
             Date expiryDate = new Date(now.getTime() + expiration * 1000); // 현재로부터 계산
 
+            // roles를 문자열 리스트로 변형 필요(원래는 enum list)
+            List<Role> roles = member.getRoles();
+            List<String> rolesName = roles.stream()
+                                            .map(Role::name) // enum의 name들(String) 가져오기
+                                            .collect(Collectors.toList());
+
             // JWT(token) 을 builder를 통해 반환
             return Jwts.builder()
                     .setHeaderParam("type", isRefresh ? "refresh" : "access")
                     .setSubject(String.valueOf(member.getId()))
-                    .claim("role", member.getRole())
+                    .claim("roles", rolesName)
                     .setIssuedAt(now)
                     .setExpiration(expiryDate)
                     .signWith(getSigningKey())
@@ -74,6 +86,28 @@ public class TokenProvider {
         return generateToken(member, refreshTokenExpiration, true);
     }
 
+    // RefreshToken redis 서버에 저장하기
+    public void saveRefreshToken(String memberId, String refreshToken) {
+
+        // redis 서버에 저장할 키
+        String key = "refreshToken: " + memberId;
+        // 저장하는 기한
+        redisTemplate.opsForValue().set(key, refreshToken, refreshTokenExpiration, TimeUnit.SECONDS);
+    }
+
+    // RefreshToken 조회하기
+    public String getRefreshToken(String memberId) {
+        String key = "refreshToken: " + memberId;
+
+        return (String) redisTemplate.opsForValue().get(key); // 멤버 고유 아이디로 확인
+    }
+
+    // Refresh Token 삭제하기
+    public void deleteRefreshToken(String memberId) {
+        String key = "refreshToken: " + memberId;
+        redisTemplate.delete(key);
+    }
+
     // 발급받은 Token으로부터 member의 아이디를 얻기
     public String getMemberIdFromToken(String token) throws CustomException {
 
@@ -86,7 +120,7 @@ public class TokenProvider {
         String memberId = claims.getSubject();
 
         if(!StringUtils.hasText(memberId)) {
-            throw new CustomException(ErrorCode.UNVAILD_TOKEN);
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         return memberId;
     }

@@ -2,9 +2,8 @@ package com.example.springserver.global.config;
 
 import com.example.springserver.api.security.auth.JwtAuthenticationFilter;
 import com.example.springserver.api.security.auth.TokenProvider;
-import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomerAccessDeniedHandler;
-import com.example.springserver.global.exception.CustomerExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +23,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
+    private final MemberRepository memberRepository;
 
     // 비밀번호를 해싱
     @Bean
@@ -55,7 +55,7 @@ public class SecurityConfig {
 
     // JwtAuthenticationFilter 추가(API 접근 인증 설정)
     private void setAccessTokenFilter(HttpSecurity httpSecurity) throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(tokenProvider);
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(memberRepository, tokenProvider);
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -81,13 +81,17 @@ public class SecurityConfig {
 
     }
 
-    //
+    // 토큰 갱신 요청을 처리하는 필터, 기존 토큰 유효성 확인 후에 새 토큰을 발급
     private void setTokenRefreshFilter(HttpSecurity httpSecurity) {
 
     }
 
-    // 인가 설정
-    private void setPermissions(HttpSecurity httpSecurity) {
+    // 인가 설정(경로별 접근 권한 설정)
+    private void setPermissions(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/auth/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+                .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
+        );
 
     }
 }
