@@ -7,9 +7,17 @@ import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.example.springserver.api.security.domain.constants.JwtValidationType.VALID_JWT;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +26,7 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final RedisTemplate redisTemplate;
 
     // 회원가입 서비스
     public TokenDto register(MemberRequestDto requestDto) throws RuntimeException {
@@ -77,12 +86,41 @@ public class MemberService {
             throw new CustomException(ErrorCode.UNMATCHED_PASSWORD);
         }
         // 로그인 성공
+
         // 3. 토큰 발급
         String accessToken = tokenProvider.generateAccessToken(member);
         String refreshToken = tokenProvider.generateRefreshToken(member);
+        tokenProvider.saveRefreshToken(member.getId(), refreshToken); // redis-server에 저장
 
         // 4. TokenDto 반환
         return new TokenDto(accessToken, refreshToken);
     }
+
+    // Refresh token 검증 후에 Access token 재발급
+    public String regenerateAccessToken(RefreshRequestDto request) {
+
+        String refreshToken = request.getRefreshToken();
+
+        // 검증 결과
+        if (tokenProvider.validateToken(refreshToken) != VALID_JWT) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        // 멤버 아이디 가져오기
+        String memberId = tokenProvider.getMemberIdFromToken(refreshToken);
+
+        // Redis에서 Refresh Token 확인하기
+        String storedRefreshToken = tokenProvider.getRefreshToken(refreshToken);
+        if (!refreshToken.equals(storedRefreshToken)) { // redis 서버와 현재 저장이 다를 때
+            throw new CustomException(ErrorCode.REFRESH_TOKEN_UNMATCHED);
+        }
+
+        // Access token을 Refresh 확인 후에 재발급
+        String newAccessToken = tokenProvider.generateAccessToken(
+                memberRepository.findById(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT)));
+        return newAccessToken;
+    }
+
 
 }
