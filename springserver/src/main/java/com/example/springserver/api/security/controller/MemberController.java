@@ -1,10 +1,7 @@
 package com.example.springserver.api.security.controller;
 
 import com.example.springserver.api.security.auth.TokenProvider;
-import com.example.springserver.api.security.dto.LoginRequestDto;
-import com.example.springserver.api.security.dto.MemberRequestDto;
-import com.example.springserver.api.security.dto.RefreshRequestDto;
-import com.example.springserver.api.security.dto.TokenDto;
+import com.example.springserver.api.security.dto.*;
 import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.api.security.service.MemberService;
 import com.example.springserver.global.exception.CustomException;
@@ -16,19 +13,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-import static com.example.springserver.api.security.domain.constants.JwtValidationType.VALID_JWT;
-
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
     private final TokenProvider tokenProvider;
     MemberService memberService;
-    MemberRepository memberRepository;
 
     // 회원 가입하기
     @PostMapping("/auth/signup")
-    public ResponseEntity<TokenDto> signUp(
+    public ResponseEntity<MemberResponseDto> signUp(
             @RequestBody MemberRequestDto requestDto
             ) {
         return ResponseEntity.ok(

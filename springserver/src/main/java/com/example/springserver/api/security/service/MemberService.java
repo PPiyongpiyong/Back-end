@@ -7,20 +7,18 @@ import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
 
 import static com.example.springserver.api.security.domain.constants.JwtValidationType.VALID_JWT;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final BCryptPasswordEncoder passwordEncoder;
@@ -29,24 +27,21 @@ public class MemberService {
     private final RedisTemplate redisTemplate;
 
     // 회원가입 서비스
-    public TokenDto register(MemberRequestDto requestDto) throws RuntimeException {
+    @Transactional
+    public MemberResponseDto register(MemberRequestDto requestDto) throws RuntimeException {
 
-        // 이미 존재하는 유저인지를 확인
+        // 이미 존재하는 아이디인지를 확인
         if (memberRepository.existsById(requestDto.id())) {
             throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
+        String pw = this.passwordEncoder.encode(requestDto.password());
         // 입력한 내용들에 대하여 입력
-        MemberEntity member = memberRepository.save(
-                MemberEntity.builder()
-                        .id(requestDto.id())
-                        .build());
+        MemberEntity member = MemberMapper.toEntity(requestDto);
+        member.setPassword(pw);
+        memberRepository.save(member); // 인코딩한 값으로 저장 필요
 
-        // 각각의 토큰 생성(Token Provider 사용)
-        String accessToken = tokenProvider.generateAccessToken(member);
-        String refreshToken = tokenProvider.generateRefreshToken(member);
-
-        return new TokenDto(accessToken, refreshToken);
+        return MemberMapper.toDto(member);
     }
 
     // 회원 정보를 추가하기
@@ -67,6 +62,7 @@ public class MemberService {
     }
 
     // 나의 정보 조회하기
+    @Transactional(readOnly = true)
     public MemberResponseDto getMyInfo(String authToken) throws CustomException {
         String memberId = tokenProvider.getMemberIdFromToken(authToken);
         MemberEntity member = memberRepository.findById(memberId)
@@ -75,6 +71,7 @@ public class MemberService {
     }
 
     // 로그인 후 토큰 발급
+    @Transactional
     public TokenDto GeneralLogin(LoginRequestDto requestDto) throws CustomException {
 
         // 1. 사용자 존재 여부 확인
@@ -97,12 +94,14 @@ public class MemberService {
     }
 
     // Refresh token 검증 후에 Access token 재발급
+    @Transactional
     public String regenerateAccessToken(RefreshRequestDto request) {
 
         String refreshToken = request.getRefreshToken();
 
         // 검증 결과
         if (tokenProvider.validateToken(refreshToken) != VALID_JWT) {
+            log.info("invlaid token");
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
 
@@ -121,6 +120,5 @@ public class MemberService {
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT)));
         return newAccessToken;
     }
-
 
 }

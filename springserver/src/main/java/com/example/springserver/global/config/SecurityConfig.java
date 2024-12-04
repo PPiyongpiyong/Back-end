@@ -7,6 +7,8 @@ import com.example.springserver.global.exception.CustomerAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +27,7 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
 
-    // 비밀번호를 해싱
+    // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -35,18 +37,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(
-                                corsConfigurationSource()
-                        )) //CORS 정책 작성 및 예외
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 예외 코드 작성
+                        httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
 
-        //setLoginFilter(httpSecurity);
         setAccessTokenFilter(httpSecurity);
-        //setTokenRefreshFilter(httpSecurity);
         setPermissions(httpSecurity);
 
-        // AccessDeniedHandler 설정
         httpSecurity.exceptionHandling()
                 .accessDeniedHandler(new CustomerAccessDeniedHandler());
 
@@ -64,9 +61,9 @@ public class SecurityConfig {
 
         CorsConfiguration conf = new CorsConfiguration();
 
-        conf.setAllowedOriginPatterns(List.of("*")); // 모든 origin에 대한 접근 허용
-        conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-        conf.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); // 접근 가능한 header 정보값
+        conf.addAllowedOrigin("*"); // 모든 Origin 허용
+        conf.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
+        conf.addAllowedHeader("*"); // 모든 헤더 허용
         conf.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -75,16 +72,6 @@ public class SecurityConfig {
         return source;
     }
 
-
-    // 로그인 인증 설정
-    private void setLoginFilter(HttpSecurity httpSecurity) {
-
-    }
-
-    // 토큰 갱신 요청을 처리하는 필터, 기존 토큰 유효성 확인 후에 새 토큰을 발급
-    private void setTokenRefreshFilter(HttpSecurity httpSecurity) {
-
-    }
 
     // 인가 설정(경로별 접근 권한 설정)
     private void setPermissions(HttpSecurity httpSecurity) throws Exception {
