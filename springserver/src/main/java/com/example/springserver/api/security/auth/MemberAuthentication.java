@@ -1,12 +1,10 @@
 package com.example.springserver.api.security.auth;
 
 import com.example.springserver.api.security.domain.MemberEntity;
-import com.example.springserver.api.security.repository.MemberRepository;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +23,7 @@ public class MemberAuthentication extends UsernamePasswordAuthenticationToken {
 
         // authorizes 생성(List 타입)
         List<GrantedAuthority> authorities = member.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
         return new MemberAuthentication(

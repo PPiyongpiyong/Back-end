@@ -8,6 +8,7 @@ public class MemberMapper {
         return MemberEntity.builder()
                 .id(requestDto.id())
                 .phoneNumber(requestDto.phoneNumber())
+                .roles(requestDto.roles())
                 .gender(requestDto.gender())
                 .parentPhoneNumber(requestDto.parentPhoneNumber())
                 .address(requestDto.address())

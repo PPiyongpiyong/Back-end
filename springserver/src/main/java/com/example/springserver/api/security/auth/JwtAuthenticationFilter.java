@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,9 @@ import static com.example.springserver.api.security.domain.constants.JwtValidati
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    public static final String TOKEN_HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
@@ -72,21 +76,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getJwtFromRequest(HttpServletRequest request) {
 
         // 헤더에서 Authorization 정보를 가져오기
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader(TOKEN_HEADER);
 
         // bearer 형식의 Authorization이 아닌 경우에 대한 체크
         if (!StringUtils.hasText(bearerToken)) {
             log.warn("Authorization header is missing or empty");
             return null;
         }
-        if (!bearerToken.startsWith("Bearer ")) {
+        if (!bearerToken.startsWith(TOKEN_PREFIX)) {
             log.warn("Authorization header format is invalid");
             return null;
         }
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
             return bearerToken.substring(7); // Bearer  이후만 반환하게 substr
         }
         return null;
     }
+
+    // 특정 경로에는 filter를 적용하지 않도록 설정
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        System.out.println("Request path: " + path); // 경로 로그 출력
+        boolean shouldNotFilter = path.startsWith("/auth/");
+        System.out.println("Should not filter: " + shouldNotFilter); // 필터링 여부 출력
+        return shouldNotFilter;
+    }
+
+
 }
