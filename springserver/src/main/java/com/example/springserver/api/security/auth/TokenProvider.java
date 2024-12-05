@@ -61,7 +61,7 @@ public class TokenProvider {
                     .claim(KEY_ROLES, member.getRoles())
                     .setIssuedAt(now)
                     .setExpiration(expiryDate)
-                    .signWith(SignatureAlgorithm.HS512, this.secretKey) // JWT의 signature 부분
+                    .signWith(SignatureAlgorithm.HS256, this.secretKey) // JWT의 signature 부분
                     .compact();
 
         } catch (IllegalArgumentException e) {

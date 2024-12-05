@@ -18,7 +18,7 @@ import java.util.Map;
 public class MemberController {
 
     private final TokenProvider tokenProvider;
-    MemberService memberService;
+    private final MemberService memberService;
 
     // 회원 가입하기
     @PostMapping("/auth/signup")
