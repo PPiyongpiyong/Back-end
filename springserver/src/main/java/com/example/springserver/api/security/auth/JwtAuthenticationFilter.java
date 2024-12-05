@@ -2,7 +2,6 @@ package com.example.springserver.api.security.auth;
 
 import com.example.springserver.api.security.domain.MemberEntity;
 import com.example.springserver.api.security.repository.MemberRepository;
-import com.example.springserver.api.security.service.MemberService;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import jakarta.servlet.FilterChain;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;

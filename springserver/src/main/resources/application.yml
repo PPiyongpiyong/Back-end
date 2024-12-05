@@ -24,7 +24,8 @@ spring:
       host: localhost
       port: 6379
   jwt:
-    secret: cHBpeW9uZ3BwaXlvbmctcHJvamVjdC1qd3Qtc2VjcmV0LWtleQ==    # base64로 'ppiyongppiyong-project-jwt-secret-key' 인코딩한 값
+    secret: cHBpeW9uZ3BwaXlvbmctc2VydmVyLXByb2plY3Qtand0LXNlY3JldC1rZXktZW5jb2RlZC1iYXNlNjQ=
+    # base64로 'ppiyongppiyong-server-project-jwt-secret-key-encoded-base64' 인코딩한 값
     access:
       expiration: 2592000000 # 60L * 60L * 24L * 30000
     refresh:

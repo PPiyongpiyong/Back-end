@@ -10,6 +10,7 @@ import org.hibernate.annotations.DialectOverride;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import software.amazon.awssdk.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +26,7 @@ public class MemberEntity implements UserDetails {
 
     @Id
     @Column(unique = true, nullable = false, name = "member_id")
+    @NotNull
     private String id;
 
     private String username;
