@@ -45,6 +45,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 
+
 	// Spring Web 의존성 (RestTemplate 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -60,6 +61,7 @@ dependencies {
 	// Spring Boot Starter Data JPA (optional, DB 연동이 필요하면 추가)
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 
 	// 이거 존나 중요함(버전 스프링부트랑 맞춰야 해서 2023.0.3)
 	implementation platform('org.springframework.cloud:spring-cloud-dependencies:2023.0.3')
@@ -71,9 +73,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 	implementation 'com.google.code.gson:gson:2.8.9'
 
 	//security
