@@ -1,4 +1,4 @@
-package com.example.springserver.global.Kakao.auth.security;
+package com.example.springserver.global.Kakao.auth.jwt;
 
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtParser;
