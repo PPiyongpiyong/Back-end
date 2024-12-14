@@ -1,6 +1,5 @@
 package com.example.springserver.global.Kakao.auth.security;
-
-import ch.qos.logback.core.status.ErrorStatus;
+import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import org.junit.jupiter.engine.Constants;
 
 import java.io.PrintWriter;
 import java.io.IOException;

@@ -1,7 +1,8 @@
 package com.example.springserver.global.Kakao.auth.security;
 
-import ch.qos.logback.core.status.ErrorStatus;
-import com.example.springserver.api.EmergencyMap.exception.UnauthorizedException;
+import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
+
+import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,16 +22,16 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (UnauthorizedException e) {
-            handleUnauthorizedException(response, e);
+        } catch (KaKaoUnauthorizedException e) {
+            KaKaoUnauthorizedException(response, e);
         } catch (Exception ee) {
             handleException(response);
         }
     }
 
-    private void handleUnauthorizedException(HttpServletResponse response, Exception e) throws IOException {
-        UnauthorizedException ue = (UnauthorizedException) e;
-        ErrorStatus errorStatus = ue.getErrorStatus();
+    private void KaKaoUnauthorizedException(HttpServletResponse response, Exception e) throws IOException {
+        KaKaoUnauthorizedException kue = (KaKaoUnauthorizedException) e;
+        ErrorStatus errorStatus = kue.getErrorStatus();
         HttpStatus httpStatus = errorStatus.getHttpStatus();
         setResponse(response, httpStatus, errorStatus);
     }
