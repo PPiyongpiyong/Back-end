@@ -39,6 +39,6 @@ logging:
 
 jwt:
   secret: ppiyongpiyong
-  access-token-expire-time: 3600000 # 1시간 밀리초
+  access-token-expire-time: 1800000 # 30분 밀리초
   refresh-token-expire-time: 604800000 # 1주 밀리초
 
