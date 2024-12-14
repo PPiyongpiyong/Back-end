@@ -43,7 +43,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 
 	// Spring Web 의존성 (RestTemplate 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -1,10 +1,8 @@
 package com.example.springserver.global.Kakao.auth;
 
-import com.example.springserver.api.MyPage.Domain.MemberEntity;
+import com.example.springserver.api.MyPage.Domain.Member;
 import lombok.Data;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class Auth {
@@ -21,8 +19,8 @@ public class Auth {
         private String password;
         //private List<String> roles;
 
-        public MemberEntity toEntity() {
-            return MemberEntity.builder()
+        public Member toEntity() {
+            return Member.builder()
                     .userId(this.userId)
                     .password(this.password)
                     .build();

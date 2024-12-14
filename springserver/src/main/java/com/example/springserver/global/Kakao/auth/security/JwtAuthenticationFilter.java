@@ -1,6 +1,9 @@
 package com.example.springserver.global.Kakao.auth.security;
 
-import com.example.springserver.api.EmergencyMap.exception.UnauthorizedException;
+
+import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
+
+import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 import com.example.springserver.global.Kakao.auth.jwt.JwtProvider;
 import com.example.springserver.global.Kakao.auth.jwt.JwtValidator;
 import jakarta.servlet.FilterChain;
@@ -8,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.engine.Constants;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -40,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(accessToken) && accessToken.startsWith(Constants.BEARER)) {
             return accessToken.substring(Constants.BEARER.length());
         }
-        throw new UnauthorizedException(ErrorStatus.INVALID_ACCESS_TOKEN);
+        throw new KaKaoUnauthorizedException(ErrorStatus.INVALID_ACCESS_TOKEN);
     }
 
     private void setAuthentication(HttpServletRequest request, Long userId) {
