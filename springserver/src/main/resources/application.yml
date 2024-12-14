@@ -37,5 +37,8 @@ logging:
           client:
             RestTemplate: DEBUG
 
-
+jwt:
+  secret: ppiyongpiyong
+  access-token-expire-time: 3600000 # 1시간 밀리초
+  refresh-token-expire-time: 604800000 # 1주 밀리초
 

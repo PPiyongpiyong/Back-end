@@ -1,4 +1,4 @@
-package com.example.springserver.global.auth;
+package com.example.springserver.global.Kakao.auth;
 
 import com.example.springserver.api.MyPage.Domain.MemberEntity;
 import lombok.Data;
