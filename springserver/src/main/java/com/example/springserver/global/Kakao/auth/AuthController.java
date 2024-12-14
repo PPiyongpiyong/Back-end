@@ -1,4 +1,4 @@
-package com.example.springserver.global.auth;
+package com.example.springserver.global.Kakao.auth;
 
 import org.springframework.web.bind.annotation.RestController;
 
