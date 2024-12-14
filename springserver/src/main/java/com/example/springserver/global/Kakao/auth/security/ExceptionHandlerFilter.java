@@ -3,6 +3,7 @@ package com.example.springserver.global.Kakao.auth.security;
 import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 
 import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
