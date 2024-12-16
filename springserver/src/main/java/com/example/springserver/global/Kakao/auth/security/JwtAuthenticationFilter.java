@@ -53,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         securityContext.setAuthentication(authentication);
     }
 
+    //HTTP 요청에서 인증 상세 정보를 추출하는 클래스
     private void createWebAuthenticationDetailsAndSet(HttpServletRequest request, UserAuthentication authentication) {
         WebAuthenticationDetailsSource webAuthenticationDetailsSource = new WebAuthenticationDetailsSource();
         WebAuthenticationDetails webAuthenticationDetails = webAuthenticationDetailsSource.buildDetails(request);
