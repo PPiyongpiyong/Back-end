@@ -3,22 +3,33 @@ import com.example.springserver.global.Kakao.auth.Dto.respond.Token;
 import com.example.springserver.global.Kakao.auth.Dto.respond.UserAuthResponseDto;
 import com.example.springserver.global.Kakao.auth.Dto.respond.UserReissueRequestDto;
 import com.example.springserver.global.Kakao.auth.Dto.respond.UserSignUpRequestDto;
+import com.example.springserver.global.Kakao.auth.Error.ConflictException;
 import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
 import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 import com.example.springserver.global.Kakao.auth.KakaoRepository.UserRepository;
 import com.example.springserver.global.Kakao.auth.jwt.JwtProvider;
 import com.example.springserver.global.Kakao.auth.jwt.JwtValidator;
 import com.example.springserver.global.Kakao.auth.Domain.User;
+
 import jakarta.persistence.EntityNotFoundException;
+
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+@RestControllerAdvice
 @RequiredArgsConstructor
 @Transactional
 @Service
+@Setter
+@Getter
+@Builder
 public class AuthService {
     private final JwtProvider jwtProvider;
     private final JwtValidator jwtValidator;
@@ -29,7 +40,7 @@ public class AuthService {
         String platformId = kakaoOAuthProvider.getKakaoPlatformId(token);
         User findUser = getUser(platformId);
         Token issuedToken = issueAccessTokenAndRefreshToken(findUser);
-        updateRefreshToken(findUser, issuedToken.getRefreshToken());
+        updateRefreshToken(findUser, issuedToken.refreshToken());
         return UserAuthResponseDto.of(issuedToken, findUser);
     }
 
@@ -40,9 +51,11 @@ public class AuthService {
         User user = createUser(platformId, request.nickname());
         User savedUser = userRepository.save(user);
         Token issuedToken = issueAccessTokenAndRefreshToken(savedUser);
-        updateRefreshToken(savedUser, issuedToken.getRefreshToken());
+        updateRefreshToken(savedUser, issuedToken.refreshToken());
         return UserAuthResponseDto.of(issuedToken, savedUser);
     }
+
+
 
     @Transactional(noRollbackFor = KaKaoUnauthorizedException.class)
     public Token reissue(String refreshToken, UserReissueRequestDto request) {
@@ -50,7 +63,7 @@ public class AuthService {
         User findUser = getUser(userId);
         validateRefreshToken(userId, refreshToken, findUser.getRefreshToken());
         Token issuedToken = issueAccessTokenAndRefreshToken(findUser);
-        updateRefreshToken(findUser, issuedToken.getRefreshToken());
+        updateRefreshToken(findUser, issuedToken.refreshToken()); //getRefreshToken사용하는 방법을 모르겠음
         return issuedToken;
     }
 
@@ -65,7 +78,7 @@ public class AuthService {
 
     private User getUser(String platformId) {
         return userRepository.findUserByPlatformId(platformId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(ErrorStatus.USER_NOT_FOUND)));
     }
 
     private void validateDuplicateNickname(String nickname) {
@@ -105,5 +118,12 @@ public class AuthService {
 
     private void deleteRefreshToken(User findUser) {
         findUser.updateRefreshToken(null);
+    }
+
+    private User createUser(String platformId, String nickname) {
+        return User.builder()
+                .platformId(platformId)
+                .nickname(nickname)
+                .build();
     }
 }
