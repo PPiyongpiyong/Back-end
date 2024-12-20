@@ -1,11 +1,15 @@
 package com.example.springserver.global.Kakao.auth.KakaoController;
+import org.springframework.ui.Model;
 
 import com.example.springserver.global.Kakao.auth.Dto.respond.Token;
 import com.example.springserver.global.Kakao.auth.Dto.respond.UserAuthResponseDto;
 import com.example.springserver.global.Kakao.auth.Dto.respond.UserReissueRequestDto;
 import com.example.springserver.global.Kakao.auth.Dto.respond.UserSignUpRequestDto;
 import com.example.springserver.global.Kakao.auth.OpenFeign.AuthService;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +47,18 @@ public class KakaoController {
     public ResponseEntity<Void> withdraw(@PathVariable Long userId) {
         authService.withdraw(userId);
         return ResponseEntity.ok().build();
+    }
+    @Value("${kakao.client_id}")
+    private String client_id;
+
+    @Value("${kakao.redirect_uri}")
+    private String redirect_uri;
+
+    @GetMapping("/page")
+    public String loginPage(Model model) {
+        String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+client_id+"&redirect_uri="+redirect_uri;
+        model.addAttribute("location", location);
+
+        return "login";
     }
 }
