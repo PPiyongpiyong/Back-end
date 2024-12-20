@@ -1,7 +1,13 @@
 package com.example.springserver.global.Kakao.auth.security;
 
 import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ApiResponse {
     private String status;
     private String message;
