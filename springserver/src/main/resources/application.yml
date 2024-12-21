@@ -40,6 +40,8 @@ aws-property:
 kakao:
   api:
     key: 3c8be9670acb0426f12d1ad91ba1a063
+  client_id: 4536a449876cd395c224d92615168ab3
+  redirect_uri: http://localhost:8080/oauth/code/ppiyong
 
 logging:
   level:
@@ -48,4 +50,5 @@ logging:
         web:
           client:
             RestTemplate: DEBUG
+
 
