@@ -49,7 +49,8 @@ public class ManualService {
                     return new ManualCategoryRespondDto(
                             manual.getCategory(), // category
                             manual.getEmergencyName(),
-                            manual.getManualSummary() // manualSummaries
+                            manual.getManualSummary(),
+                            manual.getImgUrl()// manualSummaries
                             // emergencyName
                     );
                 })
