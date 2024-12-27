@@ -1,5 +1,6 @@
 package com.example.springserver.global.config;
 
+import com.example.springserver.api.security.auth.JwtAuthenticationEntryPoint;
 import com.example.springserver.api.security.auth.JwtAuthenticationFilter;
 import com.example.springserver.api.security.auth.TokenProvider;
 import com.example.springserver.api.security.repository.MemberRepository;
@@ -28,7 +29,16 @@ public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
-    private static final String[] whiteList = {"/api/user/signin", "/api/user/signup", "/api/user/reissue", "/"};
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    public static final String[] allowUrls = {
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v3/api-docs/**",
+            "/api/v1/posts/**",
+            "/api/v1/replies/**",
+            "/login",
+            "/auth/login/kakao/**"
+    };
 
     // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
     @Bean
@@ -38,7 +48,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(whiteList);
+        return web -> web.ignoring().requestMatchers(allowUrls);
     }
 
     @Bean
@@ -55,12 +65,12 @@ public class SecurityConfig {
         setAccessTokenFilter(httpSecurity);
         setPermissions(httpSecurity);
 
-        httpSecurity.exceptionHandling()
-                .accessDeniedHandler(new CustomerAccessDeniedHandler()
-                    .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+        httpSecurity
+                .exceptionHandling(exceptionHandlingConfigurer ->
+                        exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtValidator, jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(memberRepository, tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

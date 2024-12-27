@@ -4,7 +4,6 @@ import com.example.springserver.api.security.domain.MemberEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +26,7 @@ public class MemberAuthentication extends UsernamePasswordAuthenticationToken {
                 .collect(Collectors.toList());
 
         return new MemberAuthentication(
-                member.getId(),
+                member.getMemberId(),
                 member.getPassword(),
                 authorities // 권한들 자체가 리스트 형식이기에 그냥 넣으면 됨
         );

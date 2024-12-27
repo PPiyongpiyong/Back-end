@@ -47,8 +47,9 @@ public class MemberService {
     // 회원 정보를 추가하기
     @Transactional
     public MemberResponseDto addMemberInfo(String token, MemberRequestDto requestDto) throws CustomException {
-        String memberId = tokenProvider.getMemberIdFromToken(token);
-        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+        Long memberId = tokenProvider.getMemberIdFromToken(token);
+        MemberEntity member = memberRepository.findByMemberId(memberId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         MemberEntity savedMember = memberRepository.save(MemberEntity.builder()
                 .phoneNumber(requestDto.phoneNumber())
@@ -64,8 +65,8 @@ public class MemberService {
     // 나의 정보 조회하기
     @Transactional(readOnly = true)
     public MemberResponseDto getMyInfo(String authToken) throws CustomException {
-        String memberId = tokenProvider.getMemberIdFromToken(authToken);
-        MemberEntity member = memberRepository.findById(memberId)
+        Long memberId = tokenProvider.getMemberIdFromToken(authToken);
+        MemberEntity member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
         return MemberMapper.toDto(member);
     }
@@ -75,7 +76,7 @@ public class MemberService {
     public TokenDto GeneralLogin(LoginRequestDto requestDto) throws CustomException {
 
         // 1. 사용자 존재 여부 확인
-        MemberEntity member = memberRepository.findById(requestDto.getId())
+        MemberEntity member = memberRepository.findById(requestDto.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_ALREADY_EXISTS));
 
         // 2. 비밀번호 검증
@@ -87,7 +88,7 @@ public class MemberService {
         // 3. 토큰 발급
         String accessToken = tokenProvider.generateAccessToken(member);
         String refreshToken = tokenProvider.generateRefreshToken(member);
-        tokenProvider.saveRefreshToken(member.getId(), refreshToken); // redis-server에 저장
+        tokenProvider.saveRefreshToken(member.getEmail(), refreshToken); // redis-server에 저장
 
         // 4. TokenDto 반환
         return new TokenDto(accessToken, refreshToken);
@@ -106,7 +107,7 @@ public class MemberService {
         }
 
         // 멤버 아이디 가져오기
-        String memberId = tokenProvider.getMemberIdFromToken(refreshToken);
+        Long memberId = tokenProvider.getMemberIdFromToken(refreshToken);
 
         // Redis에서 Refresh Token 확인하기
         String storedRefreshToken = tokenProvider.getRefreshToken(refreshToken);
@@ -116,7 +117,7 @@ public class MemberService {
 
         // Access token을 Refresh 확인 후에 재발급
         String newAccessToken = tokenProvider.generateAccessToken(
-                memberRepository.findById(memberId)
+                memberRepository.findByMemberId(memberId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT)));
         return newAccessToken;
     }

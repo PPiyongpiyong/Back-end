@@ -27,9 +27,12 @@ public class MemberEntity implements UserDetails {
     @Id
     @Column(unique = true, nullable = false, name = "member_id")
     @NotNull
-    private String id;
+    private Long memberId; // 유저 DB 아이디
 
-    private String username;
+    private String username; // 유저의 실제 이름
+
+    @Column(nullable = false, unique = true)
+    private String email; // 유저 이메일
 
     private String password;
 
@@ -59,5 +62,4 @@ public class MemberEntity implements UserDetails {
     public void setPassword(String pw) {
         this.password = pw;
     }
-
 }
