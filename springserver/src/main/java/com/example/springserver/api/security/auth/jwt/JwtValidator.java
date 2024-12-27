@@ -1,7 +1,6 @@
-package com.example.springserver.global.Kakao.auth.jwt;
+package com.example.springserver.api.security.auth.jwt;
 
 
-import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;

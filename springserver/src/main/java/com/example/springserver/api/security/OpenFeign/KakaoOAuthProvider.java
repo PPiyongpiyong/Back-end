@@ -1,17 +1,14 @@
-package com.example.springserver.global.Kakao.auth.OpenFeign;
+package com.example.springserver.api.security.OpenFeign;
 
 
-import com.example.springserver.api.EmergencyMap.exception.UnauthorizedException;
-import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
-import com.example.springserver.global.Kakao.auth.OpenFeign.dto.KakaoAccessTokenInfo;
+import com.example.springserver.api.security.OpenFeign.dto.KakaoAccessTokenInfo;
 import com.example.springserver.global.Kakao.auth.OpenFeign.dto.KakaoFeignClient;
-import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.example.springserver.global.Kakao.auth.OpenFeign.KakaoAccessToken.createKakaoAccessToken;
+import static com.example.springserver.api.security.OpenFeign.KakaoAccessToken.createKakaoAccessToken;
 
 @RequiredArgsConstructor
 @Component

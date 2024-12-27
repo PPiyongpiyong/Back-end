@@ -1,11 +1,10 @@
-package com.example.springserver.global.Kakao.auth.KakaoController;
+package com.example.springserver.api.security.controller;
 import org.springframework.ui.Model;
 
-import com.example.springserver.global.Kakao.auth.Dto.respond.Token;
-import com.example.springserver.global.Kakao.auth.Dto.respond.UserAuthResponseDto;
-import com.example.springserver.global.Kakao.auth.Dto.respond.UserReissueRequestDto;
-import com.example.springserver.global.Kakao.auth.Dto.respond.UserSignUpRequestDto;
-import com.example.springserver.global.Kakao.auth.OpenFeign.AuthService;
+import com.example.springserver.api.security.OpenFeign.dto.respond.UserAuthResponseDto;
+import com.example.springserver.api.security.OpenFeign.dto.respond.UserReissueRequestDto;
+import com.example.springserver.api.security.OpenFeign.dto.respond.UserSignUpRequestDto;
+import com.example.springserver.api.security.OpenFeign.AuthService;
 
 import lombok.RequiredArgsConstructor;
 

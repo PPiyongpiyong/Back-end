@@ -1,6 +1,4 @@
-package com.example.springserver.global.Kakao.auth.security;
-
-import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
+package com.example.springserver.global.exception;
 
 import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
 

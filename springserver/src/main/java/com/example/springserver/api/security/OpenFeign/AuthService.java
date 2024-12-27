@@ -1,14 +1,12 @@
-package com.example.springserver.global.Kakao.auth.OpenFeign;
-import com.example.springserver.global.Kakao.auth.Dto.respond.Token;
-import com.example.springserver.global.Kakao.auth.Dto.respond.UserAuthResponseDto;
-import com.example.springserver.global.Kakao.auth.Dto.respond.UserReissueRequestDto;
-import com.example.springserver.global.Kakao.auth.Dto.respond.UserSignUpRequestDto;
+package com.example.springserver.api.security.OpenFeign;
+import com.example.springserver.api.security.OpenFeign.dto.respond.UserAuthResponseDto;
+import com.example.springserver.api.security.OpenFeign.dto.respond.UserReissueRequestDto;
+import com.example.springserver.api.security.OpenFeign.dto.respond.UserSignUpRequestDto;
 import com.example.springserver.global.Kakao.auth.Error.ConflictException;
 import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
-import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
 import com.example.springserver.global.Kakao.auth.KakaoRepository.UserRepository;
-import com.example.springserver.global.Kakao.auth.jwt.JwtProvider;
-import com.example.springserver.global.Kakao.auth.jwt.JwtValidator;
+import com.example.springserver.api.security.auth.jwt.JwtProvider;
+import com.example.springserver.api.security.auth.jwt.JwtValidator;
 import com.example.springserver.global.Kakao.auth.Domain.User;
 
 import jakarta.persistence.EntityNotFoundException;

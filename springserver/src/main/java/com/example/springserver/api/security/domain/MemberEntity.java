@@ -43,6 +43,9 @@ public class MemberEntity implements UserDetails {
     private String address;
     private String residentNo;
 
+    // 자체 로그인, 카카오 로그인 구분
+    private String provider;
+
     // 위임 메서드 구현
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

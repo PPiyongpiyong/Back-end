@@ -1,4 +1,4 @@
-package com.example.springserver.global.Kakao.auth.OpenFeign;
+package com.example.springserver.api.security.OpenFeign;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
