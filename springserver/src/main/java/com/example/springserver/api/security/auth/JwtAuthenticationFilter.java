@@ -11,7 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -100,6 +102,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         boolean shouldNotFilter = path.startsWith("/auth/");
         System.out.println("Should not filter: " + shouldNotFilter); // 필터링 여부 출력
         return shouldNotFilter;
+    }
+
+    // kakao 관련
+    private String getAccessToken(HttpServletRequest request) {
+        String accessToken = request.getHeader(Constants.AUTHORIZATION);
+        if (StringUtils.hasText(accessToken) && accessToken.startsWith(Constants.BEARER)) {
+            return accessToken.substring(Constants.BEARER.length());
+        }
+        throw new KaKaoUnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN);
+    }
+
+    private void setAuthentication(HttpServletRequest request, Long userId) {
+        UserAuthentication authentication = createDefaultUserAuthentication(userId);
+        createWebAuthenticationDetailsAndSet(request, authentication);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+    }
+
+    //HTTP 요청에서 인증 상세 정보를 추출하는 클래스
+    private void createWebAuthenticationDetailsAndSet(HttpServletRequest request, UserAuthentication authentication) {
+        WebAuthenticationDetailsSource webAuthenticationDetailsSource = new WebAuthenticationDetailsSource();
+        WebAuthenticationDetails webAuthenticationDetails = webAuthenticationDetailsSource.buildDetails(request);
+        authentication.setDetails(webAuthenticationDetails);
     }
 
 

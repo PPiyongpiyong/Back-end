@@ -50,6 +50,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	// kakao login
+	implementation platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.3")
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	// Spring Web 의존성 (RestTemplate 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-web'

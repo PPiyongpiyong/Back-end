@@ -2,28 +2,21 @@ package com.example.springserver.api.security.auth;
 
 import com.example.springserver.api.security.domain.MemberEntity;
 import com.example.springserver.api.security.domain.constants.JwtValidationType;
-import com.example.springserver.api.security.domain.constants.Role;
 import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import javax.crypto.SecretKey;
 
 @Component
 @RequiredArgsConstructor
@@ -115,7 +108,7 @@ public class TokenProvider {
         String memberId = claims.getSubject();
 
         if(!StringUtils.hasText(memberId)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
         return memberId;
     }

@@ -1,5 +1,5 @@
-package com.example.springserver.global.Kakao.auth.security;
-import com.example.springserver.global.Kakao.auth.Error.ErrorStatus;
+package com.example.springserver.api.security.auth;
+import com.example.springserver.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +24,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 
     private void handleException(HttpServletResponse response) throws IOException {
-        setResponse(response, HttpStatus.UNAUTHORIZED, ErrorStatus.UNAUTHORIZED);
+        setResponse(response, HttpStatus.UNAUTHORIZED, ErrorCode.UNAUTHORIZED);
     }
 
     private void setResponse(HttpServletResponse response, HttpStatus httpStatus, ErrorStatus errorStatus) throws IOException {

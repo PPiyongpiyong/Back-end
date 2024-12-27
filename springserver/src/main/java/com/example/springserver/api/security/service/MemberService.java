@@ -102,7 +102,7 @@ public class MemberService {
         // 검증 결과
         if (tokenProvider.validateToken(refreshToken) != VALID_JWT) {
             log.info("invlaid token");
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
         // 멤버 아이디 가져오기

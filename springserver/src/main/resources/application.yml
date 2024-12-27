@@ -27,7 +27,7 @@ spring:
     secret: cHBpeW9uZ3BwaXlvbmctc2VydmVyLXByb2plY3Qtand0LXNlY3JldC1rZXktZW5jb2RlZC1iYXNlNjQ=
     # base64로 'ppiyongppiyong-server-project-jwt-secret-key-encoded-base64' 인코딩한 값
     access:
-      expiration: 2592000000 # 60L * 60L * 24L * 30000
+      expiration: 86400
     refresh:
       expiration: 604800 # 7 * 24 * 60 * 60L (7일)
 

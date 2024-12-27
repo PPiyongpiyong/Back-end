@@ -1,4 +1,4 @@
-package com.example.springserver.global.Kakao.auth.Dto.respond;
+package com.example.springserver.api.security.OpenFeign.dto.respond;
 
 import lombok.*;
 
