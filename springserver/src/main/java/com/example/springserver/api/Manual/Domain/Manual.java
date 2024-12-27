@@ -24,5 +24,6 @@ public class Manual {
 
     private String category;
 
+    private String imgUrl;
 
 }
