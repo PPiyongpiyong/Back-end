@@ -1,19 +1,19 @@
 package com.example.springserver.global.exception;
 
-import com.example.springserver.global.Kakao.auth.Error.KaKaoUnauthorizedException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
+// Filter에서 오류가 생길 시 연결되는 클래스
+@Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -21,29 +21,32 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (KaKaoUnauthorizedException e) {
-            KaKaoUnauthorizedException(response, e);
+        } catch (CustomException e) {
+            unauthorizedException(response, e);
         } catch (Exception ee) {
             handleException(response);
         }
     }
 
-    private void KaKaoUnauthorizedException(HttpServletResponse response, Exception e) throws IOException {
-        KaKaoUnauthorizedException kue = (KaKaoUnauthorizedException) e;
-        ErrorStatus errorStatus = kue.getErrorStatus();
-        HttpStatus httpStatus = errorStatus.getHttpStatus();
-        setResponse(response, httpStatus, errorStatus);
+    // 권한 불가
+    private ResponseEntity<ErrorResponse> unauthorizedException(HttpServletResponse response, Exception e) throws IOException {
+        log.error("Unauthorized Exception", e);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.FORBIDDEN.value())
+                .message("접근 권한이 없습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(errorResponse);
     }
+
 
     private void handleException(HttpServletResponse response) throws IOException {
-        setResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, ErrorStatus.INTERNAL_SERVER_ERROR);
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(ErrorCode.INTERNAL_SERVER_ERROR.getDescription())
+                        .build();
     }
 
-    private void setResponse(HttpServletResponse response, HttpStatus httpStatus, ErrorStatus errorStatus) throws IOException {
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(Constants.CHARACTER_TYPE);
-        response.setStatus(httpStatus.value());
-        PrintWriter writer = response.getWriter();
-        writer.write(objectMapper.writeValueAsString(ApiResponse.of(errorStatus)));
-    }
 }
