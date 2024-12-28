@@ -36,18 +36,33 @@ public class KakaoUtils {
 
     private final ObjectMapper objectMapper;
 
+    /*
+    POST 요청
+    Content-Type: application/json;charset=UTF-8
+    {
+        "token_type":"bearer",
+        "access_token":"${ACCESS_TOKEN}",
+        "expires_in":43199,
+        "refresh_token":"${REFRESH_TOKEN}",
+        "refresh_token_expires_in":5184000,
+        "scope":"account_email profile"
+    }
+     */
     public KakaoDto.OAuthToken requestToken(String accessCode) {
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+        // 헤더 설계
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        // 본문 설계
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", client_id);
-        params.add("redirect_url", redirect_uri);
-        params.add("code", accessCode);
+        params.add("client_id", client_id); // 앱 REST API 키
+        params.add("redirect_uri", redirect_uri); // 인가 코드가 리다이렉트된 URI
+        params.add("code", accessCode); // 인가 코드 받기 요청으로 얻은 인가 코드
 
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(headers, params);
 
         ResponseEntity<String> response = restTemplate.exchange(
                 "https://kauth.kakao.com/oauth/token",
