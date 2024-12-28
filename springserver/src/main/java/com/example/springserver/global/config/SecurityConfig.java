@@ -1,5 +1,6 @@
 package com.example.springserver.global.config;
 
+import com.example.springserver.api.security.auth.JwtAuthenticationEntryPoint;
 import com.example.springserver.api.security.auth.JwtAuthenticationFilter;
 import com.example.springserver.api.security.auth.TokenProvider;
 import com.example.springserver.api.security.repository.MemberRepository;
@@ -10,7 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,6 +29,16 @@ public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    public static final String[] allowUrls = {
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v3/api-docs/**",
+            "/api/v1/posts/**",
+            "/api/v1/replies/**",
+            "/login",
+            "/auth/login/kakao/**"
+    };
 
     // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
     @Bean
@@ -34,18 +47,30 @@ public class SecurityConfig {
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(allowUrls);
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors(httpSecurityCorsConfigurer ->
                         httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable);
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(sessionManagementConfigurer ->
+                        sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         setAccessTokenFilter(httpSecurity);
-        //setPermissions(httpSecurity);
+        setPermissions(httpSecurity);
 
-        httpSecurity.exceptionHandling()
-                .accessDeniedHandler(new CustomerAccessDeniedHandler());
+        httpSecurity
+                .exceptionHandling(exceptionHandlingConfigurer ->
+                        exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                        authorizationManagerRequestMatcherRegistry.anyRequest().authenticated())
+                .addFilterBefore(new JwtAuthenticationFilter(memberRepository, tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
@@ -74,11 +99,10 @@ public class SecurityConfig {
 
 
     // 인가 설정(경로별 접근 권한 설정)
-//    private void setPermissions(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.authorizeHttpRequests(auth -> auth
-//                .requestMatchers("/auth/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
-//                .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
-//        );
-//
-//    }
+    private void setPermissions(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/auth/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+                .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
+        );
+    }
 }

@@ -2,28 +2,21 @@ package com.example.springserver.api.security.auth;
 
 import com.example.springserver.api.security.domain.MemberEntity;
 import com.example.springserver.api.security.domain.constants.JwtValidationType;
-import com.example.springserver.api.security.domain.constants.Role;
 import com.example.springserver.api.security.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import javax.crypto.SecretKey;
 
 @Component
 @RequiredArgsConstructor
@@ -57,7 +50,7 @@ public class TokenProvider {
             // JWT(token) 을 builder를 통해 반환
             return Jwts.builder()
                     .setHeaderParam("type", isRefresh ? "refresh" : "access") // JWT의 header 부분
-                    .setSubject(String.valueOf(member.getId())) // JWT의 payload 부분
+                    .setSubject(String.valueOf(member.getMemberId())) // JWT의 payload 부분
                     .claim(KEY_ROLES, member.getRoles())
                     .setIssuedAt(now)
                     .setExpiration(expiryDate)
@@ -82,10 +75,10 @@ public class TokenProvider {
     }
 
     // RefreshToken redis 서버에 저장하기
-    public void saveRefreshToken(String memberId, String refreshToken) {
+    public void saveRefreshToken(String email, String refreshToken) {
 
         // redis 서버에 저장할 키
-        String key = "refreshToken: " + memberId;
+        String key = "refreshToken: " + email;
         // 저장하는 기한
         redisTemplate.opsForValue().set(key, refreshToken, refreshTokenExpiration, TimeUnit.SECONDS);
     }
@@ -104,7 +97,7 @@ public class TokenProvider {
     }
 
     // 발급받은 Token으로부터 member의 아이디를 얻기
-    public String getMemberIdFromToken(String token) throws CustomException {
+    public Long getMemberIdFromToken(String token) throws CustomException {
 
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.secretKey)
@@ -115,9 +108,9 @@ public class TokenProvider {
         String memberId = claims.getSubject();
 
         if(!StringUtils.hasText(memberId)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
-        return memberId;
+        return Long.parseLong(memberId);
     }
 
     // Claim JWT 정보 얻어오기(최종적으로 JWT의 payload(Body)를 가져오는 것과 동일
@@ -155,8 +148,8 @@ public class TokenProvider {
 //    }
 
     public Authentication getAuthentication(String token) {
-        String memberId = this.getMemberIdFromToken(token);
-        MemberEntity member = memberRepository.findById(memberId)
+        Long memberId = this.getMemberIdFromToken(token);
+        MemberEntity member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         return MemberAuthentication.createMemberAuthentication(member);

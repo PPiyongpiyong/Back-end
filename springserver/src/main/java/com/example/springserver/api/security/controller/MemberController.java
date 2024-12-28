@@ -45,7 +45,7 @@ public class MemberController {
             ) {
 
         return ResponseEntity.ok(Map.of(
-                "accessTooken",
+                "accessToken",
                 memberService.regenerateAccessToken(request)));
 
     }

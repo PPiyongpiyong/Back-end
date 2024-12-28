@@ -13,7 +13,6 @@ java {
 	}
 }
 
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -31,11 +30,6 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	implementation 'org.springframework.boot:spring-boot-starter'
-
-
-
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// JWT 관련 설정
@@ -44,9 +38,7 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON 처리용
 
 	// Trie 구조 사용
-
 	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
-
 
 	//Multipart file
 	implementation("software.amazon.awssdk:bom:2.21.0")
@@ -57,8 +49,13 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 
+	// kakao login
+	implementation platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.3")
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	//OAuth2 service
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	// Spring Web 의존성 (RestTemplate 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -75,31 +72,12 @@ dependencies {
 	// Spring Boot Starter Data JPA (optional, DB 연동이 필요하면 추가)
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 
 	// 이거 존나 중요함(버전 스프링부트랑 맞춰야 해서 2023.0.3)
 	implementation platform('org.springframework.cloud:spring-cloud-dependencies:2023.0.3')
 
 	//클라우드!!!!!
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
-	//jwt
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-	implementation 'com.google.code.gson:gson:2.8.9'
-
-	//webflux
-	//Webflux
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	//security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-	//Open Feign
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3'
 }
 
 tasks.named('test') {
