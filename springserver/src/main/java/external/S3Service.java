@@ -55,6 +55,11 @@ public class S3Service {
         );
     }
 
+    public String getImgUrl(String key){
+        // 버킷 URL이 공개적으로 접근 가능하다고 가정
+        return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, awsConfig.getRegion().id(), key);
+    }
+
 
     private String generateImageFileName() {
         return UUID.randomUUID() + ".jpg";
