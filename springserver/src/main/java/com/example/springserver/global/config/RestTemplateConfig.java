@@ -12,14 +12,14 @@ import java.util.List;
 @Configuration
 public class RestTemplateConfig {
 
-    @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        messageConverters.add(new FormHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-
-        return restTemplate;
-    }
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+//        messageConverters.add(new FormHttpMessageConverter());
+//        restTemplate.setMessageConverters(messageConverters);
+//
+//        return restTemplate;
+//    }
 }
