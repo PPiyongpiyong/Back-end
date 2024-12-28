@@ -62,4 +62,5 @@ public class MemberEntity implements UserDetails {
     public void setPassword(String pw) {
         this.password = pw;
     }
+
 }

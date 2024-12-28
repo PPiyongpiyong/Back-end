@@ -21,12 +21,13 @@ public class OAuthController {
     private final MemberService memberService;
     private final OAuth2MemberService oAuthService;
 
-    // 카카오 로그인 창으로 redirect, kakaoOAuth라는 클래스를 따로 생성해 responseUrl 메소드로 redirect
+    // 카카오 로그인 창으로 redirect
     @GetMapping("/kakao")
     public void getKakaoAuthUrl(HttpServletResponse response) throws IOException {
         response.sendRedirect(oAuthService.responseUrl());
     }
 
+    // 카카오 로그인 API (성공 후 토큰 발급)
     @GetMapping("/login/kakao")
     public ResponseEntity<?> kakaoLogin(
             @RequestParam(name = "code") String code,
