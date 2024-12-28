@@ -55,6 +55,7 @@ public class MemberController {
     public ResponseEntity<?> updateProfile(
             @RequestBody MemberRequestDto requestDto,
             @RequestHeader("Authorization") String authToken
+
     ) {
         String token = authToken.startsWith("Bearer ") ?
                 authToken.substring(7) : authToken;

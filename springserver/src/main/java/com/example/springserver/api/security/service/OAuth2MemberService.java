@@ -49,7 +49,8 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
 
     private final String KAKAO_TOKEN_REQUEST_URL = "https://kauth.kakao.com/ouath/token";
 
-    // OAuth2MemberService
+    /* OAuth2MemberService */
+    // 카카오 로그인 url 반환
     public String responseUrl() {
         String kakaoLoginUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + restApiKey + "&redirect_uri=" + redirect_uri + "&response_type=code";
 
@@ -65,6 +66,7 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         MemberEntity member = memberRepository.findByEmail(email)
                 .orElseGet(() -> createNewMember(kakaoProfile));
 
+        // 해당 멤버로 토큰을 발급
         String token = tokenProvider.generateAccessToken(member);
         httpServletResponse.setHeader("Authorization", token);
 
