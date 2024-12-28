@@ -50,7 +50,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     @Override
     public String getUsername() {
         // 실제 username이 아닌 PK가 되는 것을 반환
-        return String.valueOf(this.member.getId());
+        return String.valueOf(this.member.getMemberId());
     }
 
     @Override
