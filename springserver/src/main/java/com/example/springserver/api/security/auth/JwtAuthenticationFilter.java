@@ -11,7 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -46,10 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // 2. JWT 유효성 검증
             if (StringUtils.hasText(token) && tokenProvider.validateToken(token) == VALID_JWT) {
-                String memberId = tokenProvider.getMemberIdFromToken(token); // 유효한 jwt에 대하여 id 가져오기
+                Long memberId = tokenProvider.getMemberIdFromToken(token); // 유효한 jwt에 대하여 id 가져오기
 
-                // ID를 통하여 인증 생성
-                MemberEntity member = memberRepository.findById(memberId)
+                // ID(PK)를 통하여 인증 생성
+                MemberEntity member = memberRepository.findByMemberId(memberId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
                 MemberAuthentication authentication = MemberAuthentication.createMemberAuthentication(member);
@@ -102,5 +104,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return shouldNotFilter;
     }
 
+    //
+    private void setAuthentication(HttpServletRequest request, Long memberId) {
+        MemberEntity member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+        MemberAuthentication authentication = MemberAuthentication.createMemberAuthentication(member);
+        createWebAuthenticationDetailsAndSet(request, authentication);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+    }
+
+    //HTTP 요청에서 인증 상세 정보를 추출하는 클래스
+    private void createWebAuthenticationDetailsAndSet(HttpServletRequest request, MemberAuthentication authentication) {
+        WebAuthenticationDetailsSource webAuthenticationDetailsSource = new WebAuthenticationDetailsSource();
+        WebAuthenticationDetails webAuthenticationDetails = webAuthenticationDetailsSource.buildDetails(request);
+        authentication.setDetails(webAuthenticationDetails);
+    }
 
 }
