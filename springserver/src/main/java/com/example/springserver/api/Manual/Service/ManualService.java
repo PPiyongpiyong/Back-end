@@ -35,6 +35,7 @@ public class ManualService {
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
+
         return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgUrl());
     }
 
