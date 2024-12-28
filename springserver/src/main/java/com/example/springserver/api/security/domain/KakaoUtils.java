@@ -53,7 +53,7 @@ public class KakaoUtils {
 
         // 헤더 설계
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
         // 본문 설계
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
