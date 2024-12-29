@@ -6,8 +6,9 @@ public class MemberMapper {
 
     public static MemberEntity toEntity(MemberRequestDto requestDto) {
         return MemberEntity.builder()
-                .id(requestDto.id())
+                .email(requestDto.email())
                 .phoneNumber(requestDto.phoneNumber())
+                .username(requestDto.username())
                 .roles(requestDto.roles())
                 .gender(requestDto.gender())
                 .parentPhoneNumber(requestDto.parentPhoneNumber())
@@ -18,7 +19,7 @@ public class MemberMapper {
 
     public static MemberResponseDto toDto(MemberEntity member) {
         return new MemberResponseDto(
-                member.getId(),
+                member.getEmail(),
                 member.getUsername(),
                 member.getPhoneNumber(),
                 member.getGender(),

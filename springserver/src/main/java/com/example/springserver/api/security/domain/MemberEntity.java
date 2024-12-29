@@ -24,9 +24,8 @@ import java.util.stream.Collectors;
 @Getter
 public class MemberEntity implements UserDetails {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false, name = "member_id")
-    @NotNull
     private Long memberId; // 유저 DB 아이디
 
     private String username; // 유저의 실제 이름
@@ -48,6 +47,9 @@ public class MemberEntity implements UserDetails {
 
     // 자체 로그인, 카카오 로그인 구분
     private String provider;
+
+    // 즐겨찾기 병원 정보
+    private List<String> favorites;
 
     // 위임 메서드 구현
     @Override

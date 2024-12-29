@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // 2. JWT 유효성 검증
             if (StringUtils.hasText(token) && tokenProvider.validateToken(token) == VALID_JWT) {
-                Long memberId = tokenProvider.getMemberIdFromToken(token); // 유효한 jwt에 대하여 id 가져오기
+                Long memberId = tokenProvider.getMemberIdFromToken(token); // 유효한 jwt에 대하여 email 가져오기
 
                 // ID(PK)를 통하여 인증 생성
                 MemberEntity member = memberRepository.findByMemberId(memberId)
