@@ -8,6 +8,7 @@ import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
+import external.S3Service;
 import lombok.AllArgsConstructor;
 
 
@@ -29,14 +30,15 @@ public class ManualService {
     private final ManualCategoryRepository manualCategoryRepository;
     private final Trie trie;
     private final ManualRepository manualRepository;
-
+    private S3Service s3Service;
     // 매뉴얼 이름으로 조회
 
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
-        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgUrl());
+        String imgurl= s3Service.getImgUrl(emergencyName);
+        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), imgurl);
     }
 
 
