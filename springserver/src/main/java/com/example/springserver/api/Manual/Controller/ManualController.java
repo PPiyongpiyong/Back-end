@@ -3,6 +3,7 @@ package com.example.springserver.api.Manual.Controller;
 import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Service.ManualService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,11 @@ public class ManualController {
     @GetMapping("/explanation")
     public ManualDetailRespondDto searchDetail(@RequestParam String emergencyName) {
         return manualService.getManualDetail(emergencyName);
+    }
+
+    @GetMapping("/keyword")
+    public ManualKeywordRespond getManualByEmergencyKeyword(@RequestParam String keyword){
+        return manualService.getManualByEmergencyKeyword(keyword);
     }
 
 }

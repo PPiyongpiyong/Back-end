@@ -20,10 +20,10 @@ public class Manual {
     @Column(nullable = false)
     private String manualSummary;
 
+    @Lob
     private String manualDetail;
 
     private String category;
-
 
     private String keyword;
 
