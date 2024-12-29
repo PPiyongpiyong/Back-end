@@ -50,26 +50,4 @@ public class MemberController {
                 memberService.regenerateAccessToken(request)));
 
     }
-
-    // 회원 정보 수정하기
-    @PostMapping("/mypage/updateProfile")
-    public ResponseEntity<?> updateProfile(
-            @RequestBody MemberRequestDto requestDto,
-            @RequestHeader("Authorization") String authToken
-
-    ) {
-        String token = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
-        return ResponseEntity.ok(memberService.addMemberInfo(token, requestDto));
-    }
-
-    // 나의 정보 조회하기
-    @GetMapping("/mypage/{memberId}/getProfile")
-    public ResponseEntity<?> getProfile(
-            @RequestHeader("Authorization") String authToken
-    ) {
-        authToken = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
-        return ResponseEntity.ok(memberService.getMyInfo(authToken));
-    }
 }
