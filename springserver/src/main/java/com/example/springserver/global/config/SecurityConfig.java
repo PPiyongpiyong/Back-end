@@ -31,13 +31,15 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     public static final String[] allowUrls = {
-            "/swagger-ui/**",
-            "/swagger-resources/**",
-            "/v3/api-docs/**",
-            "/api/v1/posts/**",
-            "/api/v1/replies/**",
-            "/login",
-            "/auth/login/kakao/**"
+            "/**"
+//            "/swagger-ui/**",
+//            "/swagger-resources/**",
+//            "/v3/api-docs/**",
+//            "/api/v1/manual/**",
+//            "/api/v1/map/**",
+//            "/api/v1/**",
+//            "/api/auth/**",
+//            "/api/oauth/**"
     };
 
     // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
@@ -46,6 +48,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // url 접근 권한 설정
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(allowUrls);
@@ -60,17 +63,15 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagementConfigurer ->
-                        sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exceptionHandlingConfigurer -> {
+                    exceptionHandlingConfigurer
+                            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                            .accessDeniedHandler(new CustomerAccessDeniedHandler());
+                });
 
         setAccessTokenFilter(httpSecurity);
         setPermissions(httpSecurity);
-
-        httpSecurity
-                .exceptionHandling(exceptionHandlingConfigurer ->
-                        exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry.anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthenticationFilter(memberRepository, tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
@@ -82,6 +83,7 @@ public class SecurityConfig {
     }
 
     // CORS 설정(모든 origin 허용)
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration conf = new CorsConfiguration();
@@ -101,7 +103,7 @@ public class SecurityConfig {
     // 인가 설정(경로별 접근 권한 설정)
     private void setPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+                .requestMatchers("/api/v1/auth/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
                 .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
         );
     }
