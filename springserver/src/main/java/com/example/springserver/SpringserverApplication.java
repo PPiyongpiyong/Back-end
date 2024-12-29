@@ -12,7 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @EnableCaching
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.example.springserver")
 public class SpringserverApplication {
 
 	public static void main(String[] args) {

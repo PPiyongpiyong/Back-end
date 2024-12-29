@@ -11,13 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.http.HttpHeaders;
 import java.util.Arrays;
 
 @Component
@@ -52,8 +53,8 @@ public class KakaoUtils {
         RestTemplate restTemplate = new RestTemplate();
 
         // 헤더 설계
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8"); // Content-Type 설정
 
         // 본문 설계
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();

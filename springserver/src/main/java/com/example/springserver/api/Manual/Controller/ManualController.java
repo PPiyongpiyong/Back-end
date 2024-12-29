@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/manual")
+@RequestMapping("/api/v1/manual")
 @RequiredArgsConstructor
 public class ManualController {
     private final ManualService manualService;

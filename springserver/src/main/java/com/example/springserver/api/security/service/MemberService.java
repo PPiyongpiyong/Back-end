@@ -31,7 +31,7 @@ public class MemberService {
     public MemberResponseDto register(MemberRequestDto requestDto) throws RuntimeException {
 
         // 이미 존재하는 아이디인지를 확인
-        if (memberRepository.existsById(requestDto.id())) {
+        if (memberRepository.existsByEmail(requestDto.email())) {
             throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
@@ -76,7 +76,7 @@ public class MemberService {
     public TokenDto GeneralLogin(LoginRequestDto requestDto) throws CustomException {
 
         // 1. 사용자 존재 여부 확인
-        MemberEntity member = memberRepository.findById(requestDto.getEmail())
+        MemberEntity member = memberRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_ALREADY_EXISTS));
 
         // 2. 비밀번호 검증

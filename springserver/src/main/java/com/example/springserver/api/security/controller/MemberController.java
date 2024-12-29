@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -21,7 +22,7 @@ public class MemberController {
     private final MemberService memberService;
 
     // 회원 가입하기
-    @PostMapping("/auth/signup")
+    @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signUp(
             @RequestBody MemberRequestDto requestDto
             ) {
@@ -31,7 +32,7 @@ public class MemberController {
     }
 
     // 로그인하기
-    @PostMapping("/auth/signin")
+    @PostMapping("/signin")
     public ResponseEntity<?> signIn(
             @RequestBody LoginRequestDto requestDto
             ) {
@@ -55,6 +56,7 @@ public class MemberController {
     public ResponseEntity<?> updateProfile(
             @RequestBody MemberRequestDto requestDto,
             @RequestHeader("Authorization") String authToken
+
     ) {
         String token = authToken.startsWith("Bearer ") ?
                 authToken.substring(7) : authToken;
