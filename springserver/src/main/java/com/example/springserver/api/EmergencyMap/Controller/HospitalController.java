@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/map")
+@RequestMapping("/api/v1/map")
 @RequiredArgsConstructor
 public class HospitalController {
 
