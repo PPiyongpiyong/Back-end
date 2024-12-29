@@ -17,6 +17,6 @@ public class ManualCategoryRespondDto {
     private String category;  // 카테고리 정보
     private String emergencyName;
     private String manualSummaries;
-    private String imgUrl;
+
 
 }

@@ -4,6 +4,8 @@ import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespon
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRequest.ManualDetailRequestDto;
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRequest.ManualKeywordRequest;
+import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
 import com.example.springserver.global.exception.CustomException;
@@ -30,15 +32,15 @@ public class ManualService {
     private final ManualCategoryRepository manualCategoryRepository;
     private final Trie trie;
     private final ManualRepository manualRepository;
-    private S3Service s3Service;
+
     // 매뉴얼 이름으로 조회
 
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
-        String imgurl= s3Service.getImgUrl(emergencyName);
-        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), imgurl);
+
+        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary());
     }
 
 
@@ -52,8 +54,7 @@ public class ManualService {
                     return new ManualCategoryRespondDto(
                             manual.getCategory(), // category
                             manual.getEmergencyName(),
-                            manual.getManualSummary(),
-                            manual.getImgUrl()// manualSummaries
+                            manual.getManualSummary()// manualSummaries
                             // emergencyName
                     );
                 })
@@ -93,7 +94,13 @@ public class ManualService {
 
         return new ManualDetailRespondDto(manual.getEmergencyName(), manual.getManualDetail());
     }
-    //
+    //키워드 조회
+    public ManualKeywordRespond getManualByEmergencyKeyword(String keyword) {
+        Manual manual = manualRepository.findByKeyword(keyword)
+                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
+
+        return new ManualKeywordRespond(manual.getEmergencyName(), manual.getManualSummary());
+    }
 }
 
 
