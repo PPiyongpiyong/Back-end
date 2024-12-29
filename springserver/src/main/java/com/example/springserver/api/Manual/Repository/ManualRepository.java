@@ -20,4 +20,6 @@ public interface ManualRepository extends JpaRepository<Manual, Long> {
     @Query("SELECT m.emergencyName FROM Manual m")
     List<String> findAllEmergencyNames();
 
+    @Query("SELECT m FROM Manual m WHERE m.manualDetail LIKE %:keyword% or m.keyword LIKE %:keyword%")
+    Optional<Manual> findByDetailContaining(String keyword);
 }

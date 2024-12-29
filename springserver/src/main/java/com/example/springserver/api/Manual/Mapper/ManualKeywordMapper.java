@@ -14,7 +14,7 @@ public class ManualKeywordMapper {
     public static ManualKeywordRespond toKeywordDto(Manual manual){
         return ManualKeywordRespond.builder()
                 .emergencyName(manual.getEmergencyName())
-                .emergencyUrl(manual.getManualDetail())
+                .emergencyName(manual.getManualDetail())
                 .emergencyResponseSummary(manual.getManualSummary())
                 .build();
     }

@@ -95,8 +95,11 @@ public class ManualService {
         return new ManualDetailRespondDto(manual.getEmergencyName(), manual.getManualDetail());
     }
     //키워드 조회
+
+
+
     public ManualKeywordRespond getManualByEmergencyKeyword(String keyword) {
-        Manual manual = manualRepository.findByKeyword(keyword)
+        Manual manual = manualRepository.findByDetailContaining(keyword)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
         return new ManualKeywordRespond(manual.getEmergencyName(), manual.getManualSummary());
