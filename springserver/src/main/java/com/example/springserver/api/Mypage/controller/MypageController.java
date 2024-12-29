@@ -14,7 +14,7 @@ public class MypageController {
     private final MemberService memberService;
 
     // 회원 정보 수정하기
-    @PutMapping("/mypage/updateProfile")
+    @PostMapping("/mypage/updateProfile")
     public ResponseEntity<?> updateProfile(
             @RequestBody MemberRequestDto requestDto,
             @RequestHeader("Authorization") String authToken
