@@ -28,7 +28,7 @@ public class OAuthController {
     }
 
     // 카카오 로그인 API (성공 후 토큰 발급)
-    @GetMapping("/login/kakao")
+    @PostMapping("/login/kakao")
     public ResponseEntity<?> kakaoLogin(
             @RequestParam(name = "code") String code,
             HttpServletResponse httpServletResponse) throws IOException {
