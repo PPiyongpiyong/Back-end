@@ -44,7 +44,7 @@ public class MemberService {
         return MemberMapper.toDto(member);
     }
 
-    // 회원 정보를 추가하기
+    // 회원 정보를 추가하기(수정)
     @Transactional
     public MemberResponseDto addMemberInfo(String token, MemberRequestDto requestDto) throws CustomException {
         Long memberId = tokenProvider.getMemberIdFromToken(token);
