@@ -10,7 +10,7 @@ import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
-import external.S3Service;
+
 import lombok.AllArgsConstructor;
 
 
