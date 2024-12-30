@@ -30,7 +30,7 @@ public class ManualController {
     public ResponseEntity<?> search(@RequestParam String type, @RequestParam(required = false) String emergencyName) {
         try {
             if ("manual".equals(type) && emergencyName != null) {
-                // 매뉴얼 정보를 반환
+                // 매뉴얼 정보를 반환//
                 ManualRespondDto manualRespondDto = manualService.getManualByEmergencyName(emergencyName);
                 return ResponseEntity.ok(manualRespondDto);
             } else if ("image".equals(type) && emergencyName != null) {
