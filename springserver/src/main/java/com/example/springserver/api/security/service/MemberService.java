@@ -44,33 +44,6 @@ public class MemberService {
         return MemberMapper.toDto(member);
     }
 
-    // 회원 정보를 추가하기
-    @Transactional
-    public MemberResponseDto addMemberInfo(String token, MemberRequestDto requestDto) throws CustomException {
-        Long memberId = tokenProvider.getMemberIdFromToken(token);
-        MemberEntity member = memberRepository.findByMemberId(memberId)
-                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
-
-        MemberEntity savedMember = memberRepository.save(MemberEntity.builder()
-                .phoneNumber(requestDto.phoneNumber())
-                .gender(requestDto.gender())
-                .parentPhoneNumber(requestDto.parentPhoneNumber())
-                .address(requestDto.address())
-                .residentNo(requestDto.residentNo())
-                .build());
-
-        return MemberMapper.toDto(savedMember);
-    }
-
-    // 나의 정보 조회하기
-    @Transactional(readOnly = true)
-    public MemberResponseDto getMyInfo(String authToken) throws CustomException {
-        Long memberId = tokenProvider.getMemberIdFromToken(authToken);
-        MemberEntity member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
-        return MemberMapper.toDto(member);
-    }
-
     // 로그인 후 토큰 발급
     @Transactional
     public TokenDto GeneralLogin(LoginRequestDto requestDto) throws CustomException {
