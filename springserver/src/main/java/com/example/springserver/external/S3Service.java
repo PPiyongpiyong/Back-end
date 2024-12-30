@@ -1,16 +1,21 @@
-package external;
+package com.example.springserver.external;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 
 @Component
 public class S3Service {
@@ -45,6 +50,20 @@ public class S3Service {
         return key;
     }
 
+    public byte[] getImage(String key) throws IOException {
+        final S3Client s3Client = awsConfig.getS3Client();
+
+        GetObjectRequest request = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+    //아어
+        ResponseInputStream<GetObjectResponse> object = s3Client.getObject(request);
+        return IOUtils.toByteArray(object);
+    }
+
+
+
     public void deleteImage(String key) throws IOException {
         final S3Client s3Client = awsConfig.getS3Client();
 
@@ -77,3 +96,16 @@ public class S3Service {
     }
 
 }
+
+//이미지 조회
+    /*public String getImageUrl(String key) {
+        final S3Client s3Client = awsConfig.getS3Client();
+
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        String externalForm = s3Client.utilities().getUrl(getObjectRequest).toExternalForm();
+        return externalForm;
+    }*/
