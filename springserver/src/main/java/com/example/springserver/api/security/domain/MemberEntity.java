@@ -1,6 +1,8 @@
 package com.example.springserver.api.security.domain;
 
+import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
 import com.example.springserver.api.security.domain.constants.Role;
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,4 +67,12 @@ public class MemberEntity implements UserDetails {
         this.password = pw;
     }
 
+
+    // 정보 수정하기
+    public void updateMember(String phoneNumber, String username, String address, String parentPhoneNumber) {
+        this.phoneNumber = StringUtils.isBlank(phoneNumber) ? this.phoneNumber : phoneNumber;
+        this.username = StringUtils.isBlank(username) ? this.username : username;
+        this.address = StringUtils.isBlank(address) ? this.address : address;
+        this.parentPhoneNumber = StringUtils.isBlank(parentPhoneNumber) ? this.parentPhoneNumber : parentPhoneNumber;
+    }
 }
