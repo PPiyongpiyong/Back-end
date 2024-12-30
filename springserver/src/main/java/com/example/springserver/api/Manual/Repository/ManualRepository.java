@@ -15,9 +15,11 @@ import java.util.Optional;
 public interface ManualRepository extends JpaRepository<Manual, Long> {
 
     Optional<Manual> findByEmergencyName(String emergencyName);
-
+    Optional<Manual> findByKeyword(String keyword);
 
     @Query("SELECT m.emergencyName FROM Manual m")
     List<String> findAllEmergencyNames();
 
+    @Query("SELECT m FROM Manual m WHERE m.manualDetail LIKE %:keyword% or m.keyword LIKE %:keyword%")
+    Optional<Manual> findByDetailContaining(String keyword);
 }
