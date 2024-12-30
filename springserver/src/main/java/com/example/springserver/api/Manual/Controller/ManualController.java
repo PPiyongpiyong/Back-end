@@ -27,7 +27,8 @@ public class ManualController {
     private final S3Service s3Service;
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam String type, @RequestParam(required = false) String emergencyName) {
+    public ResponseEntity<?> search(
+            @RequestParam String type, @RequestParam(required = false) String emergencyName) {
         try {
             if ("manual".equals(type) && emergencyName != null) {
                 // 매뉴얼 정보를 반환//
