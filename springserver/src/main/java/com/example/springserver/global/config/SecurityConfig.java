@@ -1,15 +1,13 @@
 package com.example.springserver.global.config;
 
-import com.example.springserver.api.security.auth.JwtAuthenticationEntryPoint;
-import com.example.springserver.api.security.auth.JwtAuthenticationFilter;
-import com.example.springserver.api.security.auth.TokenProvider;
-import com.example.springserver.api.security.repository.MemberRepository;
+import com.example.springserver.global.auth.JwtAuthenticationEntryPoint;
+import com.example.springserver.global.auth.JwtAuthenticationFilter;
+import com.example.springserver.global.auth.TokenProvider;
+import com.example.springserver.api.Mypage.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomerAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,8 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
