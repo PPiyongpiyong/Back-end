@@ -17,7 +17,9 @@ public class HospitalController {
     public ResponseEntity<HospitalSearchResponse> getHospitals(@RequestParam(required = false, defaultValue = "1") Integer page,
                                                                @RequestParam(required = false, defaultValue = "10") Integer size,
                                                                @RequestParam String x,
-                                                               @RequestParam String y) {
-        return ResponseEntity.ok().body(hospitalService.searchHospitals(page, size, x, y));
+                                                               @RequestParam String y,
+                                                               @RequestHeader("Authorization") String authToken) {
+        String token = authToken.startsWith("Bearer ") ? authToken.substring(7) : authToken;
+        return ResponseEntity.ok().body(hospitalService.searchHospitals(page, size, x, y, token));
     }
 }
