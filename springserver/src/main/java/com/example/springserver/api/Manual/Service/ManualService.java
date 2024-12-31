@@ -8,6 +8,9 @@ import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordReques
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
+import com.example.springserver.api.Mypage.domain.MemberEntity;
+import com.example.springserver.api.Mypage.repository.MemberRepository;
+import com.example.springserver.global.auth.TokenProvider;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 
@@ -33,6 +36,10 @@ public class ManualService {
     private final Trie trie;
     private final ManualRepository manualRepository;
 
+    // 인증
+    private final TokenProvider tokenProvider;
+    private final MemberRepository memberRepository;
+
     // 매뉴얼 이름으로 조회
 
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
@@ -44,7 +51,12 @@ public class ManualService {
     }
 
 
-    public List<ManualCategoryRespondDto> getManualByCategory(String category) {
+    public List<ManualCategoryRespondDto> getManualByCategory(String category, String token) {
+
+        // token 인증 확인
+        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+
         List<Manual> manuals = manualCategoryRepository.findByCategory(category);
 
         // 카테고리 별로 매뉴얼들을 반환
@@ -67,7 +79,12 @@ public class ManualService {
     }
 
     // DB에 있는 매뉴얼 emergencyName 가져오기
-    public void loadEmergencyNameIntoTrie() {
+    public void loadEmergencyNameIntoTrie(String token) {
+
+        // token 인증 확인
+        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+
         List<String> emergencyNames = manualRepository.findAllEmergencyNames();
         for (String name: emergencyNames) {
             addAutocompleteKeyword(name);
@@ -87,7 +104,11 @@ public class ManualService {
     }
 
     //세부 매뉴얼 조회
-    public ManualDetailRespondDto getManualDetail(String emergencyName) {
+    public ManualDetailRespondDto getManualDetail(String emergencyName, String token) {
+
+        // token 인증 확인
+        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
@@ -98,7 +119,11 @@ public class ManualService {
 
 
 
-    public ManualKeywordRespond getManualByEmergencyKeyword(String keyword) {
+    public ManualKeywordRespond getManualByEmergencyKeyword(String keyword, String token) {
+
+        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+
         Manual manual = manualRepository.findByDetailContaining(keyword)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
