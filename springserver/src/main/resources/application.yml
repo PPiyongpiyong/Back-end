@@ -32,9 +32,9 @@ spring:
       expiration: 604800 # 7 * 24 * 60 * 60L (7일)
 
 aws-property:
-  s3-bucket-name: ppiyongpiyong-bucket
-  access-key: ${AWS_ACCESS_KEY_ID}
-  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  s3-bucket-name: ppiyong
+  access-key: AKIAT7JJVDWN7AN57PPJ
+  secret-key: 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
   aws-region: ap-northeast-2
 
 kakao:
