@@ -27,12 +27,7 @@ public class CustomerExceptionHandler {
         log.error("Request URI : [{}] {}", request.getMethod() ,request.getRequestURI());
         log.error("Error message : {}", errorCode.getDescription());
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                                        .status(e.getStatus())
-                                        .message(e.getMessage())
-                                        .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.resolve(errorCode.getStatus()));
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
