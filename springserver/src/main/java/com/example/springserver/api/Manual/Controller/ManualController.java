@@ -9,10 +9,7 @@ import com.example.springserver.external.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -61,27 +58,48 @@ public class ManualController {
 
 
     @GetMapping("/getCategory")
-    public List<ManualCategoryRespondDto> searchCategory(@RequestParam String category) {
-        return manualService.getManualByCategory(category);
+    public List<ManualCategoryRespondDto> searchCategory(
+            @RequestParam String category,
+            @RequestHeader("Authorization") String authToken) {
+        String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;
+
+        return manualService.getManualByCategory(category, token);
     }
 
     @GetMapping("/autocomplete")
-    public ResponseEntity<List<String>> autocomplete(@RequestParam String keyword) {
+    public ResponseEntity<List<String>> autocomplete(
+            @RequestParam String keyword,
+            @RequestHeader String authToken) {
+        String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;
 
-        manualService.loadEmergencyNameIntoTrie();
+        manualService.loadEmergencyNameIntoTrie(token);
 
         List<String> result = this.manualService.autocomplete(keyword);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/explanation")
-    public ManualDetailRespondDto searchDetail(@RequestParam String emergencyName) {
-        return manualService.getManualDetail(emergencyName);
+    public ManualDetailRespondDto searchDetail(
+            @RequestParam String emergencyName,
+            @RequestHeader String authToken) {
+
+        String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;
+
+        return manualService.getManualDetail(emergencyName, token);
     }
 
     @GetMapping("/keyword")
-    public ManualKeywordRespond getManualByEmergencyKeyword(@RequestParam String keyword){
-        return manualService.getManualByEmergencyKeyword(keyword);
+    public ManualKeywordRespond getManualByEmergencyKeyword(
+            @RequestParam String keyword,
+            @RequestHeader String authToken){
+
+        String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;
+
+        return manualService.getManualByEmergencyKeyword(keyword, token);
     }
 
 }
