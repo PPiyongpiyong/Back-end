@@ -1,7 +1,5 @@
-/*package com.example.springserver.global.kakao.controller;
+package com.example.springserver.global.kakao2.controller;
 
-import com.example.springserver.global.kakao.dto.KakaoUserInfoResponseDto;
-import com.example.springserver.global.kakao.service.KakaoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,15 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("")
 public class KakaoLoginController {
 
-    private final KakaoService kakaoService;
-
     @GetMapping("/callback")
     public ResponseEntity<?> callback(@RequestParam("code") String code) {
-        String accessToken = kakaoService.getAccessTokenFromKakao(code);
 
-        KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
-
-        // User 로그인, 또는 회원가입 로직 추가
         return new ResponseEntity<>(HttpStatus.OK);
     }
-}*/
+}

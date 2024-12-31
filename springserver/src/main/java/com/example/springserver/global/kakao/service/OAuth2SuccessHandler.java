@@ -1,4 +1,4 @@
-package com.example.springserver.global.kakao.service;
+/*package com.example.springserver.global.kakao.service;
 
 
 import com.example.springserver.global.auth.TokenProvider;
@@ -29,4 +29,4 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
     }
-}
+}*/
