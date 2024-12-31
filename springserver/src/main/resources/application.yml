@@ -39,10 +39,11 @@ aws-property:
   secret-key: vWBzp+kyFjLk/8e7FxI6QpwFNEhqY5PSL2lUjWGm
   aws-region: ap-northeast-2
 
+
 kakao:
   api:
     key: c475873a5fee8366168566ade21b7eb5
-  client_id: c475873a5fee8366168566ade21b7eb5
+  client_id: 9199195cfee03495652496d1ef79bc27
   redirect_uri: http://localhost:8080/callback # 등록한 url
 
 
