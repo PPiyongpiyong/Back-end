@@ -2,13 +2,19 @@ package com.example.springserver.api.Manual.Service;
 import com.example.springserver.api.Manual.Domain.Manual;
 import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRequest.ManualDetailRequestDto;
+import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRequest.ManualKeywordRequest;
+import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
-import com.example.springserver.global.exception.impl.ManualNotFoundException;
+import com.example.springserver.global.exception.CustomException;
+import com.example.springserver.global.exception.ErrorCode;
 
 import lombok.AllArgsConstructor;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -17,15 +23,13 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.Trie;
 
-
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ManualService {
 
     
     private final ManualCategoryRepository manualCategoryRepository;
-
-
     private final Trie trie;
     private final ManualRepository manualRepository;
 
@@ -33,7 +37,9 @@ public class ManualService {
 
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
-                .orElseThrow(() -> new ManualNotFoundException("매뉴얼을 찾을 수 없습니다: " + emergencyName));
+                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
+
+
         return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary());
     }
 
@@ -48,7 +54,7 @@ public class ManualService {
                     return new ManualCategoryRespondDto(
                             manual.getCategory(), // category
                             manual.getEmergencyName(),
-                            manual.getManualSummary() // manualSummaries
+                            manual.getManualSummary()// manualSummaries
                             // emergencyName
                     );
                 })
@@ -79,4 +85,25 @@ public class ManualService {
         this.trie.remove(keyword);
 
     }
+
+    //세부 매뉴얼 조회
+    public ManualDetailRespondDto getManualDetail(String emergencyName) {
+
+        Manual manual = manualRepository.findByEmergencyName(emergencyName)
+                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
+
+        return new ManualDetailRespondDto(manual.getEmergencyName(), manual.getManualDetail());
+    }
+    //키워드 조회
+
+
+
+    public ManualKeywordRespond getManualByEmergencyKeyword(String keyword) {
+        Manual manual = manualRepository.findByDetailContaining(keyword)
+                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
+
+        return new ManualKeywordRespond(manual.getEmergencyName(), manual.getManualSummary());
+    }
 }
+
+
