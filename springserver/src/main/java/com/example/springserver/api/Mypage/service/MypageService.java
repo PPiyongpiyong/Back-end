@@ -1,11 +1,11 @@
 package com.example.springserver.api.Mypage.service;
 
 import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
-import com.example.springserver.api.security.auth.TokenProvider;
-import com.example.springserver.api.security.domain.MemberEntity;
-import com.example.springserver.api.security.dto.MemberMapper;
-import com.example.springserver.api.security.dto.MemberResponseDto;
-import com.example.springserver.api.security.repository.MemberRepository;
+import com.example.springserver.global.auth.TokenProvider;
+import com.example.springserver.api.Mypage.domain.MemberEntity;
+import com.example.springserver.global.security.dto.MemberMapper;
+import com.example.springserver.global.security.dto.MemberResponseDto;
+import com.example.springserver.api.Mypage.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
