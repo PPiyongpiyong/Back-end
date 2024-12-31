@@ -26,28 +26,11 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    public static final String[] allowUrls = {
-            "/**"
-//            "/swagger-ui/**",
-//            "/swagger-resources/**",
-//            "/v3/api-docs/**",
-//            "/api/v1/manual/**",
-//            "/api/v1/map/**",
-//            "/api/v1/**",
-//            "/api/auth/**",
-//            "/api/oauth/**"
-    };
 
     // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    // url 접근 권한 설정
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(allowUrls);
     }
 
     @Bean
@@ -99,7 +82,7 @@ public class SecurityConfig {
     // 인가 설정(경로별 접근 권한 설정)
     private void setPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+                .requestMatchers("/auth/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
                 .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
         );
     }
