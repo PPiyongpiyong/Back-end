@@ -18,4 +18,5 @@ public class ManualCategoryRespondDto {
     private String emergencyName;
     private String manualSummaries;
 
+
 }

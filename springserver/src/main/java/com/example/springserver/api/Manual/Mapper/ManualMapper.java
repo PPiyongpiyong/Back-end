@@ -16,6 +16,7 @@ public class ManualMapper {
     public static ManualRespondDto toManualDto(Manual manual){
         return ManualRespondDto.builder()
                 .emergencyName(manual.getEmergencyName())
+
                 .emergencyResponseSummary(manual.getManualSummary())
                 .build();
     }

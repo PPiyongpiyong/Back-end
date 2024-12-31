@@ -1,13 +1,14 @@
 spring:
   application:
     name: springserver
+  main:
+    web-application-type: servlet
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/tave?createDatabaseIfNotExist=true
     username: root
     password: tkfkdgo2001!
   jpa:
-
     show-sql: true
     hibernate:
       ddl-auto: update
@@ -15,8 +16,46 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+
+  cloud:
+    compatibility-verifier:
+      enabled: false  # 이 부분을 추가하여 호환성 검사를 비활성화
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jwt:
+    secret: cHBpeW9uZ3BwaXlvbmctc2VydmVyLXByb2plY3Qtand0LXNlY3JldC1rZXktZW5jb2RlZC1iYXNlNjQ=
+    # base64로 'ppiyongppiyong-server-project-jwt-secret-key-encoded-base64' 인코딩한 값
+    access:
+      expiration: 86400
+    refresh:
+      expiration: 604800 # 7 * 24 * 60 * 60L (7일)
+
 aws-property:
   s3-bucket-name: ppiyongpiyong-bucket
   access-key: ${AWS_ACCESS_KEY_ID}
   secret-key: ${AWS_SECRET_ACCESS_KEY}
   aws-region: ap-northeast-2
+
+kakao:
+  api:
+    key: c475873a5fee8366168566ade21b7eb5
+  client_id: c475873a5fee8366168566ade21b7eb5
+  redirect_uri: http://localhost:8080/callback # 등록한 url
+
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate: DEBUG
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
