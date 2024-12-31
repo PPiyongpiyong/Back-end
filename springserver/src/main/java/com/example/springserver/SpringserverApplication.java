@@ -13,6 +13,10 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFeignClients
 @EnableCaching
 @SpringBootApplication
+<<<<<<< HEAD
+@ComponentScan(basePackages = {"com.example.springserver", "com.example.springserver.external"})
+=======
+>>>>>>> ec6b56e311fe35edd4a4d62bc7fe97577b4a2e92
 public class SpringserverApplication {
 
 	public static void main(String[] args) {
