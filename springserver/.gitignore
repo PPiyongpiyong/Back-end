@@ -36,3 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 s3.env
+
+## .idea 파일
+.idea/
