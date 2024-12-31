@@ -2,8 +2,6 @@ package com.example.springserver.api.Mypage.controller;
 
 import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
 import com.example.springserver.api.Mypage.service.MypageService;
-import com.example.springserver.api.security.dto.MemberRequestDto;
-import com.example.springserver.api.security.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
