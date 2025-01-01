@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +39,9 @@ public class MemberEntity implements UserDetails {
 
     // Enum 타입을 컬렉션으로 저장
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles;
+    @CollectionTable(name = "member_roles", joinColumns = @JoinColumn(name = "member_id"))
+    @Column(name = "roles", nullable = false)
+    private List<String> roles = new ArrayList<>(List.of("ROLE_USER"));
 
     private String phoneNumber;
     private String gender;
