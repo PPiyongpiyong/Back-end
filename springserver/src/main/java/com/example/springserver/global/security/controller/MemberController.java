@@ -1,11 +1,13 @@
 package com.example.springserver.global.security.controller;
 
 import com.example.springserver.global.auth.TokenProvider;
+import com.example.springserver.global.security.domain.constants.JwtValidationType;
 import com.example.springserver.global.security.dto.LoginRequestDto;
 import com.example.springserver.global.security.dto.MemberRequestDto;
 import com.example.springserver.global.security.dto.MemberResponseDto;
 import com.example.springserver.global.security.dto.RefreshRequestDto;
 import com.example.springserver.global.security.service.MemberService;
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -57,14 +59,19 @@ public class MemberController {
     }
 
     // Access Token을 재발급받기
+    @Operation(summary = "액세스 토큰 재발급", description = """
+            access token이 만료되면, refresh token의 유효성을 판단해 다시 access token을 발급받습니다.
+            """, requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "만료된 액세스 토큰과 리프레시 토큰",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = RefreshRequestDto.class)
+                    )
+    ))
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(
             @RequestBody RefreshRequestDto request
             ) {
-
-        return ResponseEntity.ok(Map.of(
-                "accessToken",
-                memberService.regenerateAccessToken(request)));
-
+        return ResponseEntity.ok(memberService.refresh(request));
     }
 }
