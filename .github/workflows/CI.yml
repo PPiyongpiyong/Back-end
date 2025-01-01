@@ -20,10 +20,9 @@ jobs:
         java-version: '17'
 
     - name: create application.yml
-      run: |
-        ## create application.yml
-        mkdir ./src/main/resources
-        cd ./src/main/resources
+
+      run:
+
 
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.CI }}" >> ./application.yml
