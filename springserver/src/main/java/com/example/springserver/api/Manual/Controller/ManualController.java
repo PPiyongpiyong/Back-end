@@ -8,6 +8,7 @@ import com.example.springserver.api.Manual.Service.ManualService;
 import com.example.springserver.external.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,8 @@ public class ManualController {
     @Operation(summary = "매뉴얼 검색", description = """
             응급상황 이름을 통해 매뉴얼을 검색합니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
-            """, parameters = {@Parameter(name = "Type", description = "이미지 확장자"), @Parameter(name = "EmergencyName", description = "응급상황 이름")})
+            """, parameters = {@Parameter(name = "Type", description = "이미지 확장자", schema = @Schema(type = "string", example = "jpg")),
+                @Parameter(name = "EmergencyName", description = "응급상황 이름", schema = @Schema(type = "string", example = "심장마비"))})
     @GetMapping("/search")
     public ResponseEntity<?> search(
             @RequestParam String type, @RequestParam(required = false) String emergencyName) {
@@ -67,7 +69,7 @@ public class ManualController {
     @Operation(summary = "카테고리 별 조회", description = """
             카테고리 별로 매뉴얼을 조회합니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
-            """, parameters = {@Parameter(name = "Category", description = "카테고리 이름")})
+            """, parameters = {@Parameter(name = "Category", description = "카테고리 이름", schema = @Schema(type = "string", example = "3.의학적"))})
     @GetMapping("/getCategory")
     public List<ManualCategoryRespondDto> searchCategory(
             @RequestParam String category,
@@ -81,7 +83,7 @@ public class ManualController {
     @Operation(summary = "검색 자동완성", description = """
             검색과 일치하는 응금상황 이름들을 보여줍니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
-            """, parameters = {@Parameter(name = "Keyword", description = "검색한 키워드")})
+            """, parameters = {@Parameter(name = "Keyword", description = "검색한 키워드", schema = @Schema(type = "string", example = "심장"))})
     @GetMapping("/autocomplete")
     public ResponseEntity<List<String>> autocomplete(
             @RequestParam String keyword,
@@ -99,7 +101,7 @@ public class ManualController {
     @Operation(summary = "매뉴얼 세부내용 조회", description = """
             해당하는 응급상황 이름에 대한 대처 세부내용을 반환합니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
-            """, parameters = {@Parameter(name = "EmergencyName", description = "응급상황 이름")})
+            """, parameters = {@Parameter(name = "EmergencyName", description = "응급상황 이름", schema = @Schema(type = "string", example = "심장마비"))})
     @GetMapping("/explanation")
     public ManualDetailRespondDto searchDetail(
             @RequestParam String emergencyName,
@@ -114,7 +116,7 @@ public class ManualController {
     @Operation(summary = "연관어 검색", description = """
             연관어를 통해 응급상황 매뉴얼을 검색하며, 검색과 일치하는 키워드가 있는 매뉴얼들을 반환합니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
-            """, parameters = {@Parameter(name = "Keyword", description = "검색할 내용")})
+            """, parameters = {@Parameter(name = "Keyword", description = "검색할 내용", schema = @Schema(type = "string", example = "심장정지"))})
     @GetMapping("/keyword")
     public ManualKeywordRespond getManualByEmergencyKeyword(
             @RequestParam String keyword,

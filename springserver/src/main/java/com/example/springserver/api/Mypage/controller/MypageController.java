@@ -4,10 +4,13 @@ import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
 import com.example.springserver.api.Mypage.service.MypageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,7 +25,11 @@ public class MypageController {
     @Operation(summary = "회원 정보 수정하기", description = """
             회원 정보를 수정합니다.<br>
             헤더에 accessToken을 넣어주세요.
-            """, parameters = {@Parameter(name = "MypageRequest", description = "회원가입 요청 객체")})
+            """, parameters = {@Parameter(name = "MypageRequest", description = "회원가입 요청 객체",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MypageReqeustDto.class)
+            ))})
     @PutMapping("/mypage/updateProfile")
     public ResponseEntity<?> updateProfile(
             @RequestBody MypageReqeustDto requestDto,
