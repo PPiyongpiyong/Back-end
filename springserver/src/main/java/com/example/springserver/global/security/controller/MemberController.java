@@ -6,6 +6,10 @@ import com.example.springserver.global.security.dto.MemberRequestDto;
 import com.example.springserver.global.security.dto.MemberResponseDto;
 import com.example.springserver.global.security.dto.RefreshRequestDto;
 import com.example.springserver.global.security.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +24,14 @@ public class MemberController {
     private final TokenProvider tokenProvider;
     private final MemberService memberService;
 
-    // 회원 가입하기
+    @Operation(summary = "회원 가입하기", description = "회원 가입 API 입니다. ", requestBody =
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원 가입 요청 객체",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = MemberRequestDto.class)
+                    )
+            )
+    )
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signUp(
             @RequestBody MemberRequestDto requestDto
