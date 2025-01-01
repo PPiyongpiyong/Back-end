@@ -2,6 +2,7 @@ package com.example.springserver.global.security.service;
 
 import com.example.springserver.global.auth.TokenProvider;
 import com.example.springserver.api.Mypage.domain.MemberEntity;
+import com.example.springserver.global.security.domain.constants.JwtValidationType;
 import com.example.springserver.global.security.dto.*;
 import com.example.springserver.api.Mypage.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomException;
@@ -9,10 +10,13 @@ import com.example.springserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.Map;
 
 import static com.example.springserver.global.security.domain.constants.JwtValidationType.VALID_JWT;
 
@@ -67,15 +71,38 @@ public class MemberService {
         return new TokenDto(accessToken, refreshToken);
     }
 
-    // Refresh token 검증 후에 Access token 재발급
-    @Transactional
-    public String regenerateAccessToken(RefreshRequestDto request) {
 
-        String refreshToken = request.getRefreshToken();
+    // refresh에 사용할 메소드
+    @Transactional
+    public RefreshResponseDto refresh(RefreshRequestDto request) {
+        JwtValidationType result = tokenProvider.validateToken(request.getAccessToken());
+
+        // 경우에 따른 반환
+        if (result == JwtValidationType.EXPIRED_JWT_TOKEN) {
+            try {
+                String newAccessToken = regenerateAccessToken(request.getRefreshToken());
+
+                return RefreshResponseDto.builder()
+                        .accessToken(newAccessToken).build();
+            } catch (Exception e) {
+                // 기타 예외 처리
+                throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            }
+        } else if (result == JwtValidationType.VALID_JWT) {
+            // Access Token이 여전히 유효한 경우
+            throw new CustomException(ErrorCode.TOKEN_UNEXPIRED);
+        } else {
+            // Access Token이 유효하지 않은 경우 (변조된 토큰 등)
+            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
+        }
+    }
+
+    // Refresh token 검증 후에 Access token 재발급
+    private String regenerateAccessToken(String refreshToken) {
 
         // 검증 결과
         if (tokenProvider.validateToken(refreshToken) != VALID_JWT) {
-            log.info("invlaid token");
+            log.info("invlaid refresh token");
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
