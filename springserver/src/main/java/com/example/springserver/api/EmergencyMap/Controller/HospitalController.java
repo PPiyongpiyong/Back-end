@@ -5,6 +5,7 @@ import com.example.springserver.api.EmergencyMap.Service.HospitalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class HospitalController {
     @Operation(summary = "근처 병원 조회", description = """
             위도와 경도를 기반으로 근처 병원 주소를 조회합니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
-            """, parameters = {@Parameter(name = "X", description = "경도"), @Parameter(name = "Y", description = "위도")})
+            """)
     @GetMapping("/hospital")
     public ResponseEntity<HospitalSearchResponse> getHospitals(@RequestParam(required = false, defaultValue = "1") Integer page,
                                                                @RequestParam(required = false, defaultValue = "10") Integer size,
