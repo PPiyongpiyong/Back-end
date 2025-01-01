@@ -20,11 +20,8 @@ jobs:
         java-version: '17'
 
     - name: create application.yml
-      run: |
-        ## create application.yml
-        
-        cd ./src/main/resources
-
+      run: 
+     
        
       
 
