@@ -9,7 +9,6 @@ public class MemberMapper {
                 .email(requestDto.email())
                 .phoneNumber(requestDto.phoneNumber())
                 .username(requestDto.username())
-                .roles(requestDto.roles())
                 .gender(requestDto.gender())
                 .parentPhoneNumber(requestDto.parentPhoneNumber())
                 .address(requestDto.address())
