@@ -41,7 +41,14 @@ public class MemberController {
         );
     }
 
-    // 로그인하기
+    @Operation(summary = "로그인하기", description = "로그인 기능의 API입니다.",
+                requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "아이디(이메일 주소)와 비밀번호",
+                        required = true,
+                        content = @Content(
+                                schema = @Schema(implementation = LoginRequestDto.class)
+                        )
+                ))
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(
             @RequestBody LoginRequestDto requestDto
