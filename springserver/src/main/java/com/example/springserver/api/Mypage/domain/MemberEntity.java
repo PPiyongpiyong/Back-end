@@ -37,7 +37,6 @@ public class MemberEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    // Enum 타입을 컬렉션으로 저장
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "member_roles", joinColumns = @JoinColumn(name = "member_id"))
     @Column(name = "roles", nullable = false)
