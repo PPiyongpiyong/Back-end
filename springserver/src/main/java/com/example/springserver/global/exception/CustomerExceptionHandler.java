@@ -18,8 +18,8 @@ public class CustomerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e, HttpServletRequest request) {
 
         ErrorCode errorCode = e.getErrorCode();
-        log.error("Request URI : [{}] {}", request.getMethod() ,request.getRequestURI());
-        log.error("Error message : {}", errorCode.getDescription());
+        log.error("Request URI : [{}] {}", request.getMethod() ,request.getRequestURI()); // request 기록
+        log.error("Error message : {}", errorCode.getDescription()); // Custom에서 설정한 description을 기록
 
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
