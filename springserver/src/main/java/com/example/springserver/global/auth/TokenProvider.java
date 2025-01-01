@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TokenProvider {
 
     private final ObjectMapper objectMapper; // java 객체의 다양 변환 가능
@@ -128,12 +130,16 @@ public class TokenProvider {
             final Claims claims = getClaims(token);
             return JwtValidationType.VALID_JWT;
         } catch (MalformedJwtException ex) {
+            log.warn("Invalid JWT token: {}", ex.getMessage());
             return JwtValidationType.INVALID_JWT_TOKEN;
         } catch (ExpiredJwtException ex) {
+            log.warn("Expired JWT token: {}", ex.getMessage());
             return JwtValidationType.EXPIRED_JWT_TOKEN;
         } catch (UnsupportedJwtException ex) {
+            log.warn("Unsupported JWT token: {}", ex.getMessage());
             return JwtValidationType.UNSUPPORTED_JWT_TOKEN;
         } catch (IllegalArgumentException ex) {
+            log.warn("Empty or blank JWT token: {}", ex.getMessage());
             return JwtValidationType.EMPTY_JWT;
         }
     }
