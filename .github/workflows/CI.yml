@@ -22,10 +22,10 @@ jobs:
     - name: create application.yml
       run: |
         ## create application.yml
-        mkdir ./src/main/resources
+        
         cd ./src/main/resources
 
-        # application.yml 파일 생성
+       
       
 
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
