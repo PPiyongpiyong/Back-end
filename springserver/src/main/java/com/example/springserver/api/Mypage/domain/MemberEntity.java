@@ -34,7 +34,6 @@ public class MemberEntity implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email; // 유저 이메일
 
-    @Column(nullable = false)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)

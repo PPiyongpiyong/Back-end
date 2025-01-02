@@ -74,4 +74,20 @@ public class MemberController {
             ) {
         return ResponseEntity.ok(memberService.refresh(request));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(
+            @RequestParam long memberId
+    ) {
+        memberService.logout(memberId);
+        return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    @DeleteMapping("/account")
+    public ResponseEntity<?> account(
+            @RequestBody long memberId
+    ) {
+        memberService.delete(memberId);
+        return ResponseEntity.ok("성공적으로 탈퇴 되었습니다.");
+    }
 }

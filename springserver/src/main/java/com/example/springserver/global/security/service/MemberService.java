@@ -28,7 +28,6 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
-    private final RedisTemplate redisTemplate;
 
     // 회원가입 서비스
     @Transactional
@@ -65,7 +64,7 @@ public class MemberService {
         // 3. 토큰 발급
         String accessToken = tokenProvider.generateAccessToken(member);
         String refreshToken = tokenProvider.generateRefreshToken(member);
-        tokenProvider.saveRefreshToken(member.getEmail(), refreshToken); // redis-server에 저장
+        tokenProvider.saveRefreshToken(member.getMemberId(), refreshToken); // redis-server에 저장
 
         // 4. TokenDto 반환
         return new TokenDto(accessToken, refreshToken);
@@ -110,7 +109,7 @@ public class MemberService {
         Long memberId = tokenProvider.getMemberIdFromToken(refreshToken);
 
         // Redis에서 Refresh Token 확인하기
-        String storedRefreshToken = tokenProvider.getRefreshToken(refreshToken);
+        String storedRefreshToken = tokenProvider.getRefreshToken(memberId).substring(13); // 저장된 refreshToken 가져오기
         if (!refreshToken.equals(storedRefreshToken)) { // redis 서버와 현재 저장이 다를 때
             throw new CustomException(ErrorCode.REFRESH_TOKEN_UNMATCHED);
         }
@@ -122,4 +121,20 @@ public class MemberService {
         return newAccessToken;
     }
 
+    // 로그아웃
+    @Transactional
+    public void logout(long memberId) {
+        tokenProvider.deleteRefreshToken(memberId);
+    }
+
+    // 계정 탈퇴
+    @Transactional
+    public void delete(long memberId) {
+        // redis-server에 저장된 것 삭제
+        tokenProvider.deleteRefreshToken(memberId);
+        // MemberEntity에서도 삭제
+        MemberEntity findMember = memberRepository.findByMemberId(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+        memberRepository.delete(findMember);
+    }
 }
