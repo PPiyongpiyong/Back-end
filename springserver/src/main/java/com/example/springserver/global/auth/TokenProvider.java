@@ -24,8 +24,7 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class TokenProvider {
 
-    private final ObjectMapper objectMapper; // java 객체의 다양 변환 가능
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private static final String KEY_ROLES = "roles"; // static을 사용하는 것이 좋음
     private final MemberRepository memberRepository;
@@ -74,28 +73,6 @@ public class TokenProvider {
     public String generateRefreshToken(MemberEntity member) {
 
         return generateToken(member, refreshTokenExpiration, true);
-    }
-
-    // RefreshToken redis 서버에 저장하기
-    public void saveRefreshToken(String email, String refreshToken) {
-
-        // redis 서버에 저장할 키
-        String key = "refreshToken: " + email;
-        // 저장하는 기한
-        redisTemplate.opsForValue().set(key, refreshToken, refreshTokenExpiration, TimeUnit.SECONDS);
-    }
-
-    // RefreshToken 조회하기
-    public String getRefreshToken(String memberId) {
-        String key = "refreshToken: " + memberId;
-
-        return (String) redisTemplate.opsForValue().get(key); // 멤버 고유 아이디로 확인
-    }
-
-    // Refresh Token 삭제하기
-    public void deleteRefreshToken(String memberId) {
-        String key = "refreshToken: " + memberId;
-        redisTemplate.delete(key);
     }
 
     // 발급받은 Token으로부터 member의 아이디를 얻기
@@ -159,5 +136,28 @@ public class TokenProvider {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         return MemberAuthentication.createMemberAuthentication(member);
+    }
+
+    /* Redis Utils */
+    // RefreshToken redis 서버에 저장하기
+    public void saveRefreshToken(long memberId, String refreshToken) {
+
+        // redis 서버에 저장할 키
+        String key = "refreshToken:" + memberId;
+        // 저장하는 기한
+        redisTemplate.opsForValue().set(key, refreshToken, refreshTokenExpiration, TimeUnit.SECONDS);
+    }
+
+    // RefreshToken 조회하기
+    public String getRefreshToken(long memberId) {
+        String key = "refreshToken:" + memberId;
+
+        return (String) redisTemplate.opsForValue().get(key); // 멤버 고유 아이디로 확인
+    }
+
+    // Refresh Token 삭제하기
+    public void deleteRefreshToken(long memberId) {
+        String key = "refreshToken:" + memberId;
+        redisTemplate.delete(key);
     }
 }

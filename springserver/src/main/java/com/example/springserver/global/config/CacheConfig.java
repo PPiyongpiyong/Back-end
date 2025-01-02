@@ -57,8 +57,8 @@ public class CacheConfig {
     // RedisTemplate 설정
     @Bean
     @Primary // RedisTemplate 기본 Bean 설정
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate() {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
         // Key와 Value에 대한 직렬화 설정
