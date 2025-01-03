@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(
+    protected void doFilterInternal( // 전체 프로젝트에 적용할 filter 설정
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
@@ -94,7 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    // 특정 경로에는 filter를 적용하지 않도록 설정
+    // 특정 경로에는 filter를 적용하지 않도록 설정하는 메소드
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
@@ -104,11 +104,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return shouldNotFilter;
     }
 
-    //
+    // 권한 관련
     private void setAuthentication(HttpServletRequest request, Long memberId) {
+
         MemberEntity member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+
         MemberAuthentication authentication = MemberAuthentication.createMemberAuthentication(member);
+
         createWebAuthenticationDetailsAndSet(request, authentication);
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);

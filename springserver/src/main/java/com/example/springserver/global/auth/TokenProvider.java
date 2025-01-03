@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -20,10 +21,10 @@ import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TokenProvider {
 
-    private final ObjectMapper objectMapper; // java 객체의 다양 변환 가능
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private static final String KEY_ROLES = "roles"; // static을 사용하는 것이 좋음
     private final MemberRepository memberRepository;
@@ -74,28 +75,6 @@ public class TokenProvider {
         return generateToken(member, refreshTokenExpiration, true);
     }
 
-    // RefreshToken redis 서버에 저장하기
-    public void saveRefreshToken(String email, String refreshToken) {
-
-        // redis 서버에 저장할 키
-        String key = "refreshToken: " + email;
-        // 저장하는 기한
-        redisTemplate.opsForValue().set(key, refreshToken, refreshTokenExpiration, TimeUnit.SECONDS);
-    }
-
-    // RefreshToken 조회하기
-    public String getRefreshToken(String memberId) {
-        String key = "refreshToken: " + memberId;
-
-        return (String) redisTemplate.opsForValue().get(key); // 멤버 고유 아이디로 확인
-    }
-
-    // Refresh Token 삭제하기
-    public void deleteRefreshToken(String memberId) {
-        String key = "refreshToken: " + memberId;
-        redisTemplate.delete(key);
-    }
-
     // 발급받은 Token으로부터 member의 아이디를 얻기
     public Long getMemberIdFromToken(String token) throws CustomException {
 
@@ -128,12 +107,16 @@ public class TokenProvider {
             final Claims claims = getClaims(token);
             return JwtValidationType.VALID_JWT;
         } catch (MalformedJwtException ex) {
+            log.warn("Invalid JWT token: {}", ex.getMessage());
             return JwtValidationType.INVALID_JWT_TOKEN;
         } catch (ExpiredJwtException ex) {
+            log.warn("Expired JWT token: {}", ex.getMessage());
             return JwtValidationType.EXPIRED_JWT_TOKEN;
         } catch (UnsupportedJwtException ex) {
+            log.warn("Unsupported JWT token: {}", ex.getMessage());
             return JwtValidationType.UNSUPPORTED_JWT_TOKEN;
         } catch (IllegalArgumentException ex) {
+            log.warn("Empty or blank JWT token: {}", ex.getMessage());
             return JwtValidationType.EMPTY_JWT;
         }
     }
@@ -153,5 +136,28 @@ public class TokenProvider {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         return MemberAuthentication.createMemberAuthentication(member);
+    }
+
+    /* Redis Utils */
+    // RefreshToken redis 서버에 저장하기
+    public void saveRefreshToken(long memberId, String refreshToken) {
+
+        // redis 서버에 저장할 키
+        String key = "refreshToken:" + memberId;
+        // 저장하는 기한
+        redisTemplate.opsForValue().set(key, refreshToken, refreshTokenExpiration, TimeUnit.SECONDS);
+    }
+
+    // RefreshToken 조회하기
+    public String getRefreshToken(long memberId) {
+        String key = "refreshToken:" + memberId;
+
+        return (String) redisTemplate.opsForValue().get(key); // 멤버 고유 아이디로 확인
+    }
+
+    // Refresh Token 삭제하기
+    public void deleteRefreshToken(long memberId) {
+        String key = "refreshToken:" + memberId;
+        redisTemplate.delete(key);
     }
 }
