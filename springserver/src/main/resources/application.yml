@@ -43,7 +43,7 @@ kakao:
   api:
     key: c475873a5fee8366168566ade21b7eb5
   client_id: c475873a5fee8366168566ade21b7eb5
-  redirect_uri: http://localhost:8080/callback # 등록한 url
+  redirect_uri: http://localhost:8080/auth/kakao/callback # 등록한 url
 
 
 logging:
