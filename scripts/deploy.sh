@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_PATH=$(ls /home/ubuntu/app/ppiyong-0.0.1-SNAPSHOT.jar)
+BUILD_PATH=$(ls /home/ubuntu/app/springserver-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_PATH)
 echo "> build 파일명: $JAR_NAME"
 
@@ -28,7 +28,7 @@ else
 fi
 
 echo "> application.jar 교체"
-GREEN_APPLICATION=$GREEN_PROFILE-ppiyong.jar
+GREEN_APPLICATION=$GREEN_PROFILE-springserver.jar
 GREEN_APPLICATION_PATH=$DEPLOY_PATH$GREEN_APPLICATION
 
 ln -Tfs $DEPLOY_PATH$JAR_NAME $GREEN_APPLICATION_PATH
