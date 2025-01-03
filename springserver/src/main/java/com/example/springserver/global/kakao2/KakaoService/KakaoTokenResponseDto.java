@@ -1,12 +1,12 @@
-package com.example.springserver.global.kakao.dto;
+package com.example.springserver.global.kakao2.KakaoService;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-/*
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor //역직렬화를 위한 기본 생성자
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KakaoTokenResponseDto {
 
@@ -24,4 +24,4 @@ public class KakaoTokenResponseDto {
     public Integer refreshTokenExpiresIn;
     @JsonProperty("scope")
     public String scope;
-}*/
+}

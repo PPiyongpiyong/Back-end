@@ -1,4 +1,5 @@
-package com.example.springserver.global.kakao.service;
+
+/*package com.example.springserver.global.kakao.service;
 
 import com.example.springserver.global.kakao.dto.KakaoTokenResponseDto;
 import com.example.springserver.global.kakao.dto.KakaoUserInfoResponseDto;
@@ -85,4 +86,4 @@ public class KakaoService {
         log.info("[Kakao Service] ID Token: {}", tokenResponse.getIdToken());
         log.info("[Kakao Service] Scope: {}", tokenResponse.getScope());
     }
-}
+}*/

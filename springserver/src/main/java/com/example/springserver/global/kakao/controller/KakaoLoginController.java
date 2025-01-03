@@ -1,4 +1,4 @@
-package com.example.springserver.global.kakao.controller;
+/*package com.example.springserver.global.kakao.controller;
 
 import com.example.springserver.global.kakao.dto.KakaoUserInfoResponseDto;
 import com.example.springserver.global.kakao.service.KakaoService;
@@ -27,4 +27,4 @@ public class KakaoLoginController {
         String url = kakaoService.getLoginUrl();
         return "인증 코드 값 : " + code;
     }
-}
+}*/
