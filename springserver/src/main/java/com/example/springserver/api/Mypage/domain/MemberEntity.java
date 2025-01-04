@@ -47,9 +47,6 @@ public class MemberEntity implements UserDetails {
     private String address;
     private String residentNo;
 
-    // 자체 로그인, 카카오 로그인 구분
-    private String provider;
-
     // 즐겨찾기 병원 정보
     private List<String> favorites;
 

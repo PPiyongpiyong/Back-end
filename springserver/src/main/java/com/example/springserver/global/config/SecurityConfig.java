@@ -48,8 +48,8 @@ public class SecurityConfig {
                             .accessDeniedHandler(new CustomerAccessDeniedHandler()); // 인가(Authorization) 예외 핸들러 지정
                 });
 
-        setAccessTokenFilter(httpSecurity);
-        setPermissions(httpSecurity);
+        setAccessTokenFilter(httpSecurity); // 필터 설정
+        setPermissions(httpSecurity); // web 보안 접근 설정
 
         return httpSecurity.build();
     }
