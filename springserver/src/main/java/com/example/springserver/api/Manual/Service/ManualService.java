@@ -2,7 +2,7 @@ package com.example.springserver.api.Manual.Service;
 import com.example.springserver.api.Manual.Domain.Manual;
 import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
-import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRequest.ManualDetailRequestDto;
+
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRequest.ManualKeywordRequest;
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
@@ -117,18 +117,24 @@ public class ManualService {
     }
     //키워드 조회
 
+    public List<ManualKeywordRespond> getManualByEmergencyKeyword(String keyword/*, String token*/) {
+
+        /*MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));*/
+
+        List<Manual> manuals = manualRepository.findByDetailContaining(keyword);
 
 
-    public ManualKeywordRespond getManualByEmergencyKeyword(String keyword, String token) {
-
-        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
-
-        Manual manual = manualRepository.findByDetailContaining(keyword)
-                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
-
-        return new ManualKeywordRespond(manual.getEmergencyName(), manual.getManualSummary());
+        return manuals.stream()
+                .map(manual -> new ManualKeywordRespond(
+                        manual.getEmergencyName(),
+                        manual.getManualSummary()
+                ))
+                .collect(Collectors.toList());
     }
+
+
+
 }
 
 
