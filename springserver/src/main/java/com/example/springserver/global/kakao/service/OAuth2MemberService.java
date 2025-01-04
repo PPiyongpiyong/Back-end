@@ -1,4 +1,4 @@
-/*package com.example.springserver.global.kakao.service;
+package com.example.springserver.global.kakao.service;
 
 import com.example.springserver.global.security.domain.OAuth2Attribute;
 import com.example.springserver.global.auth.TokenProvider;
@@ -69,4 +69,3 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         return memberRepository.save(member);
     }
 }
-*/
