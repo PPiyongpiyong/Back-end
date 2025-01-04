@@ -23,8 +23,7 @@ public class KakaoLoginController {
     private final KakaoService kakaoService;
 
     @Operation(summary = "카카오 인가 코드 받기", description = """
-            카카오 인가 코드를 받기 위한 url을 반환합니다.<br>
-            url에서 인가 코드를 확인할 수 있습니다.
+            카카오 인가 코드를 받기 위한 url을 반환합니다.
             """)
     @GetMapping("/page")
     public String page() {
@@ -33,6 +32,7 @@ public class KakaoLoginController {
 
     @Operation(summary = "카카오 로그인", description = """
             카카오 로그인을 통하여 유저의 이름과, 이메일을 저장합니다.<br>
+            인가 코드 요청 url을 통하여 코드를 받습니다.<br>
             구체적인 회원정보는 마이페이지 수정에서 처리합니다.
             """, parameters = @Parameter(name = "Code", description = "카카오로부터 받은 인가 코드"))
     @PostMapping("/callback")
