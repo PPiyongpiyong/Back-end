@@ -89,17 +89,15 @@ public class KakaoService {
     }
 
     // 받은 정보를 바탕으로 사용자 저장
-    public MemberResponseDto saveMemberInfo(KakaoUserInfoResponseDto profile) {
+    public MemberResponseDto saveMemberInfo(KakaoUserInfoResponseDto userInfo) {
 
-        KakaoUserInfoResponseDto.KakaoAccount account = profile.getKakaoAccount();
+        KakaoUserInfoResponseDto.KakaoAccount account = userInfo.getKakaoAccount();
 
         if (account.getIsProfileAgree()) {
 
             MemberRequestDto memberDto = MemberRequestDto.builder()
                     .email(account.getEmail())
-                    .username(account.getName())
-                    .phoneNumber(account.getPhoneNumber())
-                    .gender(account.getGender())
+                    .username(account.getProfile().getNickName())
                 .build();
             MemberEntity member = MemberMapper.toEntity(memberDto);
             memberRepository.save(member);
