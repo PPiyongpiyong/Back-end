@@ -43,7 +43,7 @@ aws-property:
 kakao:
   api:
     key: c475873a5fee8366168566ade21b7eb5
-  client_id: c475873a5fee8366168566ade21b7eb5
+  client_id: a5bf039b62d2837be3d07e455d8bda52
   redirect_uri: http://localhost:8080/auth/kakao/callback # 등록한 url
 
 
