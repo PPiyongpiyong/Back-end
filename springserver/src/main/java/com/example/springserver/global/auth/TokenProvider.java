@@ -76,7 +76,7 @@ public class TokenProvider {
     }
 
     // 발급받은 Token으로부터 member의 아이디를 얻기
-    public Long getMemberIdFromToken(String token) throws CustomException {
+    public long getMemberIdFromToken(String token) throws CustomException {
 
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.secretKey)

@@ -2,10 +2,11 @@ package com.example.springserver.global.security.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
-import java.util.List;
 
 @Schema
+@Builder
 public record MemberRequestDto (
         @Schema(name = "이메일", example = "aaa1111@example.com")
         String email,
