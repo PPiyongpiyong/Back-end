@@ -1,5 +1,6 @@
-/*package com.example.springserver.global.kakao.controller;
+package com.example.springserver.global.kakao.controller;
 
+import com.example.springserver.api.Mypage.repository.MemberRepository;
 import com.example.springserver.global.kakao.dto.KakaoUserInfoResponseDto;
 import com.example.springserver.global.kakao.service.KakaoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;
+    private final MemberRepository memberRepository;
 
-    @Operation(summary = "카카오 인가 코드 요청하기")
+    @Operation(summary = "카카오 로그인")
     @GetMapping("/callback")
     public String callback(String code) {
-        String url = kakaoService.getLoginUrl();
-        return "인증 코드 값 : " + code;
+        String accessToken = kakaoService.getAccessTokenFromKakao(code).access();
+
+        kakaoService.getUserInfo(code);
+        return "access_token=" + accessToken;
     }
-}*/
+}

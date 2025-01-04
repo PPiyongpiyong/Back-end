@@ -20,6 +20,7 @@ public enum ErrorCode {
     USER_NOT_FOUNT(404, "사용자를 찾을 수 없습니다"),
     UNMATCHED_PASSWORD(404, "비밀번호가 일치하지 않습니다."),
     _PARSING_ERROR(404, "찾을 수 없습니다."),
+    SHOULD_PERMISSION(404, "동의를 진행해주세요."),
     // 409 Conflict
     USER_ALREADY_EXISTS(409, "이미 존재하는 사용자입니다."),
     DUPLICATED_ID(409, "이미 존재하는 아이디입니다."),

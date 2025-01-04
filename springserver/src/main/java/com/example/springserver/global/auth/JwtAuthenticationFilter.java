@@ -24,7 +24,7 @@ import java.io.IOException;
 import static com.example.springserver.global.security.domain.constants.JwtValidationType.VALID_JWT;
 
 // JWT 인증을 검증하기 위한 클래스
-@Component("globalJwtAuthenticationFilter")
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
