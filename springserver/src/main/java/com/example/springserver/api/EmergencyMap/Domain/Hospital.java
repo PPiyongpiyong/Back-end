@@ -32,6 +32,8 @@ public class Hospital {
 
     private String y;
 
+
+
     private Hospital(String placeId, String placeName, String addressName, String roadAddressName, String categoryName, String phone, String x, String y) {
         this.placeId = placeId;
         this.placeName = placeName;
