@@ -118,7 +118,7 @@ public class ManualController {
             헤더에 accessToken을 넣어주세요.<br>
             """, parameters = {@Parameter(name = "Keyword", description = "검색할 내용", schema = @Schema(type = "string", example = "심장정지"))})
     @GetMapping("/keyword")
-    public ManualKeywordRespond getManualByEmergencyKeyword(
+    public List<ManualKeywordRespond> getManualByEmergencyKeyword(
             @RequestParam String keyword,
             @RequestHeader String authToken){
 
@@ -127,6 +127,7 @@ public class ManualController {
 
         return manualService.getManualByEmergencyKeyword(keyword, token);
     }
+
 
 }
 
