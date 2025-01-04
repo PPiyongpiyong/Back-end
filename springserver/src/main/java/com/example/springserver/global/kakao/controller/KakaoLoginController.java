@@ -2,6 +2,8 @@
 
 import com.example.springserver.global.kakao.dto.KakaoUserInfoResponseDto;
 import com.example.springserver.global.kakao.service.KakaoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,18 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("")
+@RequestMapping("/auth/kakao")
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;
 
+    @Operation(summary = "카카오 인가 코드 요청하기")
     @GetMapping("/callback")
-    public ResponseEntity<?> callback(@RequestParam("code") String code) {
-        String accessToken = kakaoService.getAccessTokenFromKakao(code);
-
-        KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
-
-        // User 로그인, 또는 회원가입 로직 추가
-        return new ResponseEntity<>(HttpStatus.OK);
+    public String callback(String code) {
+        String url = kakaoService.getLoginUrl();
+        return "인증 코드 값 : " + code;
     }
 }*/
