@@ -108,9 +108,7 @@ public class KakaoService {
         } else {
             throw new CustomException(ErrorCode.SHOULD_PERMISSION);
         }
-
     }
-
 
     private WebClient createWebClient(String baseUrl) {
         return WebClient.builder()
