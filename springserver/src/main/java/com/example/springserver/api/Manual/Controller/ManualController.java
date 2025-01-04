@@ -92,15 +92,16 @@ public class ManualController {
     }
 
     @GetMapping("/keyword")
-    public ManualKeywordRespond getManualByEmergencyKeyword(
-            @RequestParam String keyword,
-            @RequestHeader String authToken){
+    public List<ManualKeywordRespond> getManualByEmergencyKeyword(
+            @RequestParam String keyword/*,
+            @RequestHeader String authToken*/){
 
-        String token = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
+        /*String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;*/
 
-        return manualService.getManualByEmergencyKeyword(keyword, token);
+        return manualService.getManualByEmergencyKeyword(keyword/*, token*/);
     }
+
 
 }
 

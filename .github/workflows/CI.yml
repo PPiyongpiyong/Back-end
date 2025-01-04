@@ -33,7 +33,9 @@ jobs:
       shell: bash
       
     - name: build
-      run: |
+      run:
           chmod +x gradlew
           ./gradlew build -x test
       shell: bash
+
+
