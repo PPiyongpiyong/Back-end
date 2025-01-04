@@ -1,4 +1,6 @@
-INSERT INTO Manual (category, emergency_name, manual_detail, manual_summary,keyword) VALUES
+SELECT * FROM manual;
+
+/*INSERT INTO Manual (category, emergency_name, manual_detail, manual_summary,keyword) VALUES
     ('3. 의학적', '심정지(비외상성)', '"1. 심정지 확인과 심장충격기 준비
 심정지 확인: 환자가 반응이 없고, 숨을 쉬지 않으면 심정지로 간주합니다.
 자동심장충격기(AED) 준비: 주변에 AED가 있으면 즉시 가져옵니다.
