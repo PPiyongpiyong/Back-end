@@ -3,11 +3,11 @@ spring:
     name: springserver
   main:
     web-application-type: servlet
-  #datasource:
-  #  driver-class-name: com.mysql.cj.jdbc.Driver
-  #  url: jdbc:mysql://localhost:3306/tave?createDatabaseIfNotExist=true
-  #  username: root
-  #  password: tkfkdgo2001!
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tave?createDatabaseIfNotExist=true
+    username: root
+    password: tkfkdgo2001!
   jpa:
     show-sql: true
     hibernate:
