@@ -117,10 +117,10 @@ public class ManualService {
     }
     //키워드 조회
 
-    public List<ManualKeywordRespond> getManualByEmergencyKeyword(String keyword/*, String token*/) {
+    public List<ManualKeywordRespond> getManualByEmergencyKeyword(String keyword, String token) {
 
-        /*MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));*/
+        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         List<Manual> manuals = manualRepository.findByDetailContaining(keyword);
 
