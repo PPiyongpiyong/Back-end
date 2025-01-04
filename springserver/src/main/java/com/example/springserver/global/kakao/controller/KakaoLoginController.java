@@ -6,6 +6,7 @@ import com.example.springserver.global.kakao.service.KakaoService;
 import com.example.springserver.global.security.dto.MemberResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth/kakao")
+@Tag(name = "카카오 로그인 API")
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;
