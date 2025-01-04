@@ -1,6 +1,6 @@
 package com.example.springserver.global.config;
 
-import com.example.springserver.global.auth.JwtAuthenticationEntryPoint;
+import com.example.springserver.global.exception.CustomAuthenticationEntryPoint;
 import com.example.springserver.global.auth.JwtAuthenticationFilter;
 import com.example.springserver.global.auth.TokenProvider;
 import com.example.springserver.api.Mypage.repository.MemberRepository;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +24,7 @@ public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
     @Bean
@@ -40,13 +39,13 @@ public class SecurityConfig {
                         httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable) // 기본 로그인 페이지 사용하지 않음
                 .sessionManagement(sessionManagementConfigurer ->
-                        sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 보안성 및 확장성 설정
                 .exceptionHandling(exceptionHandlingConfigurer -> {
                     exceptionHandlingConfigurer
-                            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                            .accessDeniedHandler(new CustomerAccessDeniedHandler());
+                            .authenticationEntryPoint(customAuthenticationEntryPoint) // 인증(Authentication) 예외 핸들러 지정
+                            .accessDeniedHandler(new CustomerAccessDeniedHandler()); // 인가(Authorization) 예외 핸들러 지정
                 });
 
         setAccessTokenFilter(httpSecurity);
@@ -55,7 +54,7 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    // JwtAuthenticationFilter 추가(API 접근 인증 설정)
+    // 인증 관련 Filter 설정 클래스 : JwtAuthenticationFilter 추가
     private void setAccessTokenFilter(HttpSecurity httpSecurity) throws Exception {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(memberRepository, tokenProvider);
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -82,7 +81,9 @@ public class SecurityConfig {
     // 인가 설정(경로별 접근 권한 설정)
     private void setPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+
+                .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+
                 .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
         );
     }

@@ -25,7 +25,7 @@ public class KakaoService {
     @Value("${kakao.api.key}")
     private String restApiKey;
 
-    private static final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
+    private static final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com"; // 인가 코드 요청, host: kauth.kakao.com
     private static final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
 
     public String getLoginUrl() {
@@ -36,8 +36,8 @@ public class KakaoService {
 
     public String getAccessTokenFromKakao(String code) {
         try {
-            KakaoTokenResponseDto tokenResponse = createWebClient(KAUTH_TOKEN_URL_HOST)
-                    .post()
+            KakaoTokenResponseDto tokenResponse = createWebClient(KAUTH_TOKEN_URL_HOST) // kakao의 경우 kauth.kakao.com
+                    .post() // post 방식으로 key-value 타입의 정보들을 카카오 서버로 요청
                     .uri(uriBuilder -> uriBuilder
                             .path("/oauth/token")
                             .queryParam("grant_type", "authorization_code")

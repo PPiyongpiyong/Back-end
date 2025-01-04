@@ -1,11 +1,17 @@
 package com.example.springserver.global.security.controller;
 
 import com.example.springserver.global.auth.TokenProvider;
+import com.example.springserver.global.security.domain.constants.JwtValidationType;
 import com.example.springserver.global.security.dto.LoginRequestDto;
 import com.example.springserver.global.security.dto.MemberRequestDto;
 import com.example.springserver.global.security.dto.MemberResponseDto;
 import com.example.springserver.global.security.dto.RefreshRequestDto;
 import com.example.springserver.global.security.service.MemberService;
+import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +26,14 @@ public class MemberController {
     private final TokenProvider tokenProvider;
     private final MemberService memberService;
 
-    // 회원 가입하기
+    @Operation(summary = "회원 가입하기", description = "회원 가입 API 입니다. ", requestBody =
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원 가입 요청 객체",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = MemberRequestDto.class)
+                    )
+            )
+    )
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signUp(
             @RequestBody MemberRequestDto requestDto
@@ -30,7 +43,14 @@ public class MemberController {
         );
     }
 
-    // 로그인하기
+    @Operation(summary = "로그인하기", description = "로그인 기능의 API입니다.",
+                requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "아이디(이메일 주소)와 비밀번호",
+                        required = true,
+                        content = @Content(
+                                schema = @Schema(implementation = LoginRequestDto.class)
+                        )
+                ))
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(
             @RequestBody LoginRequestDto requestDto
@@ -39,14 +59,35 @@ public class MemberController {
     }
 
     // Access Token을 재발급받기
+    @Operation(summary = "액세스 토큰 재발급", description = """
+            access token이 만료되면, refresh token의 유효성을 판단해 다시 access token을 발급받습니다.
+            """, requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "만료된 액세스 토큰과 리프레시 토큰",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = RefreshRequestDto.class)
+                    )
+    ))
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(
             @RequestBody RefreshRequestDto request
             ) {
+        return ResponseEntity.ok(memberService.refresh(request));
+    }
 
-        return ResponseEntity.ok(Map.of(
-                "accessToken",
-                memberService.regenerateAccessToken(request)));
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(
+            @RequestParam long memberId
+    ) {
+        memberService.logout(memberId);
+        return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
 
+    @DeleteMapping("/account")
+    public ResponseEntity<?> account(
+            @RequestBody long memberId
+    ) {
+        memberService.delete(memberId);
+        return ResponseEntity.ok("성공적으로 탈퇴 되었습니다.");
     }
 }
