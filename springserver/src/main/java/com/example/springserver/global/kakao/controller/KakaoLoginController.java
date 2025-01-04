@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;
-    private final MemberRepository memberRepository;
+
+    @Operation(summary = "카카오 인가 코드 받기", description = """
+            카카오 인가 코드를 받기 위한 url을 반환합니다.<br>
+            url에서 인가 코드를 확인할 수 있습니다.
+            """)
+    @GetMapping("/page")
+    public String page() {
+        return kakaoService.getLoginUrl();
+    }
 
     @Operation(summary = "카카오 로그인", description = """
             카카오 로그인을 통하여 유저의 이름과, 이메일을 저장합니다.<br>
