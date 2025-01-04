@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/manual")
 @RequiredArgsConstructor
-@Tag(name = "Manula", description = "매뉴얼 관련 API")
+@Tag(name = "Manual", description = "매뉴얼 관련 API")
 public class ManualController {
     private final ManualService manualService;
     private final S3Service s3Service;
@@ -127,7 +127,5 @@ public class ManualController {
 
         return manualService.getManualByEmergencyKeyword(keyword, token);
     }
-
-
 }
 
