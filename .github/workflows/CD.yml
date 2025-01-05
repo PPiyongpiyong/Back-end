@@ -26,13 +26,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'corretto'
-    
     - name: make application.yml
       run: |
          ## create application.yml
-        mkdir ./src/main/resources
+        mkdir -p ./src/main/resources
         cd ./src/main/resources
-
         # application.yml 파일 생성
         touch ./application.yml
 
@@ -41,11 +39,7 @@ jobs:
         cat ./application.yml
       shell: bash
         
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
-    - name: Build with Gradle # 실제 application build(-x 옵션을 통해 test는 제외)
-      run: ./gradlew build -x test
+
       
     - name: Make Directory
       run: mkdir -p deploy
