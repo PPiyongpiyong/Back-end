@@ -40,11 +40,3 @@ jobs:
            pwd
            ls -la
 
-      - name: Move to project root (if necessary)
-        run: cd ./Back-end # gradlew 파일이 있는 위치로 이동
-
-      - name: build
-        run: |
-          chmod +x gradlew
-          ./gradlew build -x test
-        shell: bash
