@@ -15,6 +15,7 @@ public interface KakaoHospitalApiClient {
             @RequestParam("category_group_code") String categoryGroupCode,
             @RequestParam("x") String x,
             @RequestParam("y") String y,
+            @RequestParam("category_Name") String categoryName,
             @RequestParam("radius") int radius,
             @RequestParam("page") int page,
             @RequestParam("size") int size,
