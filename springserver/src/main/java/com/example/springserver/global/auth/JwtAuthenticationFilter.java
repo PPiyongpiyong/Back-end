@@ -99,7 +99,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         System.out.println("Request path: " + path); // 경로 로그 출력
-        boolean shouldNotFilter = path.startsWith("/auth/");
+        boolean shouldNotFilter = path.startsWith("/auth/signin") ||
+                path.startsWith("/auth/signup") ||
+                path.startsWith("/auth/account");
         System.out.println("Should not filter: " + shouldNotFilter); // 필터링 여부 출력
         return shouldNotFilter;
     }
