@@ -48,7 +48,7 @@ public class MemberEntity implements UserDetails {
     private String residentNo;
 
     // 즐겨찾기 병원 정보
-    private List<String> favorites;
+    //private List<String> favorites;
 
     // 위임 메서드 구현
     @Override
