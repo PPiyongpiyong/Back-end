@@ -53,7 +53,7 @@ public class MemberService {
 
         // 1. 사용자 존재 여부 확인
         MemberEntity member = memberRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_ALREADY_EXISTS));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         // 2. 비밀번호 검증
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) {
