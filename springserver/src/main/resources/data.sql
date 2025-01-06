@@ -1,7 +1,7 @@
-insert into MEMBER (member_id, username, email, password, phoneNumber, gender, parentPhoneNumber, address, residentNo) values
-    (1, '경기도 수원시', 'youyeon1111@example.com', 'female', '010-2222-2222', '$2a$10$IS2D9TKvOa8tC9YUTDOC1.XMxEwQjGbYCh2739qnufeckH7OANY7a', '010-1111-1111', NULL, '000000-4000000', '전유연', ?);
-    insert into member (member_id, username, email, password, phoneNumber, gender, parentPhoneNumber, address, residentNo) values
-    (2, '서울특별시', 'gildong@example.com', 'male', '010-1234-5678', '$2a$10$5JG4rI/xqZ1iOHxYWZHNh.4c7CB0UPH9aAsSlO32apjQdR.hPOktO', '010-1234-5678', NULL, '010101-3000000', '홍길동', ?);
+-- insert into MEMBER (member_id, username, email, password, phoneNumber, gender, parentPhoneNumber, address, residentNo) values
+--     (1, '경기도 수원시', 'youyeon1111@example.com', 'female', '010-2222-2222', '$2a$10$IS2D9TKvOa8tC9YUTDOC1.XMxEwQjGbYCh2739qnufeckH7OANY7a', '010-1111-1111', NULL, '000000-4000000', '전유연', ?);
+--     insert into member (member_id, username, email, password, phoneNumber, gender, parentPhoneNumber, address, residentNo) values
+--     (2, '서울특별시', 'gildong@example.com', 'male', '010-1234-5678', '$2a$10$5JG4rI/xqZ1iOHxYWZHNh.4c7CB0UPH9aAsSlO32apjQdR.hPOktO', '010-1234-5678', NULL, '010101-3000000', '홍길동', ?);
 
 /*INSERT INTO Manual (category, emergency_name, manual_detail, manual_summary,keyword) VALUES
     ('3. 의학적', '심정지(비외상성)', '"1. 심정지 확인과 심장충격기 준비
