@@ -2,10 +2,13 @@ name: CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "develop" ]
 
 env:
   S3_BUCKET_NAME: ppiyong
+
+permissions:
+  contents: read
 
 jobs:
   build:
