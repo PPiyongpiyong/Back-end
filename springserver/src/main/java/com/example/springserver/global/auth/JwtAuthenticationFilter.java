@@ -77,21 +77,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 헤더에서 Authorization 정보를 가져오기
         String bearerToken = request.getHeader(TOKEN_HEADER);
+        String token = bearerToken.startsWith(TOKEN_PREFIX) ? bearerToken.substring(TOKEN_PREFIX.length()) : bearerToken;
 
-        // bearer 형식의 Authorization이 아닌 경우에 대한 체크
-        if (!StringUtils.hasText(bearerToken)) {
+        // Authorization이 아닌 경우에 대한 체크
+        if (!StringUtils.hasText(token)) {
             log.warn("Authorization header is missing or empty");
             return null;
         }
-        if (!bearerToken.startsWith(TOKEN_PREFIX)) {
-            log.warn("Authorization header format is invalid");
-            return null;
-        }
-
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(7); // Bearer  이후만 반환하게 substr
-        }
-        return null;
+        log.info("입력받은 토큰 : {" + token + "}");
+        return token;
     }
 
     // 특정 경로에는 filter를 적용하지 않도록 설정하는 메소드

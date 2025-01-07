@@ -35,7 +35,8 @@ public class ManualController {
                 @Parameter(name = "EmergencyName", description = "응급상황 이름", schema = @Schema(type = "string", example = "심장마비"))})
     @GetMapping("/search")
     public ResponseEntity<?> search(
-            @RequestParam String type, @RequestParam(required = false) String emergencyName) {
+            @RequestParam String type,
+            @RequestParam(required = false) String emergencyName) {
         try {
             if ("manual".equals(type) && emergencyName != null) {
                 // 매뉴얼 정보를 반환//
@@ -87,7 +88,7 @@ public class ManualController {
     @GetMapping("/autocomplete")
     public ResponseEntity<List<String>> autocomplete(
             @RequestParam String keyword,
-            @RequestHeader String authToken) {
+            @RequestHeader("Authorization") String authToken) {
         String token = authToken.startsWith("Bearer ") ?
                 authToken.substring(7) : authToken;
 
@@ -105,7 +106,7 @@ public class ManualController {
     @GetMapping("/explanation")
     public ManualDetailRespondDto searchDetail(
             @RequestParam String emergencyName,
-            @RequestHeader String authToken) {
+            @RequestHeader("Authorization") String authToken) {
 
         String token = authToken.startsWith("Bearer ") ?
                 authToken.substring(7) : authToken;
@@ -120,7 +121,7 @@ public class ManualController {
     @GetMapping("/keyword")
     public List<ManualKeywordRespond> getManualByEmergencyKeyword(
             @RequestParam String keyword,
-            @RequestHeader String authToken){
+            @RequestHeader("Authorization") String authToken){
 
         String token = authToken.startsWith("Bearer ") ?
                 authToken.substring(7) : authToken;
