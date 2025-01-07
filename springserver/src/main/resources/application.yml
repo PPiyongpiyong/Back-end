@@ -41,9 +41,9 @@ spring:
   main:
     web-application-type: servlet
   datasource:
-    password: ppiyong2001!
-    username: ppiyong
-    url: jdbc:mysql://ppiyong.c38qk6uiuokr.ap-northeast-2.rds.amazonaws.com:3306/mysql
+    password: ppiyong!
+    username: tave
+    url: jdbc:mysql://ppiyong-database.cxyk0k0g20k9.ap-northeast-2.rds.amazonaws.com:3306/tave
 logging:
   level:
     org:
