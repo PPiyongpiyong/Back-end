@@ -78,19 +78,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 헤더에서 Authorization 정보를 가져오기
         String bearerToken = request.getHeader(TOKEN_HEADER);
 
-        // bearer 형식의 Authorization이 아닌 경우에 대한 체크
-        if (!StringUtils.hasText(bearerToken)) {
-            log.warn("Authorization header is missing or empty");
-            return null;
-        }
-        if (!bearerToken.startsWith(TOKEN_PREFIX)) {
-            log.warn("Authorization header format is invalid");
-            return null;
+        if (bearerToken != null) {
+            String token = bearerToken.startsWith(TOKEN_PREFIX) ? bearerToken.substring(TOKEN_PREFIX.length()) : bearerToken;
+
+
+            // Authorization이 아닌 경우에 대한 체크
+            if (!StringUtils.hasText(token)) {
+                log.warn("Authorization header is missing or empty");
+                return null;
+            }
+            log.info("입력받은 토큰 : {" + token + "}");
+            return token;
         }
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(7); // Bearer  이후만 반환하게 substr
-        }
         return null;
     }
 
@@ -99,7 +99,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         System.out.println("Request path: " + path); // 경로 로그 출력
-        boolean shouldNotFilter = path.startsWith("/auth/");
+        boolean shouldNotFilter = path.startsWith("/auth/signin") ||
+                path.startsWith("/auth/signup") ||
+                path.startsWith("/auth/account") ||
+                path.startsWith("/swagger-ui/index.html");
         System.out.println("Should not filter: " + shouldNotFilter); // 필터링 여부 출력
         return shouldNotFilter;
     }
