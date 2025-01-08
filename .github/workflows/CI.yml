@@ -21,8 +21,12 @@ jobs:
 
       - name: create application.yml
         run: |
-          mkdir -p ./springserver/src/main/resources
-          cd ./springserver/src/main/resources
+
+          ## create application.yml
+          mkdir ./springserver/src/main/resources
+          cd ./src/main/resources
+
+          
           
           # application.yml 파일 생성
           touch ./application.yml
