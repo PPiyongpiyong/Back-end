@@ -1,0 +1,54 @@
+server:
+  servlet:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+aws-property:
+  aws-region: ap-northeast-2
+  access-key: AKIAT7JJVDWN7AN57PPJ
+  secret-key: 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
+  s3-bucket-name: ppiyong
+kakao:
+  client_id: a5bf039b62d2837be3d07e455d8bda52
+  redirect_uri: http://localhost:8080/auth/kakao/callback
+  api:
+    key: 626e18234f7a0a6a3e2db63bf11a5456
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: 'true'
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: 'true'
+  data:
+    redis:
+      host: localhost
+      port: '6379'
+  jwt:
+    refresh:
+      expiration: '604800'
+    secret: cHBpeW9uZ3BwaXlvbmctc2VydmVyLXByb2plY3Qtand0LXNlY3JldC1rZXktZW5jb2RlZC1iYXNlNjQ=
+    access:
+      expiration: '86400'
+  application:
+    name: springserver
+  cloud:
+    compatibility-verifier:
+      enabled: 'false'
+  main:
+    web-application-type: servlet
+  datasource:
+    password: ppiyong!
+    username: tave
+    url: jdbc:mysql://ppiyong-database.cxyk0k0g20k9.ap-northeast-2.rds.amazonaws.com:3306/tave
+    driver-class-name: com.mysql.cj.jdbc.Driver
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate: DEBUG

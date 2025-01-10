@@ -20,7 +20,7 @@ import java.util.List;
 public class HospitalServiceImpl implements HospitalService {
 
     private final KakaoHospitalApiClient kakaoHospitalApiClient;
-    private static final Integer radius = 5000;
+    private static final Integer radius = 10000;
     private static final String distance = "distance";
 
     private final MemberRepository memberRepository;
@@ -37,12 +37,15 @@ public class HospitalServiceImpl implements HospitalService {
             throw new IllegalArgumentException("size는 1~15 사이의 값이어야 합니다.");
         }
 
+        // 카테고리 이름이 "진료과 선택"일 경우 필터링 없이 호출
+        String effectiveCategoryName = "진료과 선택".equals(categoryName) ? null : categoryName;
+
         // Kakao API 호출
         KakaoCategorySearchResponse categorySearchResponse = kakaoHospitalApiClient.searchHospitals(
                 CategoryGroupCode.HP8.name(),
                 x,
                 y,
-                categoryName,
+                effectiveCategoryName,
                 radius,
                 page,
                 size,
@@ -50,10 +53,16 @@ public class HospitalServiceImpl implements HospitalService {
         );
 
 
+        // 필터링 조건 수정: "진료과 선택"일 경우 필터링하지 않음
+        // 필터링 조건 적용
+        List<Document> filteredDocuments = categorySearchResponse.getDocuments();
 
-        List<Document> filteredDocuments = categorySearchResponse.getDocuments().stream()
-                .filter(document -> document.getCategoryName().contains(categoryName))
-                .toList();
+        // "진료과 선택"이 아닌 경우에만 추가 필터링
+        if (effectiveCategoryName != null) {
+            filteredDocuments = filteredDocuments.stream()
+                    .filter(document -> document.getCategoryName().contains(effectiveCategoryName))
+                    .toList();
+        }
 
 
 

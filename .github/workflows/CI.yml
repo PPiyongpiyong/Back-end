@@ -26,8 +26,7 @@ jobs:
           mkdir ./springserver/src/main/resources
           cd ./src/main/resources
 
-          
-          
+
           # application.yml 파일 생성
           touch ./application.yml
           
@@ -38,10 +37,8 @@ jobs:
           cat ./application.yml
         shell: bash
 
-      - name: build
+      - name: Check current directory and files
         run: |
-          cd springserver
-          chmod +x gradlew
-          ./gradlew build -x test
-          ls ./build/libs
-        shell: bash
+           pwd
+           ls -la
+
