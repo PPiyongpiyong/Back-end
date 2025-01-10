@@ -30,47 +30,11 @@ public class ManualController {
     private final ManualService manualService;
     private final S3Service s3Service;
 
-    /*@Operation(summary = "매뉴얼 검색", description = """
-            응급상황 이름을 통해 매뉴얼을 검색합니다.<br>
+
+    @Operation(summary = "매뉴열 조회에 따른 매뉴얼 정보 반환", description =  """
+            검색어에 따라 매뉴얼을 조회합니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
-            """, parameters = {@Parameter(name = "Type", description = "이미지 확장자", schema = @Schema(type = "string", example = "jpg")),
-                @Parameter(name = "EmergencyName", description = "응급상황 이름", schema = @Schema(type = "string", example = "심장마비"))})
-    @GetMapping("/search")
-    public ResponseEntity<?> search(
-            @RequestParam(required = false) String emergencyName) {
-        try {
-            if (emergencyName != null) {
-                // 매뉴얼 정보 조회
-                ManualRespondDto manualRespondDto = manualService.getManualByEmergencyName(emergencyName);
-
-                // 이미지 URL 조회
-                String imageKey = emergencyName + ".jpeg";
-                byte[] imageBytes = s3Service.getImage(imageKey);
-
-
-                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
-                // 매뉴얼 정보와 이미지 URL을 함께 반환
-                HashMap<String, Object> response = new HashMap<>();
-                response.put("manual", manualRespondDto);
-                response.put("image", "data:image/jpeg;base64," + base64Image); // Send base64 image
-
-                System.out.println("Manual: " + manualRespondDto);
-                System.out.println("Base64 Image: " + base64Image);
-                System.out.println("Response: " + response);
-
-                return ResponseEntity.ok(response);
-            } else {
-                // emergencyName이 비어있거나 제공되지 않은 경우
-                return ResponseEntity.badRequest().body("emergencyName 파라미터를 제공해주세요.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // 스택 트레이스를 출력
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 요청을 처리할 수 없습니다.");
-        }
-
-    }*/
-
+            """,parameters = {@Parameter(name = "Emergencyname", description = "응급상황 이름", schema = @Schema(type = "string", example = "실신"))})
     @GetMapping("/search")
     public ManualRespondDto search(@RequestParam(required = false) String emergencyName, @RequestHeader("Authorization") String authToken){
         String token = authToken.startsWith("Bearer ") ?
@@ -141,5 +105,47 @@ public class ManualController {
 
         return manualService.getManualByEmergencyKeyword(keyword, token);
     }
+
+
+     /*@Operation(summary = "매뉴얼 검색", description = """
+            응급상황 이름을 통해 매뉴얼을 검색합니다.<br>
+            헤더에 accessToken을 넣어주세요.<br>
+            """, parameters = {@Parameter(name = "Type", description = "이미지 확장자", schema = @Schema(type = "string", example = "jpg")),
+                @Parameter(name = "EmergencyName", description = "응급상황 이름", schema = @Schema(type = "string", example = "심장마비"))})
+    @GetMapping("/search")
+    public ResponseEntity<?> search(
+            @RequestParam(required = false) String emergencyName) {
+        try {
+            if (emergencyName != null) {
+                // 매뉴얼 정보 조회
+                ManualRespondDto manualRespondDto = manualService.getManualByEmergencyName(emergencyName);
+
+                // 이미지 URL 조회
+                String imageKey = emergencyName + ".jpeg";
+                byte[] imageBytes = s3Service.getImage(imageKey);
+
+
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+                // 매뉴얼 정보와 이미지 URL을 함께 반환
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("manual", manualRespondDto);
+                response.put("image", "data:image/jpeg;base64," + base64Image); // Send base64 image
+
+                System.out.println("Manual: " + manualRespondDto);
+                System.out.println("Base64 Image: " + base64Image);
+                System.out.println("Response: " + response);
+
+                return ResponseEntity.ok(response);
+            } else {
+                // emergencyName이 비어있거나 제공되지 않은 경우
+                return ResponseEntity.badRequest().body("emergencyName 파라미터를 제공해주세요.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // 스택 트레이스를 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 요청을 처리할 수 없습니다.");
+        }
+
+    }*/
 }
 
