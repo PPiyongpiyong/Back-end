@@ -37,3 +37,4 @@ out/
 s3.env
 
 # application 서버에 따로 저장하기
+/src/main/resources/
