@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class ManualRespondDto {
     private String emergencyName;
     private String emergencyResponseSummary;
+    private String emergencyImage;
 
 }

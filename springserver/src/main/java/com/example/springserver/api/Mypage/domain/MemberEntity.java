@@ -1,5 +1,5 @@
 package com.example.springserver.api.Mypage.domain;
-
+//
 import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import jakarta.persistence.*;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
+///
 @Entity(name = "MEMBER")
 @Builder
 @NoArgsConstructor

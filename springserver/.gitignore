@@ -1,6 +1,7 @@
 HELP.md
 /build
 .gradle
+
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -36,5 +37,3 @@ out/
 ### VS Code ###
 .vscode/
 s3.env
-
-# application 서버에 따로 저장하기

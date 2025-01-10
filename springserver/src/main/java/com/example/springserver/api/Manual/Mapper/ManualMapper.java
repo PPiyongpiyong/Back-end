@@ -18,6 +18,7 @@ public class ManualMapper {
                 .emergencyName(manual.getEmergencyName())
 
                 .emergencyResponseSummary(manual.getManualSummary())
+                .emergencyImage(manual.getImgurl())
                 .build();
     }
 }

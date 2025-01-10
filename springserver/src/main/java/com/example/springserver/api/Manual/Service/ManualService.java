@@ -42,12 +42,16 @@ public class ManualService {
 
     // 매뉴얼 이름으로 조회
 
-    public ManualRespondDto getManualByEmergencyName(String emergencyName) {
+    public ManualRespondDto getManualByEmergencyName(String emergencyName, String token) {
+        // token 인증 확인
+        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
 
-        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary());
+        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgurl());
     }
 
 
@@ -66,7 +70,8 @@ public class ManualService {
                     return new ManualCategoryRespondDto(
                             manual.getCategory(), // category
                             manual.getEmergencyName(),
-                            manual.getManualSummary()// manualSummaries
+                            manual.getManualSummary(),
+                            manual.getImgurl()// manualSummaries
                             // emergencyName
                     );
                 })
