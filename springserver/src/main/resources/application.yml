@@ -44,6 +44,7 @@ spring:
     password: ppiyong!
     username: tave
     url: jdbc:mysql://ppiyong-database.cxyk0k0g20k9.ap-northeast-2.rds.amazonaws.com:3306/tave
+    driver-class-name: com.mysql.cj.jdbc.Driver
 logging:
   level:
     org:
