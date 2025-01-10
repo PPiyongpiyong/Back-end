@@ -1,5 +1,5 @@
 package com.example.springserver.api.Mypage.domain;
-
+//
 import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import jakarta.persistence.*;
