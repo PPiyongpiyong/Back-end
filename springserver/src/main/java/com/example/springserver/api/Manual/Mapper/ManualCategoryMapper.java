@@ -4,7 +4,7 @@ import com.example.springserver.api.Manual.Domain.Manual;
 import com.example.springserver.api.Manual.Dto.Manual.ManualRequest.ManualRequestDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRequest.ManualCategoryRequestDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
-
+//
 public class ManualCategoryMapper {
     public static Manual toEntity(ManualCategoryRequestDto manualCategoryRequestDto){
         return Manual.builder()
