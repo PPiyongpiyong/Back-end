@@ -17,7 +17,9 @@ public class ManualCategoryMapper {
     public static ManualCategoryRespondDto toManualCategoryDto(Manual manual){
         return ManualCategoryRespondDto.builder()
                 .category(manual.getEmergencyName())
+                .category(manual.getImgurl())
                 // 여기 모르겠다..
+
                 .build();
     }
 }
