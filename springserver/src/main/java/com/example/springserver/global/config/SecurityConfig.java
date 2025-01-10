@@ -67,12 +67,15 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration conf = new CorsConfiguration();
-
-        conf.setAllowedOrigins(List.of("http://52.79.245.244:8080"));
+        //"http://52.79.245.244:8080"
+        //conf.setAllowedOrigins(List.of("http://52.79.245.244:8080","http://localhost:8080"));
+        conf.addAllowedOrigin("*");
         // 모든 Origin 허용
-        conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));// 모든 HTTP 메서드 허용
+        //conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));// 모든 HTTP 메서드 허용
+        conf.addAllowedMethod("*");
         // 허용할 HTTP 헤더 (필요한 헤더만 추가)
-        conf.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        //conf.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        conf.addAllowedHeader("*");
         // 모든 헤더 허용
         conf.setAllowCredentials(true);
 
@@ -86,7 +89,7 @@ public class SecurityConfig {
     // 인가 설정(경로별 접근 권한 설정)
     private void setPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+                .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**","/api/v1/manual/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
                 .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
         );
     }

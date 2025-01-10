@@ -57,7 +57,6 @@ public class S3Service {
                 .bucket(bucketName)
                 .key(key)
                 .build();
-    //아어
         ResponseInputStream<GetObjectResponse> object = s3Client.getObject(request);
         return IOUtils.toByteArray(object);
     }
