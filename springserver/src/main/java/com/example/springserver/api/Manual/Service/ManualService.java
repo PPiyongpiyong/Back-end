@@ -47,7 +47,7 @@ public class ManualService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
 
-        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary()/*, manual.getImgurl()*/);
+        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgurl());
     }
 
 

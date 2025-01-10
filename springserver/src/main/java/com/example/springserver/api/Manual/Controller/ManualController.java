@@ -71,11 +71,13 @@ public class ManualController {
 
     }*/
 
-    /*@GetMapping("/search")
-    public ManualRespondDto search(
-            @RequestParam(required = false) String emergencyName){
+    @GetMapping("/search")
+    public ManualRespondDto search(@RequestParam(required = false) String emergencyName, @RequestHeader("Authorization") String authToken){
+        String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;
+
         return manualService.getManualByEmergencyName(emergencyName);
-    }*/
+    }
 
 
     @Operation(summary = "카테고리 별 조회", description = """
