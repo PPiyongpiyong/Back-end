@@ -36,7 +36,8 @@ public class ManualController {
             헤더에 accessToken을 넣어주세요.<br>
             """,parameters = {@Parameter(name = "Emergencyname", description = "응급상황 이름", schema = @Schema(type = "string", example = "실신"))})
     @GetMapping("/search")
-    public ManualRespondDto search(@RequestParam(required = false) String emergencyName, @RequestHeader("Authorization") String authToken){
+    public ManualRespondDto search(@RequestParam(required = false) String emergencyName,
+                                   @RequestHeader("Authorization") String authToken){
         String token = authToken.startsWith("Bearer ") ?
                 authToken.substring(7) : authToken;
 
