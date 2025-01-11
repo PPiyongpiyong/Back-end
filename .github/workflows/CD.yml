@@ -75,7 +75,7 @@ jobs:
         run: |
           aws deploy create-deployment-group \
             --application-name ppiyong-deploy \
-            --deployment-group-name ppiyong_deploy \
+            --deployment-group-name ppiyong-deploy \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
             --service-role arn:aws:iam::825765428958:role/ppiyong-deploy \
             --region ap-northeast-2
