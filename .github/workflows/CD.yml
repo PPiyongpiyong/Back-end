@@ -71,6 +71,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-northeast-2
 
+      - name: Create Deploy group
+        run: |
+          aws deploy create-deployment-group \
+            --application-name ppiyong-deploy \
+            --deployment-group-name ppiyong_deploy \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --service-role arn:aws:iam::825765428958:role/ppiyong-deploy \
+            --region ap-northeast-2
+
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./ppiyong.zip s3://$S3_BUCKET_NAME/
 
