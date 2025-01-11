@@ -65,17 +65,8 @@ jobs:
         shell: bash
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
-
-      - name: Create Deploy group
-        run: |
-          aws deploy create-deployment-group \
-            --application-name ppiyong-deploy \
-            --deployment-group-name ppiyong-deploy \
-            --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --service-role arn:aws:iam::825765428958:role/ppiyong-deploy \
-            --region ap-northeast-2
