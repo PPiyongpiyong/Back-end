@@ -91,7 +91,7 @@ jobs:
         run: |
           aws deploy create-deployment \
             --application-name ppiyong-deploy \
-            --deployment-group-name ppiyong_deploy \
+            --deployment-group-name ppiyong-deploy \
             --file-exists-behavior OVERWRITE \
             --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=ppiyong.zip \
             --region ap-northeast-2
