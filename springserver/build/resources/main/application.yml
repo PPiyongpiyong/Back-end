@@ -11,7 +11,7 @@ aws-property:
   s3-bucket-name: ppiyong
 kakao:
   client_id: a5bf039b62d2837be3d07e455d8bda52
-  redirect_uri: http://localhost:8080/auth/kakao/callback
+  redirect_uri: http://52.79.245.244/auth/kakao/callback
   api:
     key: 626e18234f7a0a6a3e2db63bf11a5456
 spring:

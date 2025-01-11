@@ -1,5 +1,4 @@
 HELP.md
-/build
 .gradle
 
 !gradle/wrapper/gradle-wrapper.jar
@@ -37,3 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 s3.env
+
+#application 추가
+src/main/resources/*.yml

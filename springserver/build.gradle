@@ -84,6 +84,9 @@ dependencies {
 
 	// swagger 설정
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+	// healthcheck 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
