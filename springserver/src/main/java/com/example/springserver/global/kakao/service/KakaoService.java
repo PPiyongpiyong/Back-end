@@ -31,16 +31,13 @@ public class KakaoService {
     @Value("${kakao.redirect_uri}")
     private String redirectUri;
 
-    @Value("${kakao.api.key}")
-    private String restApiKey;
-
     private static final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com"; // 인가 코드 요청, host: kauth.kakao.com
     private static final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com"; // 프로필 정보 요청, host: kapi.kakao.com
 
     public String getLoginUrl() {
         return String.format(
                 "%s/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code",
-                KAUTH_TOKEN_URL_HOST, restApiKey, redirectUri);
+                KAUTH_TOKEN_URL_HOST, clientId, redirectUri);
     }
 
     public TokenDto getAccessTokenFromKakao(String code) {
@@ -93,7 +90,7 @@ public class KakaoService {
 
         KakaoUserInfoResponseDto.KakaoAccount account = userInfo.getKakaoAccount();
 
-        if (account.getIsProfileAgree()) {
+        if (account.getIsProfileAgree() != null && account.getIsProfileAgree()) {
 
             MemberRequestDto memberDto = MemberRequestDto.builder()
                     .email(account.getEmail())
