@@ -18,6 +18,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -65,16 +67,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration conf = new CorsConfiguration();
-        //"http://52.79.245.244:8080"
-        //conf.setAllowedOrigins(List.of("http://52.79.245.244:8080","http://localhost:8080"));
-        conf.addAllowedOrigin("*");
-        // 모든 Origin 허용
-        //conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));// 모든 HTTP 메서드 허용
-        conf.addAllowedMethod("*");
-        // 허용할 HTTP 헤더 (필요한 헤더만 추가)
-        //conf.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        conf.addAllowedHeader("*");
-        // 모든 헤더 허용
+        //"http://52.79.245.244/"
+        conf.setAllowedOrigins(List.of("http://52.79.245.244:8080","http://52.79.245.244:3000","http://localhost:8080", "http://localhost:3000"));
+        conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));// 모든 HTTP 메서드 허용
+        conf.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
         conf.setAllowCredentials(true);
 

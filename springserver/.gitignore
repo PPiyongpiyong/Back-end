@@ -39,3 +39,4 @@ s3.env
 
 #application 추가
 src/main/resources/*.yml
+springserver/build/resources/main/application.yml
