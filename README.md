@@ -11,8 +11,8 @@
     <div style="max-width: 400px; margin: 50px auto; background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; padding: 20px;">   
 
         삐용삐용은 AI기반 응급대처가이드를 제공합니다.
-        이 서비스를 통해 다양한 응급상황을 해결, 그리고 모두가 일상적 대처법 학습을 목표로 하고 있습니다.
-    </div>
+        삐용삐용은 다급한 응급상황을 뜻하며, 이 서비스를 통해 다양한 응급상황을 대처, 예방 그리고 모두가 일상적 대처법 학습을 목표로 하고 있습니다.
+
 </body>
 <br />
 <h3 align="center"></h3>
