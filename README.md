@@ -108,10 +108,7 @@
 
 
 
-### ✨ Project 컨벤션
-
-<details>
-<summary > ☺️ 폴더 구조 </summary>
+## 📁 폴더 구조
 
 ```
 ├── 📁 ppiyong-api
@@ -181,7 +178,7 @@
 ```
 
 <hr></hr>
-```
+
 
 <br/>
 
@@ -192,7 +189,9 @@
 
 <br />
 
-### **✨ Git 컨벤션**
+
+
+### ✨ Git 컨벤션
 
 <details>
 <summary>  1️⃣ Commit 컨벤션  </summary>
