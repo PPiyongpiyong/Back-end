@@ -3,10 +3,17 @@
 <br />
 <br />
 
-<h3> 서비스 소개 </h3>
+<h3>☺️ 서비스 이름 및 소개 </h3>
+ <div align="center" style="margin-bottom: 20px;">
+            <img width="617" alt="Logo" src="https://github.com/user-attachments/assets/3e642332-2214-43bd-a9de-11393b1fd9b9" style="max-width: 100%; height: auto;">
+        </div>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9;">
+    <div style="max-width: 400px; margin: 50px auto; background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; padding: 20px;">   
 
-<div align="center"> 
-<img width="617" alt="Logo" src=""></div>
+        삐용삐용은 AI기반 응급대처가이드를 제공합니다.
+        이 서비스를 통해 다양한 응급상황을 해결, 그리고 모두가 일상적 대처법 학습을 목표로 하고 있습니다.
+    </div>
+</body>
 <br />
 <h3 align="center"></h3>
 
