@@ -33,8 +33,8 @@ public class HospitalServiceImpl implements HospitalService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
 
-        if (size <= 0 || size > 50) {
-            throw new IllegalArgumentException("size는 1~50 사이의 값이어야 합니다.");
+        if (size <= 0 || size > 25) {
+            throw new IllegalArgumentException("size는 1~25 사이의 값이어야 합니다.");
         }
 
         // 카테고리 이름이 "진료과 선택"일 경우 필터링 없이 호출
