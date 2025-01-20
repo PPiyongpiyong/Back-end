@@ -25,7 +25,7 @@ public class HospitalController {
             """)
     @GetMapping("/hospital")
     public ResponseEntity<HospitalSearchResponse> getHospitals(@RequestParam(required = false, defaultValue = "1") Integer page,
-                                                               @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                               @RequestParam(required = false, defaultValue = "40") Integer size,
                                                                @RequestParam String x,
                                                                @RequestParam String y,
                                                                @RequestParam String categoryName,
