@@ -2,10 +2,7 @@ package com.example.springserver.global.security.controller;
 
 import com.example.springserver.global.auth.TokenProvider;
 import com.example.springserver.global.security.domain.constants.JwtValidationType;
-import com.example.springserver.global.security.dto.LoginRequestDto;
-import com.example.springserver.global.security.dto.MemberRequestDto;
-import com.example.springserver.global.security.dto.MemberResponseDto;
-import com.example.springserver.global.security.dto.RefreshRequestDto;
+import com.example.springserver.global.security.dto.*;
 import com.example.springserver.global.security.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,9 +76,9 @@ public class MemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(
-            @RequestParam long memberId
+            @RequestBody LogoutRequestDto requestDto
     ) {
-        memberService.logout(memberId);
+        memberService.logout(requestDto);
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 
