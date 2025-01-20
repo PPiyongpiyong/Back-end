@@ -90,20 +90,26 @@ public class KakaoService {
 
         KakaoUserInfoResponseDto.KakaoAccount account = userInfo.getKakaoAccount();
 
-        if (account.getIsProfileAgree() != null && account.getIsProfileAgree()) {
+        // 필요한 정보 확인
+        if (account == null) {
+            throw new CustomException(ErrorCode._PARSING_ERROR);
+        }
 
+        try {
             MemberRequestDto memberDto = MemberRequestDto.builder()
                     .email(account.getEmail())
                     .username(account.getName())
                     .phoneNumber(account.getPhoneNumber())
                     .gender(account.getGender())
                     .username(account.getProfile().getNickName())
-                .build();
+                    .build();
             MemberEntity member = MemberMapper.toEntity(memberDto);
+
+            // MemberEntity 저장
             memberRepository.save(member);
 
             return MemberMapper.toDto(member);
-        } else {
+        } catch (Exception e){
             throw new CustomException(ErrorCode.SHOULD_PERMISSION);
         }
     }

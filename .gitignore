@@ -3,3 +3,4 @@ hs_err_pid*.log
 *.iml
 deploy.sh
 springserver/build/resources/main/application.yml'
+/build/

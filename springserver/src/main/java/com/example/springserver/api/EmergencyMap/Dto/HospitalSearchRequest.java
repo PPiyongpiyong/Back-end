@@ -21,7 +21,7 @@ public class HospitalSearchRequest {
     }
 
     public void initSize() {
-        this.size = 10;
+        this.size = 40;
     }
 
 
