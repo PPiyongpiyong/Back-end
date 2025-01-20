@@ -123,8 +123,13 @@ public class MemberService {
 
     // 로그아웃
     @Transactional
-    public void logout(long memberId) {
-        tokenProvider.deleteRefreshToken(memberId);
+    public void logout(LogoutRequestDto requestDto) {
+        MemberEntity member = memberRepository.findByEmail(requestDto.getEmail())
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+
+        // password 확인
+
+        tokenProvider.deleteRefreshToken(member.getMemberId());
     }
 
     // 계정 탈퇴
