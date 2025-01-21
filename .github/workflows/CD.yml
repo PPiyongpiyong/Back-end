@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "main" ]
 
+env:
+  S3_BUCKET_NAME: ppiyong-bucket
+
 permissions:
   contents: read
 
@@ -63,3 +66,6 @@ jobs:
             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
             aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
             aws-region: ap-northeast-2
+
+      - name: Upload to S3m
+        run: aws s3 cp --region ap-northeast-2 ./ppiyong.zip s3://$S3_BUCKET_NAME/
