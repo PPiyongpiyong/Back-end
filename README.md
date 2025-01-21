@@ -70,7 +70,7 @@
 
 ### **🚎 Architecture**
 
-![다이어그램 백엔드 drawio (2)](https://github.com/user-attachments/assets/d61f3451-5881-46b1-97e4-9325f6f63bc1)
+![Image](https://github.com/user-attachments/assets/335b0091-35ec-4982-986c-8fdaee1a0c4f)
 
 <br />
 
