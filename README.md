@@ -92,10 +92,10 @@
 | Language | Java 17 |
 | Framework | Spring Boot, Gradle |
 | Authentication | Spring Security, JSON Web Tokens |
-| Orm | Spring Data JPA |
+| Orm | Spring Data JPA, QueryDSL |
 | Database | MYSQL, Redis |
 | External | AWS EC2, AWS RDS, AWS S3, AWS ElastiCache, Nginx|
-| CI | Github Action |
+| CI/CD | Github Action |
 | External API | KAKAO |
 | API Docs | Notion, Swagger |
 | Other Tool | Discord, Postman, Figma |
