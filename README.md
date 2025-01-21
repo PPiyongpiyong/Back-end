@@ -33,7 +33,7 @@
 
 ### 🌱 Hospital Map & Chat bot View
 
-| <img src="https://github.com/user-attachments/assets/f2d62458-0f59-4086-97c9-ee618a2b910d"/> | <img src="https://github.com/user-attachments/assets/7918a868-5f9e-4811-860e-3a224d645fa5"/> | <img src="https://github.com/user-attachments/assets/e29d031b-332c-477b-8e65-a3009e65ed60"/> |
+| <img src="https://github.com/user-attachments/assets/f2d62458-0f59-4086-97c9-ee618a2b910d"/> | <img src="https://github.com/user-attachments/assets/7918a868-5f9e-4811-860e-3a224d645fa5"/> | <img src="https://github.com/user-attachments/assets/cfc858df-7227-48c9-adc7-05bc3d59d80b"/> |
 | :---: | :---: | :---: |
 | 1️⃣ 응급지도 | 2️⃣ 병원 전화연결 | 3️⃣ 챗봇|
 
@@ -123,21 +123,21 @@
 │                       │   ├── dto
 │                       │   ├── mapper
 │                       │   └── repository
-|                       |   └── Service
+ |                       |   └── Service
 │                       ├── 📁 manual
 │                       │   ├── controller
 │                       │   ├── domain
 │                       │   ├── dto
 │                       │   ├── mapper
 │                       │   └── repository
-|                       |   └── Service
-|                       |   📁 Mypage
+|                        |   └── Service
+|                        |   📁 Mypage
 │                       │   ├── controller
 │                       │   ├── domain
 │                       │   ├── dto
 │                       │   ├── mapper
 │                       │   └── repository
-|                       |__ └── Service
+|                        |__ └── Service
 ├── ppiyong-api
 │   └── src
 │       └── main
@@ -146,7 +146,7 @@
 │                   └── 📁 external
 │                       ├── 📁 AwsConfig
 │                       ├── 📁 S3service
-│                       
+ │                       
 ├── ppiyong-api
 │   └── src
 │       └── main
