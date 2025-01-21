@@ -94,7 +94,7 @@
 | Authentication | Spring Security, JSON Web Tokens |
 | Orm | Spring Data JPA |
 | Database | MYSQL, Redis |
-| External | AWS EC2, AWS RDS, AWS S3, Nginx|
+| External | AWS EC2, AWS RDS, AWS S3, AWS ElastiCache, Nginx|
 | CI | Github Action |
 | External API | KAKAO |
 | API Docs | Notion, Swagger |
