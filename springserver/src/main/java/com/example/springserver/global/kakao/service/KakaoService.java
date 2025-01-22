@@ -99,7 +99,7 @@ public class KakaoService {
             MemberRequestDto memberDto = MemberRequestDto.builder()
                     .email(account.getEmail())
                     .username(account.getName())
-                    .phoneNumber(account.getPhoneNumber().substring(4))
+                    .phoneNumber(account.getPhoneNumber().substring(3))
                     .gender(account.getGender())
                     .build();
             MemberEntity member = MemberMapper.toEntity(memberDto);
