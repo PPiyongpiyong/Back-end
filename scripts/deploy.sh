@@ -1,6 +1,6 @@
 #!/bin/bash
-BUILD_PATH=$(ls /home/ubuntu/app/springserver-0.0.1-SNAPSHOT.jar)
-JAR_NAME=$(basename $BUILD_PATH)
+PROJECT_ROOT="/home/ubuntu/Back-end/springserver"
+JAR_NAME=$PROJECT_ROOT/build/libs/springserver-S
 echo "> build 파일명: $JAR_NAME"
 
 echo "> build 파일 복사"
