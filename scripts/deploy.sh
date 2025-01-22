@@ -1,6 +1,8 @@
 #!/bin/bash
 PROJECT_ROOT="/home/ubuntu/Back-end/springserver"
 JAR_NAME=$PROJECT_ROOT/build/libs/springserver-S
+GREEN_PORT=8081
+BLUE_PORT=8080
 echo "> build 파일명: $JAR_NAME"
 
 echo "> build 파일 복사"
@@ -17,12 +19,12 @@ if [ "$BLUE_PROFILE" == "set1" ]; then
   GREEN_PORT=8081
 elif [ "$BLUE_PROFILE" == "set2" ]; then
   GREEN_PROFILE="set1"
-  GREEN_PORT=8081
+  GREEN_PORT=8080
 else
   echo "> 일치하는 Profile이 없습니다. Profile: $BLUE_PROFILE"
   echo "> set1을 할당합니다. IDLE_PROFILE: set1"
   GREEN_PROFILE="set1"
-  GREEN_PORT=8081
+  GREEN_PORT=8080
 fi
 
 echo "> application.jar 교체"
