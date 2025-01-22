@@ -16,6 +16,7 @@ public class ManualKeywordMapper {
                 .emergencyName(manual.getEmergencyName())
                 .emergencyName(manual.getManualDetail())
                 .emergencyResponseSummary(manual.getManualSummary())
+                .emergencyName(manual.getImgurl())
                 .build();
     }
 
