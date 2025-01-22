@@ -133,7 +133,8 @@ public class ManualService {
         return manuals.stream()
                 .map(manual -> new ManualKeywordRespond(
                         manual.getEmergencyName(),
-                        manual.getManualSummary()
+                        manual.getManualSummary(),
+                        manual.getImgurl()
                 ))
                 .collect(Collectors.toList());
     }

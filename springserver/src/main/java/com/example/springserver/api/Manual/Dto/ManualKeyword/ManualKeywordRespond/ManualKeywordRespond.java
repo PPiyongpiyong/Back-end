@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class ManualKeywordRespond {
     private String emergencyName;
     private String emergencyResponseSummary;
-
+    private String emergencyImage;
 }
