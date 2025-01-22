@@ -24,6 +24,7 @@ public enum ErrorCode {
     // 409 Conflict
     USER_ALREADY_EXISTS(409, "이미 존재하는 사용자입니다."),
     DUPLICATED_ID(409, "이미 존재하는 아이디입니다."),
+    INVALID_REQUEST(410, "정상적인 요청을 해주세요"),
     // 500
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류입니다.")
     ;
