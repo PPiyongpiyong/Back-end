@@ -36,7 +36,7 @@ public class KakaoService {
 
     public String getLoginUrl() {
         return String.format(
-                "%s/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code",
+                "%s/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code&prompt=login",
                 KAUTH_TOKEN_URL_HOST, clientId, redirectUri);
     }
 
