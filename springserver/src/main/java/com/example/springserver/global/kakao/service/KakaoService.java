@@ -92,16 +92,15 @@ public class KakaoService {
 
         // 필요한 정보 확인
         if (account == null) {
-            throw new CustomException(ErrorCode._PARSING_ERROR);
+            throw new CustomException(ErrorCode.SHOULD_PERMISSION);
         }
 
         try {
             MemberRequestDto memberDto = MemberRequestDto.builder()
                     .email(account.getEmail())
                     .username(account.getName())
-                    .phoneNumber(account.getPhoneNumber())
+                    .phoneNumber(account.getPhoneNumber().substring(4))
                     .gender(account.getGender())
-                    .username(account.getProfile().getNickName())
                     .build();
             MemberEntity member = MemberMapper.toEntity(memberDto);
 
