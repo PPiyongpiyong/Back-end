@@ -108,7 +108,7 @@ public class ManualController {
         return manualService.getManualByEmergencyKeyword(keyword, token);
     }
 
-
+    //s3이미지 조회 base64 활용
      /*@Operation(summary = "매뉴얼 검색", description = """
             응급상황 이름을 통해 매뉴얼을 검색합니다.<br>
             헤더에 accessToken을 넣어주세요.<br>
