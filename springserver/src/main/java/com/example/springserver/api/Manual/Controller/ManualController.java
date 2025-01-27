@@ -51,15 +51,13 @@ public class ManualController {
         String token = authToken.startsWith("Bearer ") ?
                 authToken.substring(7) : authToken;
 
-        // emergencyName이 제공된 경우
         if (emergencyName != null) {
             return manualService.getManualByEmergencyName(emergencyName, token);
-        }
-
-        // keyword가 제공된 경우
-        if (keyword != null) {
+        } else if (keyword != null) {
             return manualService.getManualByEmergencyKeyword(keyword, token);
         }
+
+
 
         // 이 코드는 실행되지 않음 (정상적인 요청이라면)
         throw new CustomException(ErrorCode.INVALID_REQUEST);
