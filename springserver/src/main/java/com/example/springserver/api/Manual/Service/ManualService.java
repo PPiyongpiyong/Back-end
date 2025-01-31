@@ -42,10 +42,7 @@ public class ManualService {
 
     // 매뉴얼 이름으로 조회
 
-    public ManualRespondDto getManualByEmergencyName(String emergencyName, String token) {
-        // token 인증 확인
-        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+    public ManualRespondDto getManualByEmergencyName(String emergencyName) {
 
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
@@ -55,11 +52,7 @@ public class ManualService {
     }
 
 
-    public List<ManualCategoryRespondDto> getManualByCategory(String category, String token) {
-
-        // token 인증 확인
-        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+    public List<ManualCategoryRespondDto> getManualByCategory(String category) {
 
         List<Manual> manuals = manualCategoryRepository.findByCategory(category);
 
@@ -84,11 +77,7 @@ public class ManualService {
     }
 
     // DB에 있는 매뉴얼 emergencyName 가져오기
-    public void loadEmergencyNameIntoTrie(String token) {
-
-        // token 인증 확인
-        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+    public void loadEmergencyNameIntoTrie() {
 
         List<String> emergencyNames = manualRepository.findAllEmergencyNames();
         for (String name: emergencyNames) {
@@ -105,27 +94,19 @@ public class ManualService {
     // Trie에 저장된 키워드 삭제
     public void deleteAutocompleteKeyword(String keyword) {
         this.trie.remove(keyword);
-
     }
 
     //세부 매뉴얼 조회
-    public ManualDetailRespondDto getManualDetail(String emergencyName, String token) {
-
-        // token 인증 확인
-        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+    public ManualDetailRespondDto getManualDetail(String emergencyName) {
 
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
 
         return new ManualDetailRespondDto(manual.getEmergencyName(), manual.getManualDetail());
     }
+
     //키워드 조회
-
-    public List<ManualKeywordRespond> getManualByEmergencyKeyword(String keyword, String token) {
-
-        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+    public List<ManualKeywordRespond> getManualByEmergencyKeyword(String keyword) {
 
         List<Manual> manuals = manualRepository.findByDetailContaining(keyword);
 

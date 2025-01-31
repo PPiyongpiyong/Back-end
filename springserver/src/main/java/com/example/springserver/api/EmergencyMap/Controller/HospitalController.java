@@ -28,11 +28,8 @@ public class HospitalController {
                                                                @RequestParam(required = false, defaultValue = "15") Integer size,
                                                                @RequestParam String x,
                                                                @RequestParam String y,
-                                                               @RequestParam String categoryName,
-                                                               @RequestHeader("Authorization") String authToken) {
-        String token = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
-        return ResponseEntity.ok().body(hospitalService.searchHospitals(page, size, x, y, categoryName, token));
+                                                               @RequestParam String categoryName) {
+        return ResponseEntity.ok().body(hospitalService.searchHospitals(page, size, x, y, categoryName));
 
     }
 }
