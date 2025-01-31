@@ -1,9 +1,7 @@
 package com.example.springserver.api.Manual.Controller;
 
-import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
-import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Service.ManualService;
 import com.example.springserver.external.S3Service;
 import com.example.springserver.global.exception.CustomException;
@@ -12,14 +10,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com .example.springserver.global.exception.ErrorCode; // 실제 경로로 변경
 
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -39,22 +33,19 @@ public class ManualController {
             """, parameters = {
             @Parameter(name = "emergencyName", description = "응급상황 이름", schema = @Schema(type = "string", example = "실신")),
             @Parameter(name = "keyword", description = "검색 키워드", schema = @Schema(type = "string", example = "심장"))
-
     })
     @GetMapping("/search")
     public Object searchManual(
             @RequestParam(required = false) String emergencyName,
-            @RequestParam(required = false) String keyword,
-            @RequestHeader("Authorization") String authToken) {
-
-        // 토큰 처리
-        String token = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
-
+            @RequestParam(required = false) String keyword) {
+        // emergencyName이 제공된 경우
         if (emergencyName != null) {
-            return manualService.getManualByEmergencyName(emergencyName, token);
-        } else if (keyword != null) {
-            return manualService.getManualByEmergencyKeyword(keyword, token);
+            return manualService.getManualByEmergencyName(emergencyName);
+        }
+
+        // keyword가 제공된 경우
+        if (keyword != null) {
+            return manualService.getManualByEmergencyKeyword(keyword);
         }
 
 
@@ -71,12 +62,8 @@ public class ManualController {
             """, parameters = {@Parameter(name = "Category", description = "카테고리 이름", schema = @Schema(type = "string", example = "3.의학적"))})
     @GetMapping("/getCategory")
     public List<ManualCategoryRespondDto> searchCategory(
-            @RequestParam String category,
-            @RequestHeader("Authorization") String authToken) {
-        String token = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
-
-        return manualService.getManualByCategory(category, token);
+            @RequestParam String category) {
+        return manualService.getManualByCategory(category);
     }
 
     @Operation(summary = "검색 자동완성", description = """
@@ -85,12 +72,9 @@ public class ManualController {
             """, parameters = {@Parameter(name = "Keyword", description = "검색한 키워드", schema = @Schema(type = "string", example = "심장"))})
     @GetMapping("/autocomplete")
     public ResponseEntity<List<String>> autocomplete(
-            @RequestParam String keyword,
-            @RequestHeader("Authorization") String authToken) {
-        String token = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
+            @RequestParam String keyword) {
 
-        manualService.loadEmergencyNameIntoTrie(token);
+        manualService.loadEmergencyNameIntoTrie();
 
         List<String> result = this.manualService.autocomplete(keyword);
         return ResponseEntity.ok(result);
@@ -103,13 +87,8 @@ public class ManualController {
             """, parameters = {@Parameter(name = "EmergencyName", description = "응급상황 이름", schema = @Schema(type = "string", example = "심장마비"))})
     @GetMapping("/explanation")
     public ManualDetailRespondDto searchDetail(
-            @RequestParam String emergencyName,
-            @RequestHeader("Authorization") String authToken) {
-
-        String token = authToken.startsWith("Bearer ") ?
-                authToken.substring(7) : authToken;
-
-        return manualService.getManualDetail(emergencyName, token);
+            @RequestParam String emergencyName) {
+        return manualService.getManualDetail(emergencyName);
     }
 
     /*@Operation(summary = "연관어 검색", description = """

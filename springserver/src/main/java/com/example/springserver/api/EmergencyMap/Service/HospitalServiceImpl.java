@@ -27,11 +27,7 @@ public class HospitalServiceImpl implements HospitalService {
     private final TokenProvider tokenProvider;
 
     @Override
-    public HospitalSearchResponse searchHospitals(Integer page, Integer size, String x, String y, String categoryName, String token) {
-        // token 인증 확인
-        MemberEntity member = memberRepository.findByMemberId(tokenProvider.getMemberIdFromToken(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
-
+    public HospitalSearchResponse searchHospitals(Integer page, Integer size, String x, String y, String categoryName) {
 
         if (size <= 0 || size > 25) {
             throw new IllegalArgumentException("size는 1~25 사이의 값이어야 합니다.");
