@@ -48,6 +48,8 @@ public class ManualController {
             return manualService.getManualByEmergencyKeyword(keyword);
         }
 
+
+
         // 이 코드는 실행되지 않음 (정상적인 요청이라면)
         throw new CustomException(ErrorCode.INVALID_REQUEST);
     }
