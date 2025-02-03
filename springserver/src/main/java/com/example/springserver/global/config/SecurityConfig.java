@@ -5,20 +5,29 @@ import com.example.springserver.global.auth.JwtAuthenticationFilter;
 import com.example.springserver.global.auth.TokenProvider;
 import com.example.springserver.api.Mypage.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomerAccessDeniedHandler;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.example.springserver.global.config.CustomLoginFailureHandler;
 import java.util.List;
+import java.io.IOException;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,6 +37,9 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomLoginFailureHandler customLoginFailureHandler;
+    //fail2ban을 활용한 로그기록
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
     // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -91,4 +103,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
         );
     }
+
+
+
+
 }

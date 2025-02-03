@@ -19,7 +19,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String clientIp = request.getRemoteAddr(); // 클라이언트 IP 추출
-        logger.warn("Login failed from IP: {}", clientIp); // 로그 기록
+        logger.warn("FAIL2BAN_LOGIN_FAILURE: Login failed from IP: {}", clientIp);// 로그 기록
         super.onAuthenticationFailure(request, response, exception);
     }
 }
