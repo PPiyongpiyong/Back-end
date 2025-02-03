@@ -1,14 +1,13 @@
-INSERT INTO manaul (category, emergency_name, imgurl, keyword, manual_detail, manual_summary) VALUES
-    ('3. 의학적',
-     '아아',
-     'https://ppiyong-bucket.s3.ap-northeast-2.amazonaws.com/%EC%8B%AC%EC%A0%95%EC%A7%80(%EC%99%B8%EC%83%81%EC%84%B1).jpeg',
-     '심장마비, 급성 심근경색, 부정맥, 심부전, 호흡정지, 심장 정지 후 소생술, 갑작스런 심장사, 심장 쇼크, 심폐정지, 심혈관 질환, 심근허혈, 뇌졸중, 전기적 활동 없음(PEA), 심실세동(VF), 심실빈맥(VT), 심박수 감소(서맥), 심혈관 응급상황, 전도장애, 급성 심장질환, 저혈압성 쇼크, 폐색전증, 기도 폐쇄, 급성 저산소증, 카디악 아레스트, 심박정지, 말초 순환부전, 쇼크성 심부전, 심박출량 저하, 응급 소생술, 심정지',
+SELECT * FROM manual
 
-     '1. 현장 안전 및 감염 방지\n
-, 제세동.\n
-- 반응 확인: 환자가 반응 없을 시 이송을 준비합니다.',
 
-     '심폐소생술 및 출혈 통제');
+
+/*/
+INSERT INTO manual (manual_id, emergency_name, manual_summary, manual_detail, category, keyword, imgurl)
+VALUES (1, '심장마비', '긴급한 심장마비 조치', '환자를 눕히고 119 신고 후 CPR 실시', '의학적', '심장', 'http://example.com/image.png');
+
+
+
 
 
 

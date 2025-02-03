@@ -126,43 +126,47 @@ public class ManualService {
                 ))
                 .collect(Collectors.toList());
     }
-    // 즐겨찾기 추가
 
-    public ManualFavorite addFavorite(String emergencyName) {
-        // 이미 즐겨찾기에 추가된 경우 예외 처리
-        if (manualFavoriteRepository.findByEmergencyName(emergencyName).isPresent()) {
+    // 즐겨찾기 추가
+    public ManualFavorite addFavorite(Long memberId, Long manualId) {
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        Manual manual = manualRepository.findById(manualId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
+
+        // 이미 즐겨찾기한 경우 예외 처리
+        if (manualFavoriteRepository.findByMemberAndManual(member, manual).isPresent()) {
             throw new IllegalArgumentException("이미 즐겨찾기에 추가된 항목입니다.");
         }
 
-        // 기존 매뉴얼이 있는지 확인
-        Manual existingManual = manualRepository.findByEmergencyName(emergencyName)
-                .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
-
-        // 새로운 즐겨찾기 엔티티 생성
-        ManualFavorite manualFavorite = ManualFavorite.builder()
-                .emergencyName(existingManual.getEmergencyName())
-                .imgurl(existingManual.getImgurl())
-                .manualSummary(existingManual.getManualSummary())
-                .manualDetail(existingManual.getManualDetail())
-                .build();
-
         // 즐겨찾기 저장
+        ManualFavorite manualFavorite = new ManualFavorite(member, manual);
         return manualFavoriteRepository.save(manualFavorite);
     }
 
-    //즐겨찾기 삭제
-    public void deleteFavorite(String emergencyName) {
-        // 해당 응급상황이 즐겨찾기에 존재하는지 확인
-        ManualFavorite manualFavorite = manualFavoriteRepository.findByEmergencyName(emergencyName)
+
+    // 즐겨찾기 삭제
+    public void deleteFavorite(Long memberId, Long manualId) {
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        Manual manual = manualRepository.findById(manualId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
+
+        ManualFavorite manualFavorite = manualFavoriteRepository.findByMemberAndManual(member, manual)
                 .orElseThrow(() -> new IllegalArgumentException("해당 즐겨찾기가 존재하지 않습니다."));
 
-        // 즐겨찾기 삭제
         manualFavoriteRepository.delete(manualFavorite);
     }
 
-    //즐겨찾기 조회
-    public List<ManualFavorite> getFavorites() {
-        return manualFavoriteRepository.findAll();
+
+    // 특정 사용자의 즐겨찾기 목록 조회
+    public List<ManualFavorite> getFavorites(Long memberId) {
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        return manualFavoriteRepository.findByMember(member);
     }
 
 }

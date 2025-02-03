@@ -77,29 +77,46 @@ public class ManualController {
         List<String> result = this.manualService.autocomplete(keyword);
         return ResponseEntity.ok(result);
     }
+
     //즐겨찾기 추가
-    @PostMapping("")
-    public ResponseEntity<ManualFavorite> addFavorite(@RequestParam String emergencyName) {
-        ManualFavorite manualFavorite = manualService.addFavorite(emergencyName);
+    @Operation(summary = "즐겨찾기 추가", description = """
+        특정 사용자가 특정 응급상황을 즐겨찾기에 추가합니다.<br>
+        """, parameters = {
+            @Parameter(name = "memberId", description = "사용자 ID", schema = @Schema(type = "long", example = "1")),
+            @Parameter(name = "manualId", description = "매뉴얼 ID", schema = @Schema(type = "long", example = "2"))
+    })
+    @PostMapping("/favorite")
+    public ResponseEntity<ManualFavorite> addFavorite(@RequestParam Long memberId, @RequestParam Long manualId) {
+        ManualFavorite manualFavorite = manualService.addFavorite(memberId, manualId);
         return ResponseEntity.ok(manualFavorite);
     }
 
+
     //즐겨찾기 삭제
-    @DeleteMapping("")
-    public ResponseEntity<String> deleteFavorite(@RequestParam String emergencyName) {
-        manualService.deleteFavorite(emergencyName);
+
+    @Operation(summary = "즐겨찾기 삭제", description = """
+        특정 사용자의 특정 응급상황 즐겨찾기를 삭제합니다.<br>
+        """, parameters = {
+            @Parameter(name = "memberId", description = "사용자 ID", schema = @Schema(type = "long", example = "1")),
+            @Parameter(name = "manualId", description = "매뉴얼 ID", schema = @Schema(type = "long", example = "2"))
+    })
+    @DeleteMapping("/favorite")
+    public ResponseEntity<String> deleteFavorite(@RequestParam Long memberId, @RequestParam Long manualId) {
+        manualService.deleteFavorite(memberId, manualId);
         return ResponseEntity.ok("즐겨찾기가 삭제되었습니다.");
     }
 
-    //즐겨찾기 조회
 
-    @Operation(summary = "즐겨찾기 목록 조회", description = """
-        사용자가 저장한 모든 즐겨찾기를 조회합니다.<br>
-        헤더에 accessToken을 넣어주세요.<br>
-        """)
+    //즐겨찾기 조회
+    @Operation(summary = "사용자별 즐겨찾기 조회", description = """
+        특정 사용자의 즐겨찾기 목록을 조회합니다.<br>
+        """, parameters = {
+            @Parameter(name = "memberId", description = "사용자 ID", schema = @Schema(type = "long", example = "1"))
+    })
     @GetMapping("/favorites")
-    public ResponseEntity<List<ManualFavorite>> getFavorites() {
-        List<ManualFavorite> favorites = manualService.getFavorites();
+    public ResponseEntity<List<ManualFavorite>> getFavorites(@RequestParam Long memberId) {
+        List<ManualFavorite> favorites = manualService.getFavorites(memberId);
+        System.out.println("favorites size: " + favorites.size());
         return ResponseEntity.ok(favorites);
     }
 
