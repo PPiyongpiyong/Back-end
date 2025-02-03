@@ -36,7 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 s3.env
-
+#data.sql추가
+/src/main/resources/data.sql
 #application 추가
 /src/main/resources/*.yml
 /src/main/resources/

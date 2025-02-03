@@ -1,5 +1,6 @@
 package com.example.springserver.api.Manual.Service;
 import com.example.springserver.api.Manual.Domain.Manual;
+import com.example.springserver.api.Manual.Domain.ManualFavorite;
 import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 
@@ -7,6 +8,7 @@ import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRequest.ManualKeywordRequest;
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
+import com.example.springserver.api.Manual.Repository.ManualFavoriteRepository;
 import com.example.springserver.api.Manual.Repository.ManualRepository;
 import com.example.springserver.api.Mypage.domain.MemberEntity;
 import com.example.springserver.api.Mypage.repository.MemberRepository;
@@ -18,6 +20,8 @@ import lombok.AllArgsConstructor;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -25,17 +29,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.Trie;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+
 public class ManualService {
 
     
     private final ManualCategoryRepository manualCategoryRepository;
     private final Trie trie;
     private final ManualRepository manualRepository;
-
+    private final ManualFavoriteRepository manualFavoriteRepository;
     // 인증
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
@@ -119,8 +126,44 @@ public class ManualService {
                 ))
                 .collect(Collectors.toList());
     }
+    // 즐겨찾기 추가
 
+    public ManualFavorite addFavorite(String emergencyName) {
+        // 이미 즐겨찾기에 추가된 경우 예외 처리
+        if (manualFavoriteRepository.findByEmergencyName(emergencyName).isPresent()) {
+            throw new IllegalArgumentException("이미 즐겨찾기에 추가된 항목입니다.");
+        }
 
+        // 기존 매뉴얼이 있는지 확인
+        Manual existingManual = manualRepository.findByEmergencyName(emergencyName)
+                .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
+
+        // 새로운 즐겨찾기 엔티티 생성
+        ManualFavorite manualFavorite = ManualFavorite.builder()
+                .emergencyName(existingManual.getEmergencyName())
+                .imgurl(existingManual.getImgurl())
+                .manualSummary(existingManual.getManualSummary())
+                .manualDetail(existingManual.getManualDetail())
+                .build();
+
+        // 즐겨찾기 저장
+        return manualFavoriteRepository.save(manualFavorite);
+    }
+
+    //즐겨찾기 삭제
+    public void deleteFavorite(String emergencyName) {
+        // 해당 응급상황이 즐겨찾기에 존재하는지 확인
+        ManualFavorite manualFavorite = manualFavoriteRepository.findByEmergencyName(emergencyName)
+                .orElseThrow(() -> new IllegalArgumentException("해당 즐겨찾기가 존재하지 않습니다."));
+
+        // 즐겨찾기 삭제
+        manualFavoriteRepository.delete(manualFavorite);
+    }
+
+    //즐겨찾기 조회
+    public List<ManualFavorite> getFavorites() {
+        return manualFavoriteRepository.findAll();
+    }
 
 }
 

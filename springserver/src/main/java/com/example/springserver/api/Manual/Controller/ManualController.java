@@ -1,5 +1,7 @@
 package com.example.springserver.api.Manual.Controller;
 
+import com.example.springserver.api.Manual.Domain.Manual;
+import com.example.springserver.api.Manual.Domain.ManualFavorite;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
 import com.example.springserver.api.Manual.Service.ManualService;
@@ -42,14 +44,10 @@ public class ManualController {
         if (emergencyName != null) {
             return manualService.getManualByEmergencyName(emergencyName);
         }
-
         // keyword가 제공된 경우
         if (keyword != null) {
             return manualService.getManualByEmergencyKeyword(keyword);
         }
-
-
-
         // 이 코드는 실행되지 않음 (정상적인 요청이라면)
         throw new CustomException(ErrorCode.INVALID_REQUEST);
     }
@@ -79,6 +77,32 @@ public class ManualController {
         List<String> result = this.manualService.autocomplete(keyword);
         return ResponseEntity.ok(result);
     }
+    //즐겨찾기 추가
+    @PostMapping("")
+    public ResponseEntity<ManualFavorite> addFavorite(@RequestParam String emergencyName) {
+        ManualFavorite manualFavorite = manualService.addFavorite(emergencyName);
+        return ResponseEntity.ok(manualFavorite);
+    }
+
+    //즐겨찾기 삭제
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteFavorite(@RequestParam String emergencyName) {
+        manualService.deleteFavorite(emergencyName);
+        return ResponseEntity.ok("즐겨찾기가 삭제되었습니다.");
+    }
+
+    //즐겨찾기 조회
+
+    @Operation(summary = "즐겨찾기 목록 조회", description = """
+        사용자가 저장한 모든 즐겨찾기를 조회합니다.<br>
+        헤더에 accessToken을 넣어주세요.<br>
+        """)
+    @GetMapping("/favorites")
+    public ResponseEntity<List<ManualFavorite>> getFavorites() {
+        List<ManualFavorite> favorites = manualService.getFavorites();
+        return ResponseEntity.ok(favorites);
+    }
+
 
 
     @Operation(summary = "매뉴얼 세부내용 조회", description = """
@@ -90,6 +114,10 @@ public class ManualController {
             @RequestParam String emergencyName) {
         return manualService.getManualDetail(emergencyName);
     }
+
+
+
+
 
     /*@Operation(summary = "연관어 검색", description = """
             연관어를 통해 응급상황 매뉴얼을 검색하며, 검색과 일치하는 키워드가 있는 매뉴얼들을 반환합니다.<br>

@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import com.example.springserver.global.config.CustomLoginFailureHandler;
 import java.util.List;
 
 @Configuration
@@ -27,7 +27,7 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
+    private final CustomLoginFailureHandler customLoginFailureHandler;
     // 비밀번호를 해싱(DB에 비밀번호 그대로 저장하면 안 됨)
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -37,10 +37,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+
                 .cors(httpSecurityCorsConfigurer ->
                         httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
+                .formLogin(form -> form
+                        .failureHandler(customLoginFailureHandler))
+
                 .httpBasic(AbstractHttpConfigurer::disable) // 기본 로그인 페이지 사용하지 않음
                 .sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 보안성 및 확장성 설정
@@ -84,7 +87,7 @@ public class SecurityConfig {
     // 인가 설정(경로별 접근 권한 설정)
     private void setPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**","/api/v1/**", "/actuator/**","").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
+                .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**","/api/v1/**", "/actuator/**").permitAll() // 로그인과 회원가입에 대하여는 누구든 접근 가능
                 .anyRequest().authenticated() // 그 외의 모든 요청에 대하여는 권한이 필요
         );
     }
