@@ -5,6 +5,8 @@ import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespon
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRequest.ManualGetRequest;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRespond.ManualGetRespond;
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRequest.ManualKeywordRequest;
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
@@ -19,6 +21,8 @@ import com.example.springserver.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -128,11 +132,11 @@ public class ManualService {
     }
 
     // 즐겨찾기 추가
-    public ManualFavorite addFavorite(Long memberId, Long manualId) {
-        MemberEntity member = memberRepository.findById(memberId)
+    public ManualFavorite addFavorite(String email, String emergencyName) {
+        MemberEntity member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        Manual manual = manualRepository.findById(manualId)
+        Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
 
         // 이미 즐겨찾기한 경우 예외 처리
@@ -147,11 +151,11 @@ public class ManualService {
 
 
     // 즐겨찾기 삭제
-    public void deleteFavorite(Long memberId, Long manualId) {
-        MemberEntity member = memberRepository.findById(memberId)
+    public void deleteFavorite(String email, String emergenyName) {
+        MemberEntity member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        Manual manual = manualRepository.findById(manualId)
+        Manual manual = manualRepository.findByEmergencyName(emergenyName)
                 .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
 
         ManualFavorite manualFavorite = manualFavoriteRepository.findByMemberAndManual(member, manual)
@@ -162,11 +166,19 @@ public class ManualService {
 
 
     // 특정 사용자의 즐겨찾기 목록 조회
-    public List<ManualFavorite> getFavorites(Long memberId) {
-        MemberEntity member = memberRepository.findById(memberId)
+    public List<ManualGetRespond> getFavorites(String email) {
+        MemberEntity member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        return manualFavoriteRepository.findByMember(member);
+        List<ManualFavorite> favorites = manualFavoriteRepository.findByMember(member);
+
+        return favorites.stream().map(fav -> ManualGetRespond.builder()
+                        .category(fav.getCategory())
+                        .emergencyName(fav.getEmergencyName())
+                        .emergencyResponseSummary(fav.getEmergencyResponseSummary())
+                        .emergencyImage(fav.getEmergencyImage())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 }

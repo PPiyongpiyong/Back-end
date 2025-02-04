@@ -26,8 +26,24 @@ public class ManualFavorite {
     @JoinColumn(name = "manual_id", nullable = false)
     private Manual manual; // 즐겨찾기한 매뉴얼 정보
 
+    @Column(nullable = false) // 🔹 추가 필드로 사용자의 이메일 저장
+    private String email;
+
+    @Column(nullable = false) // 🔹 추가 필드로 매뉴얼의 응급상황이름 저장
+    private String emergencyName;
+
+    private String category;
+    private String emergencyResponseSummary;
+    private String emergencyImage;
+
     public ManualFavorite(MemberEntity member, Manual manual) {
         this.member = member;
         this.manual = manual;
+        this.email = member.getEmail(); // 추가 필드에 이메일 저장
+        this.emergencyName = manual.getEmergencyName();
+        this.category = manual.getCategory();
+        this.emergencyResponseSummary = manual.getManualSummary();
+        this.emergencyImage = manual.getImgurl();
+        // 추가 필드에 응급상황이름 저장
     }
 }

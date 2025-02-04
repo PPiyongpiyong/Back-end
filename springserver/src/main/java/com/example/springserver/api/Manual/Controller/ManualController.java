@@ -4,6 +4,10 @@ import com.example.springserver.api.Manual.Domain.Manual;
 import com.example.springserver.api.Manual.Domain.ManualFavorite;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRequest.ManualGetRequest;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRequest.ManualPostRequest;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRespond.ManualGetRespond;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRespond.ManualPostRespond;
 import com.example.springserver.api.Manual.Service.ManualService;
 import com.example.springserver.external.S3Service;
 import com.example.springserver.global.exception.CustomException;
@@ -79,47 +83,38 @@ public class ManualController {
     }
 
     //즐겨찾기 추가
-    @Operation(summary = "즐겨찾기 추가", description = """
-        특정 사용자가 특정 응급상황을 즐겨찾기에 추가합니다.<br>
-        """, parameters = {
-            @Parameter(name = "memberId", description = "사용자 ID", schema = @Schema(type = "long", example = "1")),
-            @Parameter(name = "manualId", description = "매뉴얼 ID", schema = @Schema(type = "long", example = "2"))
-    })
+
     @PostMapping("/favorite")
-    public ResponseEntity<ManualFavorite> addFavorite(@RequestParam Long memberId, @RequestParam Long manualId) {
-        ManualFavorite manualFavorite = manualService.addFavorite(memberId, manualId);
-        return ResponseEntity.ok(manualFavorite);
+    public ResponseEntity<ManualPostRespond> addFavorite(@RequestParam String email, String emergencyName) {
+        ManualFavorite manualFavorite = manualService.addFavorite(email, emergencyName);
+
+        ManualPostRespond response = ManualPostRespond.builder()
+                .category(manualFavorite.getManual().getCategory())
+                .emergencyName(manualFavorite.getManual().getEmergencyName())
+                .emergencyResponseSummary(manualFavorite.getManual().getManualSummary())
+                .emergencyImage(manualFavorite.getManual().getImgurl())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
 
     //즐겨찾기 삭제
 
-    @Operation(summary = "즐겨찾기 삭제", description = """
-        특정 사용자의 특정 응급상황 즐겨찾기를 삭제합니다.<br>
-        """, parameters = {
-            @Parameter(name = "memberId", description = "사용자 ID", schema = @Schema(type = "long", example = "1")),
-            @Parameter(name = "manualId", description = "매뉴얼 ID", schema = @Schema(type = "long", example = "2"))
-    })
-    @DeleteMapping("/favorite")
-    public ResponseEntity<String> deleteFavorite(@RequestParam Long memberId, @RequestParam Long manualId) {
-        manualService.deleteFavorite(memberId, manualId);
+    @DeleteMapping("/deletefavorite")
+    public ResponseEntity<String> deleteFavorite(@RequestParam String email, String emergencyName) {
+        manualService.deleteFavorite(email, emergencyName);
         return ResponseEntity.ok("즐겨찾기가 삭제되었습니다.");
     }
 
 
     //즐겨찾기 조회
-    @Operation(summary = "사용자별 즐겨찾기 조회", description = """
-        특정 사용자의 즐겨찾기 목록을 조회합니다.<br>
-        """, parameters = {
-            @Parameter(name = "memberId", description = "사용자 ID", schema = @Schema(type = "long", example = "1"))
-    })
+
     @GetMapping("/favorites")
-    public ResponseEntity<List<ManualFavorite>> getFavorites(@RequestParam Long memberId) {
-        List<ManualFavorite> favorites = manualService.getFavorites(memberId);
-        System.out.println("favorites size: " + favorites.size());
+    public ResponseEntity<List<ManualGetRespond>> getFavorites(@RequestParam String email) {
+        List<ManualGetRespond> favorites = manualService.getFavorites(email);
         return ResponseEntity.ok(favorites);
     }
-
 
 
     @Operation(summary = "매뉴얼 세부내용 조회", description = """

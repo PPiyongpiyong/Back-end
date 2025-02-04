@@ -73,7 +73,7 @@ public class SecurityConfig {
 
     // 인증 관련 Filter 설정 클래스 : JwtAuthenticationFilter 추가
     private void setAccessTokenFilter(HttpSecurity httpSecurity) throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(memberRepository, tokenProvider);
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(memberRepository, tokenProvider, customLoginFailureHandler);
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

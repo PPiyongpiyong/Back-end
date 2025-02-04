@@ -1,5 +1,4 @@
-SELECT * FROM manual
-
+SELECT * FROM manual_favorite
 
 
 /*/

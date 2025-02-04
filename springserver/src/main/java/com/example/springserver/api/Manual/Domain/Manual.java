@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @NoArgsConstructor // 매개변수가 없는 기본 생성자를 자동으로 생성 (new Bank())
@@ -31,4 +34,7 @@ public class Manual {
 
     private String imgurl;
 
+    //코드리뷰 반영 OneToMany
+    @OneToMany(mappedBy = "manual", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ManualFavorite> manualFavorites = new ArrayList<>();
 }
