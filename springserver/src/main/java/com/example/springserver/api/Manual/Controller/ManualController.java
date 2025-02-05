@@ -1,7 +1,13 @@
 package com.example.springserver.api.Manual.Controller;
 
+import com.example.springserver.api.Manual.Domain.Manual;
+import com.example.springserver.api.Manual.Domain.ManualFavorite;
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRequest.ManualGetRequest;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRequest.ManualPostRequest;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRespond.ManualGetRespond;
+import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRespond.ManualPostRespond;
 import com.example.springserver.api.Manual.Service.ManualService;
 import com.example.springserver.external.S3Service;
 import com.example.springserver.global.exception.CustomException;
@@ -42,14 +48,10 @@ public class ManualController {
         if (emergencyName != null) {
             return manualService.getManualByEmergencyName(emergencyName);
         }
-
         // keyword가 제공된 경우
         if (keyword != null) {
             return manualService.getManualByEmergencyKeyword(keyword);
         }
-
-
-
         // 이 코드는 실행되지 않음 (정상적인 요청이라면)
         throw new CustomException(ErrorCode.INVALID_REQUEST);
     }
@@ -80,6 +82,40 @@ public class ManualController {
         return ResponseEntity.ok(result);
     }
 
+    //즐겨찾기 추가
+
+    @PostMapping("/favorite")
+    public ResponseEntity<ManualPostRespond> addFavorite(@RequestParam String email, String emergencyName) {
+        ManualFavorite manualFavorite = manualService.addFavorite(email, emergencyName);
+
+        ManualPostRespond response = ManualPostRespond.builder()
+                .category(manualFavorite.getManual().getCategory())
+                .emergencyName(manualFavorite.getManual().getEmergencyName())
+                .emergencyResponseSummary(manualFavorite.getManual().getManualSummary())
+                .emergencyImage(manualFavorite.getManual().getImgurl())
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    //즐겨찾기 삭제
+
+    @DeleteMapping("/deletefavorite")
+    public ResponseEntity<String> deleteFavorite(@RequestParam String email, String emergencyName) {
+        manualService.deleteFavorite(email, emergencyName);
+        return ResponseEntity.ok("즐겨찾기가 삭제되었습니다.");
+    }
+
+
+    //즐겨찾기 조회
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<ManualGetRespond>> getFavorites(@RequestParam String email) {
+        List<ManualGetRespond> favorites = manualService.getFavorites(email);
+        return ResponseEntity.ok(favorites);
+    }
+
 
     @Operation(summary = "매뉴얼 세부내용 조회", description = """
             해당하는 응급상황 이름에 대한 대처 세부내용을 반환합니다.<br>
@@ -90,6 +126,10 @@ public class ManualController {
             @RequestParam String emergencyName) {
         return manualService.getManualDetail(emergencyName);
     }
+
+
+
+
 
     /*@Operation(summary = "연관어 검색", description = """
             연관어를 통해 응급상황 매뉴얼을 검색하며, 검색과 일치하는 키워드가 있는 매뉴얼들을 반환합니다.<br>
