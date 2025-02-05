@@ -58,6 +58,7 @@ logging:
           client:
             RestTemplate: DEBUG
         security : info
+    root: info
   #fail2ban
   file:
     name: /var/log/spring-boot.log

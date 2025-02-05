@@ -1,4 +1,4 @@
-SELECT * FROM manual_favorite
+SELECT * FROM member;
 
 
 /*/
