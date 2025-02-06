@@ -38,4 +38,10 @@ public class Document {
 
     private String distance;
 
+    private Boolean isFavorite = false;
+
+    public void favorite() {
+        this.isFavorite = true;
+    }
+
 }

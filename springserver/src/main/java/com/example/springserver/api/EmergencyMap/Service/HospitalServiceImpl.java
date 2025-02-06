@@ -1,9 +1,12 @@
 package com.example.springserver.api.EmergencyMap.Service;
 
 import com.example.springserver.api.EmergencyMap.Domain.CategoryGroupCode;
+import com.example.springserver.api.EmergencyMap.Domain.Hospital;
 import com.example.springserver.api.EmergencyMap.Dto.HospitalSearchResponse;
 import com.example.springserver.api.EmergencyMap.Dto.kakaoRestApi.Document;
 import com.example.springserver.api.EmergencyMap.Dto.kakaoRestApi.KakaoCategorySearchResponse;
+import com.example.springserver.api.EmergencyMap.Repository.HospitalRepository;
+import com.example.springserver.api.EmergencyMap.Repository.LikeBoardRepository;
 import com.example.springserver.api.Mypage.domain.MemberEntity;
 import com.example.springserver.api.Mypage.repository.MemberRepository;
 import com.example.springserver.global.auth.TokenProvider;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Member;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +29,17 @@ public class HospitalServiceImpl implements HospitalService {
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final HospitalRepository hospitalRepository;
+    private final LikeBoardRepository likeBoardRepository;
 
     @Override
-    public HospitalSearchResponse searchHospitals(Integer page, Integer size, String x, String y, String categoryName) {
+    public HospitalSearchResponse searchHospitals(String authToken, Integer page, Integer size, String x, String y, String categoryName) {
 
         if (size <= 0 || size > 25) {
             throw new IllegalArgumentException("size는 1~25 사이의 값이어야 합니다.");
         }
+
+        Long memberId = tokenProvider.getMemberIdFromToken(authToken);
 
         // 카테고리 이름이 "진료과 선택"일 경우 필터링 없이 호출
         String effectiveCategoryName = "진료과 선택".equals(categoryName) ? null : categoryName;
@@ -51,19 +59,36 @@ public class HospitalServiceImpl implements HospitalService {
 
         // 필터링 조건 수정: "진료과 선택"일 경우 필터링하지 않음
         // 필터링 조건 적용
-        List<Document> filteredDocuments = categorySearchResponse.getDocuments();
+        List<Document> filteredDocuments = categorySearchResponse.getDocuments().stream().peek(
+                document -> {
+                    Optional<Hospital> optionalHospital = hospitalRepository.findByPlaceId(document.getId());
+
+                    optionalHospital.ifPresent(hospital -> {
+                        if(likeBoardRepository.findByMemberIdAndHospital(memberId, hospital).isPresent()) {
+                            document.favorite();
+                        }
+                    });
+
+                }
+        ).toList();
 
         // "진료과 선택"이 아닌 경우에만 추가 필터링
         if (effectiveCategoryName != null) {
             filteredDocuments = filteredDocuments.stream()
                     .filter(document -> document.getCategoryName().contains(effectiveCategoryName))
+                    .peek(document -> {
+                        Optional<Hospital> optionalHospital = hospitalRepository.findByPlaceId(document.getId());
+
+                        optionalHospital.ifPresent(hospital -> {
+                            if(likeBoardRepository.findByMemberIdAndHospital(memberId, hospital).isPresent()) {
+                                document.favorite();
+                            }
+                        });
+
+                    })
                     .toList();
         }
 
-
-
         return HospitalSearchResponse.ofFiltered(categorySearchResponse, filteredDocuments);
-        // 필터링된 데이터를 기반으로 응답 생성
-
     }
 }
