@@ -29,7 +29,7 @@ public class Manual {
     private String manualDetail;
 
     private String category;
-
+    @Column(columnDefinition = "TEXT")
     private String keyword;
 
     private String imgurl;
