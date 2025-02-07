@@ -154,9 +154,7 @@ public class ManualService {
         // 이미 즐겨찾기한 경우 예외 처리
         if (manualFavoriteRepository.findByMemberAndManual(member, manual).isPresent()) {
             throw new IllegalArgumentException("이미 즐겨찾기에 추가된 항목입니다.");
-        }
-
-        // 즐겨찾기 저장
+        }        // 즐겨찾기 저장
         ManualFavorite manualFavorite = new ManualFavorite(member, manual);
         return manualFavoriteRepository.save(manualFavorite);
     }
