@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "hospital")
 public class Hospital {
 
+    // 추가된 메서드
+    @Getter
     @Id
     @Column(unique = true, nullable = false)
     private String placeId;
@@ -51,8 +53,4 @@ public class Hospital {
                 .build();
     }
 
-    // 추가된 메서드
-    public String getPlaceId() {
-        return placeId;
-    }
 }

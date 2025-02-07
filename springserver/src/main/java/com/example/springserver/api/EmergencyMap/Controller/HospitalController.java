@@ -3,9 +3,6 @@ package com.example.springserver.api.EmergencyMap.Controller;
 import com.example.springserver.api.EmergencyMap.Dto.HospitalSearchResponse;
 import com.example.springserver.api.EmergencyMap.Service.HospitalService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +25,9 @@ public class HospitalController {
                                                                @RequestParam(required = false, defaultValue = "15") Integer size,
                                                                @RequestParam String x,
                                                                @RequestParam String y,
-                                                               @RequestParam String categoryName) {
-        return ResponseEntity.ok().body(hospitalService.searchHospitals(page, size, x, y, categoryName));
+                                                               @RequestParam String categoryName,
+                                                               @RequestHeader(name = "Authorization", required = false) String authToken) {
+        return ResponseEntity.ok().body(hospitalService.searchHospitals(authToken,page, size, x, y, categoryName));
 
     }
 }
