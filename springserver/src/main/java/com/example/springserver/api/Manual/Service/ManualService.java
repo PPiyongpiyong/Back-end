@@ -54,13 +54,16 @@ public class ManualService {
     // 매뉴얼 이름으로 조회
 
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
+        List<Manual> manuals = manualRepository.findByEmergencyName(emergencyName);
 
-        Manual manual = manualRepository.findByEmergencyName(emergencyName)
-                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
+        if (manuals.isEmpty()) {
+            throw new CustomException(ErrorCode.MANUAL_NOT_FOUND);
+        }
 
-
+        Manual manual = manuals.get(0); // 첫 번째 Manual 객체 선택
         return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgurl());
     }
+
 
 
     public List<ManualCategoryRespondDto> getManualByCategory(String category) {
@@ -110,9 +113,13 @@ public class ManualService {
     //세부 매뉴얼 조회
     public ManualDetailRespondDto getManualDetail(String emergencyName) {
 
-        Manual manual = manualRepository.findByEmergencyName(emergencyName)
-                .orElseThrow(() -> new CustomException(ErrorCode.MANUAL_NOT_FOUND));
+        List<Manual> manuals = manualRepository.findByEmergencyName(emergencyName);
 
+        if (manuals.isEmpty()) {
+            throw new CustomException(ErrorCode.MANUAL_NOT_FOUND);
+        }
+
+        Manual manual = manuals.get(0); // 첫 번째 Manual 객체 선택
         return new ManualDetailRespondDto(manual.getEmergencyName(), manual.getManualDetail());
     }
 
@@ -136,8 +143,13 @@ public class ManualService {
         MemberEntity member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        Manual manual = manualRepository.findByEmergencyName(emergencyName)
-                .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
+        List<Manual> manuals = manualRepository.findByEmergencyName(emergencyName);
+
+        if (manuals.isEmpty()) {
+            throw new CustomException(ErrorCode.MANUAL_NOT_FOUND);
+        }
+
+        Manual manual = manuals.get(0); // 첫 번째 Manual 객체 선택
 
         // 이미 즐겨찾기한 경우 예외 처리
         if (manualFavoriteRepository.findByMemberAndManual(member, manual).isPresent()) {
@@ -151,18 +163,21 @@ public class ManualService {
 
 
     // 즐겨찾기 삭제
-    public void deleteFavorite(String email, String emergenyName) {
+    public void deleteFavorite(String email, String emergencyName) {
         MemberEntity member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        Manual manual = manualRepository.findByEmergencyName(emergenyName)
-                .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다."));
+        Manual manual = manualRepository.findByEmergencyName(emergencyName)
+                .stream() // List -> Stream 변환
+                .findFirst() // 첫 번째 요소 가져오기
+                .orElseThrow(() -> new IllegalArgumentException("해당 매뉴얼이 존재하지 않습니다.")); // Optional이므로 사용 가능
 
         ManualFavorite manualFavorite = manualFavoriteRepository.findByMemberAndManual(member, manual)
                 .orElseThrow(() -> new IllegalArgumentException("해당 즐겨찾기가 존재하지 않습니다."));
 
         manualFavoriteRepository.delete(manualFavorite);
     }
+
 
 
     // 특정 사용자의 즐겨찾기 목록 조회
@@ -176,7 +191,7 @@ public class ManualService {
                         .category(fav.getCategory())
                         .emergencyName(fav.getEmergencyName())
                         .emergencyResponseSummary(fav.getEmergencyResponseSummary())
-                        .emergencyImage(fav.getEmergencyImage())
+                        .emergencyImage(fav.getImgurl())
                         .build())
                 .collect(Collectors.toList());
     }

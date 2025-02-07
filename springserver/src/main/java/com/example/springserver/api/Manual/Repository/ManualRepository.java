@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface ManualRepository extends JpaRepository<Manual, Long> {
 
-    Optional<Manual> findByEmergencyName(String emergencyName);
+    List<Manual> findByEmergencyName(String emergencyName);
     Optional<Manual> findByKeyword(String keyword);
 
     @Query("SELECT m.emergencyName FROM Manual m")

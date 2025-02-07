@@ -34,7 +34,12 @@ public class ManualFavorite {
 
     private String category;
     private String emergencyResponseSummary;
-    private String emergencyImage;
+    private String imgurl;
+    @Column(columnDefinition = "TEXT")
+    private String keyword;
+    @Column(columnDefinition = "TEXT")
+    private String manualDetail;
+    private String manualSummary;
 
     public ManualFavorite(MemberEntity member, Manual manual) {
         this.member = member;
@@ -43,7 +48,10 @@ public class ManualFavorite {
         this.emergencyName = manual.getEmergencyName();
         this.category = manual.getCategory();
         this.emergencyResponseSummary = manual.getManualSummary();
-        this.emergencyImage = manual.getImgurl();
+        this.imgurl = manual.getImgurl();
+        this.keyword = manual.getKeyword();
+        this.manualDetail = manual.getManualDetail();
+        this.manualSummary = manual.getManualSummary();
         // 추가 필드에 응급상황이름 저장
     }
 }
