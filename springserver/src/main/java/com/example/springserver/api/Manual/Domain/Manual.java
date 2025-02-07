@@ -34,6 +34,8 @@ public class Manual {
 
     private String imgurl;
 
+    private boolean isLiked;
+
     //코드리뷰 반영 OneToMany
     @OneToMany(mappedBy = "manual", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ManualFavorite> manualFavorites = new ArrayList<>();

@@ -60,8 +60,14 @@ public class ManualService {
             throw new CustomException(ErrorCode.MANUAL_NOT_FOUND);
         }
 
-        Manual manual = manuals.get(0); // 첫 번째 Manual 객체 선택
-        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgurl());
+        Manual manual = manuals.get(0);
+        // 즐겨찾기 여부 확인
+        boolean isLiked = manualFavoriteRepository.findByManual(manual).isPresent();
+
+
+
+
+        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgurl(), isLiked);
     }
 
 

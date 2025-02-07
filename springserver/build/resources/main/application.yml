@@ -30,7 +30,6 @@ spring:
     redis:
       host: localhost
       port: 6379
-      enable: true  # 비활성화
   jwt:
     refresh:
       expiration: 604800
@@ -57,12 +56,6 @@ logging:
         web:
           client:
             RestTemplate: DEBUG
-        security : info
-    root: info
-  #fail2ban
-  file:
-    name: /var/log/spring-boot.log
-
 
 management:
   endpoints:
