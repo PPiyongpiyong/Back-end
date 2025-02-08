@@ -17,27 +17,13 @@ public class HospitalSearchResponse {
         this.hospitals = hospitals;
     }
 
-    public static HospitalSearchResponse of(KakaoCategorySearchResponse kakaoCategorySearchResponse) {
-
-        List<HospitalInfo> hospitalInfos = kakaoCategorySearchResponse.getDocuments().stream()
-                .map(HospitalInfo::of)
-                .toList();
-
-        HospitalSearchMeta searchMeta = new HospitalSearchMeta(kakaoCategorySearchResponse.getMeta().getIsEnd(), kakaoCategorySearchResponse.getMeta().getPageableCount());
-
-        return new HospitalSearchResponse(
-                searchMeta,
-                hospitalInfos
-        );
-    }
-
     /**
      * 필터링된 병원 데이터를 포함하는 응답 생성 메서드
      */
     public static HospitalSearchResponse ofFiltered(KakaoCategorySearchResponse kakaoCategorySearchResponse, List<Document> filteredDocuments) {
         // 필터링된 병원 정보를 변환
         List<HospitalInfo> hospitalInfos = filteredDocuments.stream()
-                .map(HospitalInfo::of)
+                .map(document -> HospitalInfo.createDocument(document, document.getIsFavorite()))
                 .toList();
 
         // 메타데이터 생성

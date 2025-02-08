@@ -2,6 +2,7 @@ package com.example.springserver.global.auth;
 
 import com.example.springserver.api.Mypage.domain.MemberEntity;
 import com.example.springserver.api.Mypage.repository.MemberRepository;
+import com.example.springserver.global.config.CustomLoginFailureHandler;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
 import jakarta.servlet.FilterChain;
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -34,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final CustomLoginFailureHandler customLoginFailureHandler; // 추가
 
     @Override
     protected void doFilterInternal( // 전체 프로젝트에 적용할 filter 설정
@@ -65,7 +69,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Invalid token\", \"message\": \"" + e.getMessage() + "\"}");
-
+            //Exception을 AuthenticationException로 변환
+            AuthenticationException authException = new BadCredentialsException("Invalid JWT token", e);
+            customLoginFailureHandler.onAuthenticationFailure(request, response, authException);
             return; // 필터 체인을 중단
         }
         filterChain.doFilter(request, response);

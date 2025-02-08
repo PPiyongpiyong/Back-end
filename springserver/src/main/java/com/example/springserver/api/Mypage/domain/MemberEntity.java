@@ -1,5 +1,6 @@
 package com.example.springserver.api.Mypage.domain;
 //
+import com.example.springserver.api.Manual.Domain.ManualFavorite;
 import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import jakarta.persistence.*;
@@ -26,7 +27,7 @@ public class MemberEntity implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false, name = "member_id")
-    private Long memberId; // 유저 DB 아이디
+    private Long memberId; // 유저 DB 아이디c
 
     @Column(nullable = false)
     private String username; // 유저의 실제 이름
@@ -46,6 +47,9 @@ public class MemberEntity implements UserDetails {
     private String parentPhoneNumber;
     private String address;
     private String residentNo;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ManualFavorite> manualFavorites = new ArrayList<>();
 
     // 즐겨찾기 병원 정보
     //private List<String> favorites;
