@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @Table(name = "manual_favorite")
 public class ManualFavorite {
-
+//
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

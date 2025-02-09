@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface ManualFavoriteRepository extends JpaRepository<ManualFavorite, Long> {
     Optional<ManualFavorite> findByMemberAndManual(MemberEntity member, Manual manual);
     List<ManualFavorite> findByMember(MemberEntity member);
+    Optional<ManualFavorite> findByManual(Manual manual);
     void deleteByMemberAndManual(MemberEntity member, Manual manual);
 }
 

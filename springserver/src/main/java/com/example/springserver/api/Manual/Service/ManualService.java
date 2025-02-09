@@ -5,9 +5,7 @@ import com.example.springserver.api.Manual.Dto.Manual.ManualRespond.ManualRespon
 import com.example.springserver.api.Manual.Dto.ManualCategory.ManualCategoryRespond.ManualCategoryRespondDto;
 
 import com.example.springserver.api.Manual.Dto.ManualDetail.ManualDetailRespond.ManualDetailRespondDto;
-import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRequest.ManualGetRequest;
 import com.example.springserver.api.Manual.Dto.ManualFavorite.ManualFavoriteRespond.ManualGetRespond;
-import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRequest.ManualKeywordRequest;
 import com.example.springserver.api.Manual.Dto.ManualKeyword.ManualKeywordRespond.ManualKeywordRespond;
 import com.example.springserver.api.Manual.Repository.ManualCategoryRepository;
 import com.example.springserver.api.Manual.Repository.ManualFavoriteRepository;
@@ -21,11 +19,7 @@ import com.example.springserver.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -33,8 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.Trie;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Service
@@ -54,6 +46,7 @@ public class ManualService {
     // 매뉴얼 이름으로 조회
 
     public ManualRespondDto getManualByEmergencyName(String emergencyName) {
+        // 매뉴얼 조회
         List<Manual> manuals = manualRepository.findByEmergencyName(emergencyName);
 
         if (manuals.isEmpty()) {
@@ -61,7 +54,14 @@ public class ManualService {
         }
 
         Manual manual = manuals.get(0); // 첫 번째 Manual 객체 선택
-        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgurl());
+
+
+        // 즐겨찾기 여부 확인
+        boolean isLiked = manualFavoriteRepository.findByManual(manual).isPresent();
+        manual.setLiked(isLiked); // isLiked 값 설정
+
+        // 응답 객체 반환
+        return new ManualRespondDto(manual.getEmergencyName(), manual.getManualSummary(), manual.getImgurl(), manual.isLiked());
     }
 
 
@@ -78,8 +78,8 @@ public class ManualService {
                             manual.getCategory(), // category
                             manual.getEmergencyName(),
                             manual.getManualSummary(),
-                            manual.getImgurl()// manualSummaries
-                            // emergencyName
+                            manual.getImgurl(),// manualSummaries
+                            manual.isLiked()                     // emergencyName
                     );
                 })
                 .collect(Collectors.toList());
@@ -154,9 +154,7 @@ public class ManualService {
         // 이미 즐겨찾기한 경우 예외 처리
         if (manualFavoriteRepository.findByMemberAndManual(member, manual).isPresent()) {
             throw new IllegalArgumentException("이미 즐겨찾기에 추가된 항목입니다.");
-        }
-
-        // 즐겨찾기 저장
+        }        // 즐겨찾기 저장
         ManualFavorite manualFavorite = new ManualFavorite(member, manual);
         return manualFavoriteRepository.save(manualFavorite);
     }

@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Setter
 @Getter
 @NoArgsConstructor // 매개변수가 없는 기본 생성자를 자동으로 생성 (new Bank())
 @AllArgsConstructor // 모든 필드를 매개변수로 받는 전체 생성자를 자동으로 생성
@@ -33,6 +33,8 @@ public class Manual {
     private String keyword;
 
     private String imgurl;
+
+    private boolean isLiked;
 
     //코드리뷰 반영 OneToMany
     @OneToMany(mappedBy = "manual", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

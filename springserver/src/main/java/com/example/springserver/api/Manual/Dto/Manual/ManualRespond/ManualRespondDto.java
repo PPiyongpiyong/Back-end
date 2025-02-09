@@ -14,5 +14,6 @@ public class ManualRespondDto {
     private String emergencyName;
     private String emergencyResponseSummary;
     private String emergencyImage;
+    private Boolean isLiked;
 
 }

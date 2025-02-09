@@ -19,6 +19,7 @@ public class ManualMapper {
 
                 .emergencyResponseSummary(manual.getManualSummary())
                 .emergencyImage(manual.getImgurl())
+
                 .build();
     }
 }

@@ -18,5 +18,6 @@ public class ManualCategoryRespondDto {
     private String emergencyName;
     private String emergencyResponseSummary;
     private String emergencyImage;
+    private boolean isLiked;
 
 }
