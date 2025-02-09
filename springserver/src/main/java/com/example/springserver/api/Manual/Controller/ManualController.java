@@ -83,7 +83,10 @@ public class ManualController {
     }
 
     //즐겨찾기 추가
-
+    @Operation(summary = "즐겨찾기 추가", description = """
+        사용자가 특정 응급상황을 즐겨찾기에 추가합니다.<br>
+        헤더에 accessToken을 넣어주세요.<br>
+        """,  parameters = {@Parameter(name = "email, emergencyName", description = "본인 이메일과 추가하려는 응급상황", schema = @Schema(type = "string", example = "hong@example.com, 심장마비"))})
     @PostMapping("/favorite")
     public ResponseEntity<ManualPostRespond> addFavorite(@RequestParam String email, String emergencyName) {
         ManualFavorite manualFavorite = manualService.addFavorite(email, emergencyName);
@@ -100,7 +103,10 @@ public class ManualController {
 
 
     //즐겨찾기 삭제
-
+    @Operation(summary = "즐겨찾기 삭제", description = """
+        사용자가 특정 응급상황을 즐겨찾기에서 삭제합니다.<br>
+        헤더에 accessToken을 넣어주세요.<br>
+        """,  parameters = {@Parameter(name = "email, emergencyName", description = "본인 이메일과 삭제하려는 응급상황", schema = @Schema(type = "string", example = "hong@example.com, 심장마비"))})
     @DeleteMapping("/deletefavorite")
     public ResponseEntity<String> deleteFavorite(@RequestParam String email, String emergencyName) {
         manualService.deleteFavorite(email, emergencyName);
@@ -109,6 +115,11 @@ public class ManualController {
 
 
     //즐겨찾기 조회
+
+    @Operation(summary = "마이 페이지에서 즐겨찾기 조회", description = """
+        사용자가 마이페이지에서 즐겨찾기한 응급상황을 조회합니다.<br>
+        헤더에 accessToken을 넣어주세요.<br>
+        """,  parameters = {@Parameter(name = "email", description = "본인 이메일", schema = @Schema(type = "string", example = "hong@example.com"))})
 
     @GetMapping("/favorites")
     public ResponseEntity<List<ManualGetRespond>> getFavorites(@RequestParam String email) {
