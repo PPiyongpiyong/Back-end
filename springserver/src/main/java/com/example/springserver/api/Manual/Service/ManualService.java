@@ -190,6 +190,7 @@ public class ManualService {
                         .emergencyName(fav.getEmergencyName())
                         .emergencyResponseSummary(fav.getEmergencyResponseSummary())
                         .emergencyImage(fav.getImgurl())
+                        .isLiked(fav.getManual().isLiked())
                         .build())
                 .collect(Collectors.toList());
     }

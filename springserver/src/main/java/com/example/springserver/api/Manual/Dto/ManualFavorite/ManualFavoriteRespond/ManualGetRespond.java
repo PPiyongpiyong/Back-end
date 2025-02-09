@@ -16,6 +16,9 @@ public class ManualGetRespond {
     private String emergencyName;
     private String emergencyResponseSummary;
     private String emergencyImage;
+    private boolean isLiked;
+
+
 
     public String getCategory() {
         return category;
