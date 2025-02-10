@@ -1,20 +1,17 @@
 package com.example.springserver.global.security.controller;
 
 import com.example.springserver.global.auth.TokenProvider;
-import com.example.springserver.global.security.domain.constants.JwtValidationType;
 import com.example.springserver.global.security.dto.*;
 import com.example.springserver.global.security.service.MemberService;
-import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,6 +21,7 @@ public class MemberController {
 
     private final TokenProvider tokenProvider;
     private final MemberService memberService;
+
 
     @Operation(summary = "회원 가입하기", description = "회원 가입 API 입니다. ", requestBody =
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원 가입 요청 객체",
@@ -52,9 +50,10 @@ public class MemberController {
                 ))
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(
-            @RequestBody LoginRequestDto requestDto
+            @RequestBody LoginRequestDto requestDto,
+            HttpServletResponse response
             ) {
-        return ResponseEntity.ok(memberService.GeneralLogin(requestDto));
+        return ResponseEntity.ok(memberService.GeneralLogin(requestDto, response));
     }
 
     // Access Token을 재발급받기
@@ -69,24 +68,58 @@ public class MemberController {
     ))
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(
-            @RequestBody RefreshRequestDto request
+            HttpServletRequest request, HttpServletResponse response
             ) {
-        return ResponseEntity.ok(memberService.refresh(request));
+        return ResponseEntity.ok(memberService.refresh(request, response));
     }
 
+    // 로그아웃하기
     @PostMapping("/logout")
     public ResponseEntity<?> logout(
-            @RequestBody LogoutRequestDto requestDto
+            HttpServletResponse response,
+            @RequestHeader("Authorization") String authToken
     ) {
-        memberService.logout(requestDto);
+        String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;
+        memberService.logout(response, token);
+
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 
-    @DeleteMapping("/account")
-    public ResponseEntity<?> account(
-            @RequestBody long memberId
+    // 회원탈퇴하기
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteMember(
+            @RequestHeader("Authorization") String authToken
     ) {
-        memberService.delete(memberId);
+        String token = authToken.startsWith("Bearer ") ?
+                authToken.substring(7) : authToken;
+
+        memberService.delete(token);
+
         return ResponseEntity.ok("성공적으로 탈퇴 되었습니다.");
+    }
+
+    // 비밀번호 찾기 요청(이메일로 인증번호 전송하기)
+    @PostMapping("/password/verification")
+    public void verification(
+            @RequestBody VerificationRequestDto request
+    ) {
+        memberService.sendVerificationCode(request);
+    }
+
+    // 인증번호 검증받기
+    @PostMapping("/certiMail")
+    public void verifyMail(
+            @RequestBody VerificationRequestDto request,
+            @RequestParam String code
+    ) {
+        memberService.verify(request, code);
+    }
+
+    // 인증번호 확인 후 비밀번호 초기화하기
+    @PostMapping("/password/reset")
+    public void changePassword(
+        PasswordRequestDto request
+    ) {
     }
 }

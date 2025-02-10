@@ -85,8 +85,13 @@ public class ManualController {
     //즐겨찾기 추가
 
     @PostMapping("/favorite")
-    public ResponseEntity<ManualPostRespond> addFavorite(@RequestParam String email, String emergencyName) {
-        ManualFavorite manualFavorite = manualService.addFavorite(email, emergencyName);
+    public ResponseEntity<ManualPostRespond> addFavorite(
+            @RequestHeader("Authorization") String authToken,
+            @RequestParam String email) {
+        // 토큰 인증
+        String token = authToken.startsWith("Bearere ") ? authToken.substring(7) : authToken;
+
+        ManualFavorite manualFavorite = manualService.addFavorite(token, email);
 
         ManualPostRespond response = ManualPostRespond.builder()
                 .category(manualFavorite.getManual().getCategory())
@@ -100,10 +105,14 @@ public class ManualController {
 
 
     //즐겨찾기 삭제
-
     @DeleteMapping("/deletefavorite")
-    public ResponseEntity<String> deleteFavorite(@RequestParam String email, String emergencyName) {
-        manualService.deleteFavorite(email, emergencyName);
+    public ResponseEntity<String> deleteFavorite(
+            @RequestHeader("Authorization") String authToken,
+            @RequestParam String emergencyName) {
+        // 토큰 인증
+        String token = authToken.startsWith("Bearere ") ? authToken.substring(7) : authToken;
+
+        manualService.deleteFavorite(token, emergencyName);
         return ResponseEntity.ok("즐겨찾기가 삭제되었습니다.");
     }
 
@@ -111,8 +120,12 @@ public class ManualController {
     //즐겨찾기 조회
 
     @GetMapping("/favorites")
-    public ResponseEntity<List<ManualGetRespond>> getFavorites(@RequestParam String email) {
-        List<ManualGetRespond> favorites = manualService.getFavorites(email);
+    public ResponseEntity<List<ManualGetRespond>> getFavorites(
+            @RequestHeader String authToken) {
+        String token = authToken.startsWith("Bearere ") ?
+                authToken.substring(7) : authToken;
+
+        List<ManualGetRespond> favorites = manualService.getFavorites(token);
         return ResponseEntity.ok(favorites);
     }
 

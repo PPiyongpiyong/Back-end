@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public class ManualService {
 
-    
     private final ManualCategoryRepository manualCategoryRepository;
     private final Trie trie;
     private final ManualRepository manualRepository;
@@ -139,9 +138,12 @@ public class ManualService {
     }
 
     // 즐겨찾기 추가
-    public ManualFavorite addFavorite(String email, String emergencyName) {
-        MemberEntity member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+    public ManualFavorite addFavorite(String token, String emergencyName) {
+
+        Long memberId = tokenProvider.getMemberIdFromToken(token);
+
+        MemberEntity member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         List<Manual> manuals = manualRepository.findByEmergencyName(emergencyName);
 
@@ -163,9 +165,12 @@ public class ManualService {
 
 
     // 즐겨찾기 삭제
-    public void deleteFavorite(String email, String emergencyName) {
-        MemberEntity member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+    public void deleteFavorite(String token, String emergencyName) {
+
+        Long memberId = tokenProvider.getMemberIdFromToken(token);
+
+        MemberEntity member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         Manual manual = manualRepository.findByEmergencyName(emergencyName)
                 .stream() // List -> Stream 변환
@@ -181,9 +186,11 @@ public class ManualService {
 
 
     // 특정 사용자의 즐겨찾기 목록 조회
-    public List<ManualGetRespond> getFavorites(String email) {
-        MemberEntity member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+    public List<ManualGetRespond> getFavorites(String token) {
+        Long memberId = tokenProvider.getMemberIdFromToken(token);
+
+        MemberEntity member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
 
         List<ManualFavorite> favorites = manualFavoriteRepository.findByMember(member);
 
@@ -195,7 +202,4 @@ public class ManualService {
                         .build())
                 .collect(Collectors.toList());
     }
-
 }
-
-//

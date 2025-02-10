@@ -5,7 +5,6 @@ import com.example.springserver.global.security.domain.constants.JwtValidationTy
 import com.example.springserver.api.Mypage.repository.MemberRepository;
 import com.example.springserver.global.exception.CustomException;
 import com.example.springserver.global.exception.ErrorCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 
 import java.util.Date;

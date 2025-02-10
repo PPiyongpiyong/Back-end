@@ -91,6 +91,8 @@ dependencies {
 
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 
+	// 이메일 전송
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
