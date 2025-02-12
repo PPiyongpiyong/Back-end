@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "일반 로그인 API")
 public class MemberController {
 
-    private final TokenProvider tokenProvider;
     private final MemberService memberService;
-
 
     @Operation(summary = "회원 가입하기", description = "회원 가입 API 입니다. ", requestBody =
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원 가입 요청 객체",
