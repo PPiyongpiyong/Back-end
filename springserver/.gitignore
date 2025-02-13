@@ -42,3 +42,4 @@ s3.env
 /src/main/resources/*.yml
 /src/main/resources/
 springserver/build/resources/main/application.yml
+/Back-end/springserver/build/resources/main/application.yml

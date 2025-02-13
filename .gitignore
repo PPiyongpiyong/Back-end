@@ -2,5 +2,5 @@ hs_err_pid*.log
 .idea/
 *.iml
 deploy.sh
-springserver/build/resources/main/application.yml'
+springserver/build/resources/main/application.yml
 /build/
