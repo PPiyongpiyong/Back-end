@@ -57,7 +57,7 @@
 <h2>👩🏻‍💻 Server Developers </h2>
 
 
-| <img src="https://github.com/user-attachments/assets/c0401bdd-ba90-47f2-856e-43a6685d5e14" width="200"/> | <img src="https://github.com/user-attachments/assets/c0401bdd-ba90-47f2-856e-43a6685d5e14" width="200"/> | <img src="https://github.com/user-attachments/assets/c0401bdd-ba90-47f2-856e-43a6685d5e14" width="200"/> |
+| <img src="https://github.com/user-attachments/assets/2ac2c9d4-e5d0-4990-8265-c96a50d2e26c" width="200"/> | <img src="https://github.com/user-attachments/assets/1d3bb3db-27c2-40e3-a7d9-49e49fa64b3e" width="200"/> | <img src="https://github.com/user-attachments/assets/c0401bdd-ba90-47f2-856e-43a6685d5e14" width="200"/> |
 | :-----------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | 
 |                                           [전유연](https://github.com/youyeon11)                                            |                                          [이효린](https://github.com/temari-cpu)                                           |                                          [최민준](https://github.com/202010927choiminjune)                                           |                                       
 |                                                   `Backend`                                                   |                                                         `Backend`                                                          |                                                         `Backend`                                                          |                                                        
@@ -186,15 +186,9 @@
 
 
 
-
 <br />
 
 ## 📌 협업 공간
-### [📏 컨벤션 노션 링크](https://www.notion.so/13920e6d515c8027a202ff4ceead9f22)
-<br/>
-<br />
-
-## 🖊️ 협업 공간
 
 ### [📏 협업 공간 피그마 링크](https://www.figma.com/design/H2T6Ut8GnVuMpoH03ccma8/UI?node-id=2-653&t=rUl6RYQ0POvzHHHI-0)
 
