@@ -83,8 +83,8 @@ public class SecurityConfig {
 
         CorsConfiguration conf = new CorsConfiguration();
         //"http://52.79.245.244/"
-        conf.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000"));
-        conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));// 모든 HTTP 메서드 허용
+        conf.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000", "https://ppiyongppiyong.co.kr"));
+        conf.setAllowedMethods(List.of("OPTIONS", "GET", "POST", "PUT", "DELETE"));// 모든 HTTP 메서드 허용
         conf.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
         conf.setAllowCredentials(true);
