@@ -14,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableCaching
 @SpringBootApplication
 public class SpringserverApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SpringserverApplication.class, args);
 	}

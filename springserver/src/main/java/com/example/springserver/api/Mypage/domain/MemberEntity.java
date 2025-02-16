@@ -1,14 +1,12 @@
 package com.example.springserver.api.Mypage.domain;
 //
 import com.example.springserver.api.Manual.Domain.ManualFavorite;
-import com.example.springserver.api.Mypage.dto.MypageReqeustDto;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

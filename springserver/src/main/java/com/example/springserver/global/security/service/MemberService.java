@@ -92,7 +92,7 @@ public class MemberService {
         response.addCookie(refreshTokenCookie);
 
         // 5. TokenDto 반환
-        return new TokenDto(accessToken, refreshToken);
+        return new TokenDto(accessToken);
     }
 
 
