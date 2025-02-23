@@ -42,7 +42,7 @@ public class MypageController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = MypageReqeustDto.class)
             ))})
-    @PutMapping("/mypage/updateProfile")
+    @PutMapping("/mypage/profile")
     public ResponseEntity<?> updateProfile(
             @RequestBody MypageReqeustDto requestDto,
             @RequestHeader("Authorization") String authToken
@@ -58,7 +58,7 @@ public class MypageController {
             마이페이지를 조회합니다.<br>
             헤더에 accessToken을 넣어주세요.
             """)
-    @GetMapping("/mypage/getProfile")
+    @GetMapping("/mypage/info")
     public ResponseEntity<?> getProfile(
             @RequestHeader("Authorization") String authToken
     ) {

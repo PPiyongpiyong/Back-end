@@ -8,6 +8,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.awaitility.Awaitility.given;
+import static org.mockito.ArgumentMatchers.anyString;
+
 
 @WebMvcTest(ManualControllerTest.class)
 class ManualControllerTest {
@@ -22,7 +25,6 @@ class ManualControllerTest {
     @Test
     void successAutoComplete() throws Exception {
         //given
-
         //when
         //then
     }
