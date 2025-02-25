@@ -30,7 +30,7 @@ class MemberControllerTest {
     @Test
     void successCreateAccount() throws Exception {
         //given
-        given(memberService.register(anyLong(), anyLong()))
+
         //when
 
         //then
