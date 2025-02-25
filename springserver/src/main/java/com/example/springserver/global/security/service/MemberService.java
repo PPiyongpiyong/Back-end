@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.springserver.global.security.domain.constants.JwtValidationType.VALID_JWT;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Service
 @RequiredArgsConstructor
@@ -247,49 +250,33 @@ public class MemberService {
         };
     }
 
-//    // 비밀번호 변경하기
-//    @Transactional
-//    public PasswordResponseDto change(PasswordRequestDto request) {
-//
-//        MemberEntity member = memberRepository.findByEmail(request.email())
-//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
-//        long memberId = member.getMemberId();
-//
-//        // 저장되어있는 refresh token 삭제하기
-//        deleteVerificationCode(memberId);
-//
-//        /* 쿠키의 Refresh token 추출 */
-//        String requestTemporaryToken = null;
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies) {
-//            if (cookie.getName().equals("temporary-token")) {
-//                requestTemporaryToken = cookie.getValue();
-//            }
-//        }
-//
-//        /* Temporary Token 추출 -> 해당 유저가 업데이트 중 인지 확인 */
-//        String email = jwtTokenProvider.getClaims(requestTemporaryToken).get("email").toString();
-//
-//        /* 비밀번호 변경 */
-//        String encodePassword = bCryptPasswordEncoder.encode(resetPasswordDto.getNewPassword());
-//        authService.resetPassword(email, encodePassword);
-//
-//        /*성공 시 쿠키 초기화*/
-//        ResponseCookie responseCookie = ResponseCookie.from("temporary-token", null)
-//                .maxAge(0)
-//                .path("/")
-//                .build();
-//        return ResponseEntity
-//                .status(CREATED)
-//                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-//                .body(ResponseDto.success(OK, null));
-//
-//        MemberEntity member = memberRepository.findByEmail(
-//                request.email()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
-//
-//
-//
-//    }
+    // 비밀번호 변경하기
+    @Transactional
+    public String change(PasswordRequestDto request) {
+
+        MemberEntity member = memberRepository.findByEmail(request.email())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUNT));
+        long memberId = member.getMemberId();
+
+        // 저장되어있는 인증 코드 삭제하기
+        deleteVerificationCode(memberId);
+
+        /* 비밀번호 변경 */
+        try {
+            String password = request.password();
+            String encodePassword = passwordEncoder.encode(password);
+            member.setPassword(encodePassword);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+        }
+
+        /*성공 시 쿠키 초기화*/
+        ResponseCookie responseCookie = ResponseCookie.from("temporary-token", null)
+                .maxAge(0)
+                .path("/")
+                .build();
+        return "성공적으로 변경 되었습니다.";
+    }
 
     // 인증코드 유효 시간보다 빠르게 완료 시 삭제
     public void deleteVerificationCode(long memberId) {

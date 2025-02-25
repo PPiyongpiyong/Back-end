@@ -116,8 +116,9 @@ public class MemberController {
 
     // 인증번호 확인 후 비밀번호 초기화하기
     @PostMapping("/password/reset")
-    public void changePassword(
+    public ResponseEntity<?> changePassword(
         PasswordRequestDto request
     ) {
+        return ResponseEntity.ok(memberService.change(request));
     }
 }
