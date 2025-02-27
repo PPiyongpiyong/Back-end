@@ -25,7 +25,7 @@ public class MemberEntity implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false, name = "member_id")
-    private Long memberId; // 유저 DB 아이디c
+    private Long memberId; // 유저 DB 아이디
 
     @Column(nullable = false)
     private String username; // 유저의 실제 이름
