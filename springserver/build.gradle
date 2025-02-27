@@ -85,6 +85,10 @@ dependencies {
 
 	// 이메일 전송
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// S3에 WebP로 변환
+	implementation 'com.twelvemonkeys.imageio:imageio-webp:3.8.1'
+
 }
 
 tasks.named('test') {

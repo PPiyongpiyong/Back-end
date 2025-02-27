@@ -267,7 +267,7 @@ public class MemberService {
             String encodePassword = passwordEncoder.encode(password);
             member.setPassword(encodePassword);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
         /*성공 시 쿠키 초기화*/
