@@ -1,4 +1,4 @@
-# 1. OpenJDK 17 사용
+# 1. 환경 설정
 FROM amd64/amazoncorretto:17 AS build
 
 # 2. 작업 디렉토리 설정
